@@ -1,0 +1,28 @@
+<svg id="Fixing_sizes" data-name="Fixing sizes" xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 29.7 29.7">
+    <defs>
+        <style>
+            .cls-1{fill:url(#linear-gradient);}.cls-2{fill:url(#linear-gradient-2);}.cls-3{fill:url(#linear-gradient-3);}
+        </style>
+        <linearGradient id="linear-gradient" x1="727.4" y1="-670.1" x2="733.56" y2="-663.94"
+                        gradientTransform="matrix(3.7, 0, 0, -3.7, -2695.64, -2456.67)" gradientUnits="userSpaceOnUse">
+            <stop offset="0.11" stop-color="#c757bc"/>
+            <stop offset="0.17" stop-color="#cd5ca9"/>
+            <stop offset="0.49" stop-color="#e8744f"/>
+            <stop offset="0.72" stop-color="#f88316"/>
+            <stop offset="0.82" stop-color="#ff8900"/>
+        </linearGradient>
+        <linearGradient id="linear-gradient-2" x1="730.62" y1="-671.83" x2="733.63" y2="-668.83"
+                        gradientTransform="matrix(3.7, 0, 0, -3.7, -2695.64, -2456.67)" gradientUnits="userSpaceOnUse">
+            <stop offset="0.3" stop-color="#00afff"/>
+            <stop offset="0.69" stop-color="#5282ff"/>
+            <stop offset="1" stop-color="#945dff"/>
+        </linearGradient>
+        <linearGradient id="linear-gradient-3" x1="728.43" y1="-665.84" x2="730.54" y2="-663.73"
+                        xlink:href="#linear-gradient-2"/>
+    </defs>
+    <title>_02_languages logos [Recovered]</title>
+    <path class="cls-1" d="M14.87,2.64l-12.32,13V27.17l12.3-12.32L27.08,2.64H14.87Z"/>
+    <path class="cls-2" d="M2.55,27.17l12.3-12.32L27.08,27.17H2.55Z"/>
+    <path class="cls-3" d="M2.55,2.64H14.87l-12.32,13Z"/>
+</svg>

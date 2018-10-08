@@ -1,10 +1,10 @@
 {
   "name": "repl.it",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "electron version of repl.it",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron src"
   },
   "keywords": [
     "Electron",
@@ -15,14 +15,13 @@
   ],
   "author": "leon332157",
   "devDependencies": {
-    "electron": "^3.0.0",
-    "electron-online": "",
+    "electron": "^3.0.3",
     "electron-debug": ""
   },
   "dependencies": {
     "discord-rpc": "^3.0.1",
     "electron-debug": "^2.0.0",
-    "electron-online": "^1.0.0"
+    "register-scheme": "github:devsnek/node-register-scheme"
   },
   "repo": "https://github.com/leon332157/repl.it-electron",
   "licence": "MIT"
