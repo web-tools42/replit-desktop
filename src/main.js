@@ -1,23 +1,67 @@
-// Modules to control application life and create native browser window
-const {app, BrowserWindow, Menu, dialog, ipcMain} = require('electron');
+const {app, BrowserWindow, Menu} = require('electron');
 const DiscordRPC = require('discord-rpc');
-// Keep a global reference of the window object, if you don't, the window will
-// be closed automatically when the JavaScript object is garbage collected.
-let mainWindow;
-let DarkCSS;
-let Dark;
-const clientId = '494756536644665347';
 const fs = require('fs');
+let DarkCSS;
+let win;
+var Dark;
+var subWindow;
+const clientId = '498635999274991626';
+fs.readFile(__dirname + '/Preferences.json', function (err, data) {
+    if (err) {
+        Dark = false;
+        throw err;
+    }
+    Dark = JSON.parse(data.toString())['Dark'];
+});
+
+const rpc = new DiscordRPC.Client({transport: 'ipc'});
 fs.readFile(__dirname + '/Dark.css', function (err, data) {
     if (err) {
         throw err;
     }
     return DarkCSS = data.toString();
 });
+var startTimestamp = new Date();
 
-const rpc = new DiscordRPC.Client({transport: 'ipc'});
+async function startSubWindow(url) {
+    if (subWindow !== undefined) {
+        return
+    }
+    subWindow = new BrowserWindow(
+        {
+            width: 1280,
+            height: 800,
+            title: 'Repl.it',
+            icon: '/icon.png'
+        }
+    );
+    if (url) {
+        subWindow.loadURL(url)
+    }
+    else {
+        subWindow.loadURL('https://repl.it')
+    }
+    addDark(subWindow);
+    subWindow.on('did-fail-load', () => {
+        message(subWindow)
+    })
+}
+
 
 const template = [
+    {
+        label: 'Files',
+        submenu: [
+            {
+                label: 'New Window',
+                accelerator: "CmdOrCtrl+N", click() {
+                    startSubWindow(win.webContents.getURL())
+                }
+            },
+            {type: 'separator'},
+            {role: 'quit'}
+        ],
+    },
     {
         label: 'Edit',
         submenu: [
@@ -48,19 +92,49 @@ const template = [
             {
                 role: 'selectall'
             }
+            , {type: 'separator'}
         ]
     },
     {
         label: 'View',
         submenu: [
             {
+                label: 'Go Back', click(item, focusedWindow) {
+                    if (focusedWindow.webContents.canGoBack()) {
+                        focusedWindow.webContents.goBack()
+                    }
+                }
+            },
+            {
+                label: 'Go Forward', click(item, focusedWindow) {
+                    if (focusedWindow.webContents.canGoForward()) {
+                        focusedWindow.webContents.goForward()
+                    }
+                }
+            },
+            {type: 'separator'},
+            {
                 label: 'Dark Mode',
                 accelerator: "F10",
                 click(item, focusedWindow) {
-                    Dark = true
-                    addDark(item, focusedWindow)
+                    Dark = true;
+                    addDark(focusedWindow)
                 }
             },
+            {
+                label: 'Dark Mode Off',
+                accelerator: "F9",
+                click(item, focusedWindow) {
+                    Dark = false;
+                    focusedWindow.reload()
+                }
+            },
+            {
+                label: 'Select Input', accelerator: 'CmdOrCtrl+f', click(item, focusedWindow) {
+                    selectInput(focusedWindow)
+                }
+            },
+            {type: 'separator'},
             {
                 label: 'Reload',
                 accelerator: 'CmdOrCtrl+R',
@@ -112,12 +186,12 @@ const template = [
             {
                 label: 'Learn More',
                 click() {
-                    require('electron').shell.openExternal('https://github.com/leon332157/repl.it-electron')
+                    require('electron').shell.openExternal('https://repl.it')
                 }
             }
         ]
     }
-]
+];
 if (process.platform === 'darwin') {
     const name = app.getName();
     template.unshift({
@@ -148,11 +222,8 @@ if (process.platform === 'darwin') {
             {
                 type: 'separator'
             },
-            {
-                role: 'quit'
-            }
         ]
-    })
+    });
     // Edit menu.
     template[1].submenu.push(
         {
@@ -169,7 +240,7 @@ if (process.platform === 'darwin') {
                 }
             ]
         }
-    )
+    );
     // Window menu.
     template[3].submenu = [
         {
@@ -195,204 +266,256 @@ if (process.platform === 'darwin') {
         }
     ]
 }
-
 const menu = Menu.buildFromTemplate(template);
-const langs = {
-        'has': 'Haskell',
-        'kot': 'Kotlin',
-        'qba': 'QBasic',
-        'for': 'Forth',
-        'lol': 'LOLCODE',
-        'bra': 'BrainFuck',
-        'emo': 'Emoticon',
-        'blo': 'Bloop',
-        'unl': 'Unlambda',
-        'jav': 'Java',
-        'cof': 'CoffeeScript',
-        'sch': 'Scheme',
-        'apl': 'APL',
-        'lua': 'Lua',
-        'pyt': 'Python',
-        'rub': 'Ruby',
-        'roy': 'Roy',
-        'php': 'PHP',
-        'nod': 'Nodejs',
-        'enz': 'Enzyme',
-        'go': 'Go',
-        'cpp': 'C++',
-        'c': 'C',
-        'csh': 'C#',
-        'fsh': 'F#',
-        'htm': 'HTML5',
-        'rus': 'Rust',
-        'swi': 'Swift',
-        'jes': 'Jest',
-        'dja': 'Django',
-        'exp': 'Express',
-        'sin': 'Sinatra',
-        'r': 'R',
-        'nex': 'Next.js',
-        'gat': 'GatsbyJS',
-        'rea': 'React',
-        'bas': 'bash',
-        'qui': 'Quil'
-    }
-;
-
-function addDark() {
-    if (Dark) {
-        mainWindow.webContents.insertCSS(DarkCSS);
-    }
-}
-
-
-const message = function () {
+const message = function (windowObject) {
 
     return dialog.showMessageBox({
-        title: "Internet Failed",
-        message: "Internet Failed, do you want to try again?",
+        title: "Loading Failed",
+        message: `loading Failed on window ${win}, do you want to try again?`,
         type: 'error',
         buttons: ["Try again please", "Quit"],
         defaultId: 0
     }, function (index) {
         // if clicked "Try again please"
         if (index === 0) {
-            mainWindow.reload();
+            windowObject.reload();
         }
         else {
             app.quit()
 
         }
     })
+};
+
+function addDark(windowObj) {
+    if (Dark) {
+        try {
+            windowObj.webContents.insertCSS(DarkCSS);
+        }
+        catch (e) {
+            console.log(e)
+        }
+    }
 }
 
 
-async function setActivity() {
-    if (!rpc || !mainWindow) {
-        return;
+function getUrl() {
+    try {
+        var url = win.webContents.getURL().replace(/(^\w+:|^)\/\/repl\.it\//, '');
+        url = url.split('?')[0];
+        return url
+    } catch (e) {
+        return ''
     }
-    const url = mainWindow.webContents.getURL();
-    console.log(url);
-    const url_list = url.split('/');
-    console.log(url_list);
-    var last = url_list[url_list.length - 1];
-    var owner = url_list[url_list.length - 2];
-    if (owner.startsWith('@')) {
-        mainWindow.webContents.executeJavaScript(`require('electron').ipcRenderer.send('a',document.body.innerHTML.match(/"contentLength"..."language":".../g))`);
-        ipcMain.on('a', (_, language_array) => {
-            let abbr_lang;
-            try {
-                abbr_lang = language_array[0].toString().replace('\"contentLength":0,"language\":\"', '').replace('"', '').replace(',', '')
-            }
-            catch (e) {
-                console.log(e);
-                abbr_lang = 'Unk'
-            }
-            try {
-                console.log(abbr_lang)
-                rpc.setActivity({
-                    details: `Working on ${last}`,
-                    state: `Owner: ${owner}`,
-                    //startTimestamp,
-                    largeImageKey: abbr_lang.toLowerCase(),
-                    largeImageText: langs[abbr_lang],
-                    smallImageKey: 'logo',
-                    smallImageText: 'repl.it',
-                    instance: false,
-                })
-            }
-            catch (e) {
-                console.log(e)
-            }
+}
 
-        })
+var urlbefore = '';
+var urlnow = '';
+
+function setUrl() {
+    urlbefore = urlnow;
+    urlnow = getUrl();
+    if (urlbefore !== urlnow) {
+        startTimestamp = new Date();
     }
-    else if (url.includes('https://repl.it/talk')) {
+    win.webContents.executeJavaScript(`
+users=document.querySelectorAll('.jsx-1145327309:not(.leaderboard-list-item),a.jsx-774577553')
+for (user in users) {
+try{
+user=users[user]
+if (user.textContent.startsWith('ReplTalk ')) {
+user.classList.add('bot');
+}
+}catch(e){}
+}`)
+}
+
+async function setPlayingDiscord() {
+    var url = getUrl();
+    var spliturl = url.split('/');
+
+    if (spliturl[0] === 'repls') {
+        rpc.setActivity({
+            details: `Browsing Repls`,
+            state: `${url}`,
+            startTimestamp,
+            largeImageKey: 'logo',
+            largeImageText: 'Repl.it',
+            instance: false
+        });
+    }
+    else if (spliturl[0] === 'talk') {
+        let viewing;
+        if (spliturl[3] !== undefined) {
+            await win.webContents.executeJavaScript("document.getElementsByClassName('board-post-detail-title')[0].textContent", function (result) {
+                viewing = `Viewing ${result}`
+            }) // gets the repl talk post name
+        } else {
+            viewing = url
+        }
+        var talkBoard = 'error';
+        switch (spliturl[1]) {
+            case 'announcements':
+                talkBoard = 'Announcements';
+                break;
+            case 'ask':
+                talkBoard = 'Ask';
+                break;
+            case 'challenge':
+                talkBoard = 'Challenge';
+                break;
+            case 'learn':
+                talkBoard = 'Learn';
+                break;
+            case 'share':
+                talkBoard = 'Share';
+                break;
+            default:
+                talkBoard = ''
+        }
+        console.log(talkBoard);
+        rpc.setActivity({
+            state: `Viewing ${viewing}`,
+            details: `In Repl Talk ${talkBoard}`,
+            startTimestamp,
+            largeImageKey: 'logo',
+            largeImageText: 'Repl.it',
+            smallImageKey: 'talk',
+            smallImageText: 'Repl Talk',
+            instance: false
+        });
+    }
+    else if (spliturl[0][0] === '@' && spliturl[1] !== undefined) {
+        var fileName = 'Error';
+        var replName = 'Error';
+        await win.webContents.executeJavaScript("document.querySelector('.file-header-name div').textContent", function (result) {
+            fileName = result
+        });
+        await win.webContents.executeJavaScript("document.getElementsByTagName('title')[0].textContent.split('-').pop()", function (result) {
+            replName = result
+        });
+        await win.webContents.executeJavaScript("document.querySelector('.workspace-header-description-container img')['title']", function (result) {
+            replLanguage = result
+        });
+
+        var rawlang = fileName.split('.').slice(-1)[0]; // gets the file extension
+        var lang = rawlang;
+        if (replLanguage === 'Nodejs') {
+            lang = 'node'
+        }
+        const langsJson = {
+            'py': 'python',
+            'cpp': 'cpp',
+            'cs': 'csharp',
+            'html': 'html',
+            'css': 'css',
+            'js': 'javascript',
+            'node': 'nodejs',
+            'java': 'java',
+            'rb': 'ruby',
+            'txt': 'txt'
+        };
+        rpc.setActivity({
+            details: `Editing ${replName}: ${fileName}`,
+            state: `repl.it/${url} `,
+            startTimestamp,
+            smallImageKey: 'logo',
+            smallImageText: 'Repl.it',
+            largeImageKey: langsJson[lang],
+            largeImageText: rawlang,
+            instance: false
+        });
+
+    }
+    else if (spliturl[0] === 'talk') {
         rpc.setActivity({
             details: `In Repl Talk`,
-            state: `${url.replace('https://repl.it/talk/', '')}`,
-            //startTimestamp,
-            largeImageKey: 'repl-talk',
+            state: `repl.it/${url}`,
+            startTimestamp,
+            largeImageKey: 'talk',
             largeImageText: 'Repl Talk',
             smallImageKey: 'logo',
-            smallImageText: 'repl.it',
-            instance: false,
+            smallImageText: 'Repl.it',
+            instance: false
         });
-    }
-    else {
+    } else if (spliturl[0][0] === '@') {
         rpc.setActivity({
-            details: `At Lobby`,
-            state: `${url}`,
-            //startTimestamp,
+            details: `Looking at ${spliturl[0]}'s profile`,
+            state: `repl.it/${url}`,
+            startTimestamp,
             largeImageKey: 'logo',
-            largeImageText: 'repl.it',
-            instance: false,
+            largeImageText: 'Repl.it',
+            instance: false
+        });
+    } else if (spliturl[0] === 'account') {
+        rpc.setActivity({
+            details: `Changing account settings`,
+            state: `repl.it/${url}`,
+            startTimestamp,
+            largeImageKey: 'logo',
+            largeImageText: 'Repl.it',
+            instance: false
+        });
+    } else {
+        rpc.setActivity({
+            details: `On Repl.it`,
+            state: `repl.it/${url}`,
+            startTimestamp,
+            largeImageKey: 'logo',
+            largeImageText: 'Repl.it',
+            instance: false
         });
     }
-    /*rpc.setActivity({
-        details: `Working on ${urll}`,
-        state: `On ${url}`,
-        startTimestamp,
-        largeImageKey: 'logo',
-        largeImageText: 'repl.it',
-        instance: false,
-    });
-    */
 }
 
-rpc.on('ready', () => {
-    mainWindow.on('did-finish-load', setActivity);
-    // activity can only be set every 15 seconds
-    setInterval(() => {
-        setActivity();
-    }, 5e3);
-});
 
-rpc.login({clientId}).catch(console.error);
-
-function checkConn() {
-    mainWindow.webContents.on('did-fail-load', message)
+function selectInput(focusedWindow) {
+    focusedWindow.webContents.executeJavaScript(`document.getElementsByTagName('input')[0].focus().select()`, false);
 }
 
 function createWindow() {
-    // Create the browser window.
-    mainWindow = new BrowserWindow({width: 1280, height: 800})
-    Menu.setApplicationMenu(menu)
-    checkConn()
-    mainWindow.loadURL('https://repl.it');
-    mainWindow.on('focus', checkConn);
-    mainWindow.webContents.on('did-frame-finish-load', addDark)
-    // Emitted when the window is closed.
-    mainWindow.on('closed', function () {
-        // Dereference the window object, usually you would store windows
-        // in an array if your app supports multi windows, this is the time
-        // when you should delete the corresponding element.
-        mainWindow = null;
+    win = new BrowserWindow(
+        {
+            width: 1280,
+            height: 800,
+            title: 'Repl.it',
+            icon: '/icon.png'
+        }
+    );
+    win.loadURL('https://repl.it/repls'); //sometimes it makes you log in even if youre already logged in
+    //that's cookie problem, if u goes to login directly, they can't see the main page. but what ever
+    win.webContents.on('did-fail-load', () => {
+            message(win)
+        }
+    );
+    Menu.setApplicationMenu(menu);
+    win.webContents.on('did-frame-finish-load', () => {
+        addDark(win)
+    });
+
+    win.on('closed', () => {
+        // Dereference the window object, usually you would store windows in an array. if your app supports multi windows, this is the time when you should delete the corresponding element.
+        win = null;
         app.quit()
     })
 }
 
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
-app.on('ready', createWindow);
+rpc.on('ready', () => {
+    win.on('did-finish-load', setPlayingDiscord);
+    // activity can only be set every 15 seconds
+    setInterval(() => {
+        setPlayingDiscord();
+    }, 15e3);
+});
+rpc.on('ready', () => {
+    setInterval(setUrl, 1000);
+});
+// thats so the timestamp is correct on discord and stuff
 
-// Quit when all windows are closed.
 app.on('window-all-closed', function () {
     // On OS X it is common for applications and their menu bar
     // to stay active until the user quits explicitly with Cmd + Q
-    if (process.platform !== 'darwin') {
-        app.quit()
-    }
+    app.quit()
 });
-
-app.on('activate', function () {
-    // On OS X it's common to re-create a window in the app when the
-    // dock icon is clicked and there are no other windows open.
-    if (mainWindow === null) {
-        createWindow()
-    }
-});
-
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and require them here.
+app.on('ready', createWindow);
+rpc.login({clientId}).catch(console.error);
