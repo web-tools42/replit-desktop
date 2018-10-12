@@ -1,4 +1,4 @@
-const {app, BrowserWindow, Menu} = require('electron');
+const {app, BrowserWindow, Menu, dialog} = require('electron');
 const DiscordRPC = require('discord-rpc');
 const fs = require('fs');
 let DarkCSS;
@@ -14,6 +14,7 @@ fs.readFile(__dirname + '/Preferences.json', function (err, data) {
     Dark = JSON.parse(data.toString())['Dark'];
 });
 
+
 const rpc = new DiscordRPC.Client({transport: 'ipc'});
 fs.readFile(__dirname + '/Dark.css', function (err, data) {
     if (err) {
@@ -22,30 +23,6 @@ fs.readFile(__dirname + '/Dark.css', function (err, data) {
     return DarkCSS = data.toString();
 });
 var startTimestamp = new Date();
-
-async function startSubWindow(url) {
-    if (subWindow !== undefined) {
-        return
-    }
-    subWindow = new BrowserWindow(
-        {
-            width: 1280,
-            height: 800,
-            title: 'Repl.it',
-            icon: '/icon.png'
-        }
-    );
-    if (url) {
-        subWindow.loadURL(url)
-    }
-    else {
-        subWindow.loadURL('https://repl.it')
-    }
-    addDark(subWindow);
-    subWindow.on('did-fail-load', () => {
-        message(subWindow)
-    })
-}
 
 
 const template = [
@@ -118,7 +95,7 @@ const template = [
                 accelerator: "F10",
                 click(item, focusedWindow) {
                     Dark = true;
-                    addDark(focusedWindow)
+                    addDark(focusedWindow, Dark)
                 }
             },
             {
@@ -222,10 +199,12 @@ if (process.platform === 'darwin') {
             {
                 type: 'separator'
             },
+            {role: 'quit'},
         ]
     });
     // Edit menu.
-    template[1].submenu.push(
+    template[1].submenu.splice(-1);
+    template[2].submenu.push(
         {
             type: 'separator'
         },
@@ -242,7 +221,7 @@ if (process.platform === 'darwin') {
         }
     );
     // Window menu.
-    template[3].submenu = [
+    template[4].submenu = [
         {
             label: 'Close',
             accelerator: 'CmdOrCtrl+W',
@@ -271,7 +250,7 @@ const message = function (windowObject) {
 
     return dialog.showMessageBox({
         title: "Loading Failed",
-        message: `loading Failed on window ${win}, do you want to try again?`,
+        message: `loading Failed on window ${windowObject.id}, do you want to try again?`,
         type: 'error',
         buttons: ["Try again please", "Quit"],
         defaultId: 0
@@ -287,15 +266,56 @@ const message = function (windowObject) {
     })
 };
 
-function addDark(windowObj) {
-    if (Dark) {
+function startSubWindow(url) {
+    if (subWindow !== undefined) {
+        return
+    }
+    subWindow = new BrowserWindow(
+        {
+            width: 1280,
+            height: 800,
+            title: 'Repl.it',
+            icon: '/icon.png'
+        }
+    );
+    if (url) {
+        subWindow.loadURL(url)
+    }
+    else {
+        subWindow.loadURL('https://repl.it')
+    }
+    subWindow.webContents.on('did-frame-finish-load', () => {
+        addDark(subWindow, Dark);
+        addSearch(subWindow);
+    });
+    subWindow.on('did-fail-load', () => {
+        message(subWindow)
+    })
+}
+
+function addSearch(focusedWindow) {
+    focusedWindow.webContents.executeJavaScript(`// Retrieve the electron in page search module
+const searchInPage = require('electron-in-page-search').default;
+const remote = require('electron').remote;
+// or
+// import searchInPage from 'electron-in-page-search';
+
+// Create an instance with the current window
+const inPageSearch = searchInPage(remote.getCurrentWebContents());`)
+    console.log(`Search initialized for ${focusedWindow.id}`)
+}
+
+function addDark(windowObj, arg) {
+    if (arg) {
         try {
             windowObj.webContents.insertCSS(DarkCSS);
+            console.log(`DarkCSS Added for ${windowObj.id}`)
         }
         catch (e) {
             console.log(e)
         }
     }
+    console.log(`nope for ${windowObj.id}`)
 }
 
 
@@ -375,7 +395,7 @@ async function setPlayingDiscord() {
         }
         console.log(talkBoard);
         rpc.setActivity({
-            state: `Viewing ${viewing}`,
+            state: `${viewing}`,
             details: `In Repl Talk ${talkBoard}`,
             startTimestamp,
             largeImageKey: 'logo',
@@ -490,7 +510,8 @@ function createWindow() {
     );
     Menu.setApplicationMenu(menu);
     win.webContents.on('did-frame-finish-load', () => {
-        addDark(win)
+        addDark(win, Dark);
+        addSearch(win)
     });
 
     win.on('closed', () => {
@@ -510,7 +531,6 @@ rpc.on('ready', () => {
 rpc.on('ready', () => {
     setInterval(setUrl, 1000);
 });
-// thats so the timestamp is correct on discord and stuff
 
 app.on('window-all-closed', function () {
     // On OS X it is common for applications and their menu bar
