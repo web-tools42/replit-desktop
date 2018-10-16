@@ -4,7 +4,7 @@ Supports Discord rich presence using DiscordRPC library.
 Currently discontinued.
 
 ## Usage:
-Download the app in release tab for your system. And execute the excuteable. 
+Download the app in (release)[https://github.com/leon332157/repl.it-electron/releases] tab for your system. And execute the excuteable. 
 
-#Licence
+# Licence
 MIT, see LICENCE for details.
