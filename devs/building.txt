@@ -1,0 +1,10 @@
+DEBUG=electron-packager electron-packager . 'repl.it' --asar --platform=win32 --arch=ia32 --icon='/Users/lynnzheng/Desktop/repl.it/ico/logo.ico'
+electron-installer-zip 'repl.it-win32-ia32' 'repl.it-x32.zip'
+
+
+DEBUG=electron-packager electron-packager . 'repl.it' --asar --platform=win32 --arch=x64 --icon='/Users/lynnzheng/Desktop/repl.it/ico/logo.ico'
+electron-installer-zip 'repl.it-win32-x64' 'repl.it-x64.zip'
+
+
+DEBUG=electron-packager electron-packager . 'repl.it' --asar --platform=darwin --icon='/Users/lynnzheng/Desktop/repl.it/icns/icon.icns'
+electron-installer-dmg ./repl.it-darwin-x64/repl.it.app repl.it --debug --icon='/Users/lynnzheng/Desktop/repl.it/icns/logo_256x256.icns'

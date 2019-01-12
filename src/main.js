@@ -1,19 +1,16 @@
 const {app, BrowserWindow, Menu, dialog} = require('electron');
 const DiscordRPC = require('discord-rpc');
 const fs = require('fs');
+const Store = require('electron-store');
+const ElectronStore = new Store();
 let DarkCSS;
 let win;
 var Dark;
-var subWindow;
+var subWindow = undefined;
 const clientId = '498635999274991626';
-fs.readFile(__dirname + '/Preferences.json', function (err, data) {
-    if (err) {
-        Dark = false;
-        throw err;
-    }
-    Dark = JSON.parse(data.toString())['Dark'];
-});
-
+console.log(`Conf Path ${ElectronStore.path}`);
+Dark = ElectronStore.get('DarkTheme', false);
+var startTimestamp = new Date();
 
 const rpc = new DiscordRPC.Client({transport: 'ipc'});
 fs.readFile(__dirname + '/Dark.css', function (err, data) {
@@ -22,7 +19,6 @@ fs.readFile(__dirname + '/Dark.css', function (err, data) {
     }
     return DarkCSS = data.toString();
 });
-var startTimestamp = new Date();
 
 
 const template = [
@@ -103,6 +99,12 @@ const template = [
                 accelerator: "F9",
                 click(item, focusedWindow) {
                     Dark = false;
+                    try {
+                        ElectronStore.set('DarkTheme', false);
+                    } catch (e) {
+                        console.error(e);
+
+                    }
                     focusedWindow.reload()
                 }
             },
@@ -258,8 +260,7 @@ const message = function (windowObject) {
         // if clicked "Try again please"
         if (index === 0) {
             windowObject.reload();
-        }
-        else {
+        } else {
             app.quit()
 
         }
@@ -280,40 +281,32 @@ function startSubWindow(url) {
     );
     if (url) {
         subWindow.loadURL(url)
-    }
-    else {
+    } else {
         subWindow.loadURL('https://repl.it')
     }
     subWindow.webContents.on('did-frame-finish-load', () => {
         addDark(subWindow, Dark);
-        addSearch(subWindow);
     });
     subWindow.on('did-fail-load', () => {
         message(subWindow)
-    })
+    });
+    subWindow.on('close', () => {
+        subWindow.prototype = {};
+        subWindow = undefined;
+    });
 }
 
-function addSearch(focusedWindow) {
-    focusedWindow.webContents.executeJavaScript(`// Retrieve the electron in page search module
-const searchInPage = require('electron-in-page-search').default;
-const remote = require('electron').remote;
-// or
-// import searchInPage from 'electron-in-page-search';
-
-// Create an instance with the current window
-const inPageSearch = searchInPage(remote.getCurrentWebContents());`)
-    console.log(`Search initialized for ${focusedWindow.id}`)
-}
 
 function addDark(windowObj, arg) {
     if (arg) {
         try {
             windowObj.webContents.insertCSS(DarkCSS);
-            console.log(`DarkCSS Added for ${windowObj.id}`)
+            console.debug(`DarkCSS Added for ${windowObj.id}`);
+            ElectronStore.set('DarkTheme', true);
+        } catch (e) {
+            console.error(`Error adding dark theme ${e}`)
         }
-        catch (e) {
-            console.log(e)
-        }
+        return;
     }
     console.log(`nope for ${windowObj.id}`)
 }
@@ -347,7 +340,8 @@ if (user.textContent.startsWith('ReplTalk ')) {
 user.classList.add('bot');
 }
 }catch(e){}
-}`)
+}`).catch((ret) => {
+    })
 }
 
 async function setPlayingDiscord() {
@@ -363,8 +357,7 @@ async function setPlayingDiscord() {
             largeImageText: 'Repl.it',
             instance: false
         });
-    }
-    else if (spliturl[0] === 'talk') {
+    } else if (spliturl[0] === 'talk') {
         let viewing;
         if (spliturl[3] !== undefined) {
             await win.webContents.executeJavaScript("document.getElementsByClassName('board-post-detail-title')[0].textContent", function (result) {
@@ -404,10 +397,10 @@ async function setPlayingDiscord() {
             smallImageText: 'Repl Talk',
             instance: false
         });
-    }
-    else if (spliturl[0][0] === '@' && spliturl[1] !== undefined) {
+    } else if (spliturl[0][0] === '@' && spliturl[1] !== undefined) {
         var fileName = 'Error';
         var replName = 'Error';
+        var replLanguage = 'Error';
         await win.webContents.executeJavaScript("document.querySelector('.file-header-name div').textContent", function (result) {
             fileName = result
         });
@@ -433,7 +426,8 @@ async function setPlayingDiscord() {
             'node': 'nodejs',
             'java': 'java',
             'rb': 'ruby',
-            'txt': 'txt'
+            'txt': 'txt',
+            'Error': 'txt'
         };
         rpc.setActivity({
             details: `Editing ${replName}: ${fileName}`,
@@ -444,10 +438,10 @@ async function setPlayingDiscord() {
             largeImageKey: langsJson[lang],
             largeImageText: rawlang,
             instance: false
-        });
-
-    }
-    else if (spliturl[0] === 'talk') {
+        }).catch((ret) => {
+            console.debug(`error@editing ${ret}`)
+        })
+    } else if (spliturl[0] === 'talk') {
         rpc.setActivity({
             details: `In Repl Talk`,
             state: `repl.it/${url}`,
@@ -457,7 +451,9 @@ async function setPlayingDiscord() {
             smallImageKey: 'logo',
             smallImageText: 'Repl.it',
             instance: false
-        });
+        }).catch((ret) => {
+            console.debug(`error@talk ${ret}`)
+        })
     } else if (spliturl[0][0] === '@') {
         rpc.setActivity({
             details: `Looking at ${spliturl[0]}'s profile`,
@@ -466,7 +462,9 @@ async function setPlayingDiscord() {
             largeImageKey: 'logo',
             largeImageText: 'Repl.it',
             instance: false
-        });
+        }).catch((ret) => {
+            console.debug(`error@profile ${ret}`)
+        })
     } else if (spliturl[0] === 'account') {
         rpc.setActivity({
             details: `Changing account settings`,
@@ -475,7 +473,9 @@ async function setPlayingDiscord() {
             largeImageKey: 'logo',
             largeImageText: 'Repl.it',
             instance: false
-        });
+        }).catch((ret) => {
+            console.debug(`error@acount ${ret}`)
+        })
     } else {
         rpc.setActivity({
             details: `On Repl.it`,
@@ -484,7 +484,9 @@ async function setPlayingDiscord() {
             largeImageKey: 'logo',
             largeImageText: 'Repl.it',
             instance: false
-        });
+        }).catch((ret) => {
+            console.debug(`error@main ${ret}`)
+        })
     }
 }
 
@@ -502,8 +504,7 @@ function createWindow() {
             icon: '/icon.png'
         }
     );
-    win.loadURL('https://repl.it/repls'); //sometimes it makes you log in even if youre already logged in
-    //that's cookie problem, if u goes to login directly, they can't see the main page. but what ever
+    win.loadURL('https://repl.it');
     win.webContents.on('did-fail-load', () => {
             message(win)
         }
@@ -511,12 +512,10 @@ function createWindow() {
     Menu.setApplicationMenu(menu);
     win.webContents.on('did-frame-finish-load', () => {
         addDark(win, Dark);
-        addSearch(win)
     });
 
     win.on('closed', () => {
         // Dereference the window object, usually you would store windows in an array. if your app supports multi windows, this is the time when you should delete the corresponding element.
-        win = null;
         app.quit()
     })
 }
