@@ -261,8 +261,7 @@ const message = function (windowObject) {
         if (index === 0) {
             windowObject.reload();
         } else {
-            app.quit()
-
+            process.exit()
         }
     })
 };
@@ -282,7 +281,7 @@ function startSubWindow(url) {
     if (url) {
         subWindow.loadURL(url)
     } else {
-        subWindow.loadURL('https://repl.it')
+        subWindow.loadURL('https://repl.it/repls')
     }
     subWindow.webContents.on('did-frame-finish-load', () => {
         addDark(subWindow, Dark);
@@ -331,7 +330,11 @@ function setUrl() {
     if (urlbefore !== urlnow) {
         startTimestamp = new Date();
     }
-    win.webContents.executeJavaScript(`
+    if (win === undefined) {
+        return
+    }
+    try {
+        win.webContents.executeJavaScript(`
 users=document.querySelectorAll('.jsx-1145327309:not(.leaderboard-list-item),a.jsx-774577553')
 for (user in users) {
 try{
@@ -341,7 +344,10 @@ user.classList.add('bot');
 }
 }catch(e){}
 }`).catch((ret) => {
-    })
+        })
+    } catch (e) {
+        console.error(e)
+    }
 }
 
 async function setPlayingDiscord() {
@@ -504,7 +510,7 @@ function createWindow() {
             icon: '/icon.png'
         }
     );
-    win.loadURL('https://repl.it');
+    win.loadURL('https://repl.it/repls');
     win.webContents.on('did-fail-load', () => {
             message(win)
         }
@@ -534,7 +540,8 @@ rpc.on('ready', () => {
 app.on('window-all-closed', function () {
     // On OS X it is common for applications and their menu bar
     // to stay active until the user quits explicitly with Cmd + Q
-    app.quit()
+    app.quit();
+    process.exit(0)
 });
 app.on('ready', createWindow);
 rpc.login({clientId}).catch(console.error);

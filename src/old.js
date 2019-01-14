@@ -266,8 +266,7 @@ const message = function () {
         // if clicked "Try again please"
         if (index === 0) {
             mainWindow.reload();
-        }
-        else {
+        } else {
             app.quit()
 
         }
@@ -291,8 +290,7 @@ async function setActivity() {
             let abbr_lang;
             try {
                 abbr_lang = language_array[0].toString().replace('\"contentLength":0,"language\":\"', '').replace('"', '').replace(',', '')
-            }
-            catch (e) {
+            } catch (e) {
                 console.log(e);
                 abbr_lang = 'Unk'
             }
@@ -308,14 +306,12 @@ async function setActivity() {
                     smallImageText: 'repl.it',
                     instance: false,
                 })
-            }
-            catch (e) {
+            } catch (e) {
                 console.log(e)
             }
 
         })
-    }
-    else if (url.includes('https://repl.it/talk')) {
+    } else if (url.includes('https://repl.it/talk')) {
         rpc.setActivity({
             details: `In Repl Talk`,
             state: `${url.replace('https://repl.it/talk/', '')}`,
@@ -326,8 +322,7 @@ async function setActivity() {
             smallImageText: 'repl.it',
             instance: false,
         });
-    }
-    else {
+    } else {
         rpc.setActivity({
             details: `At Lobby`,
             state: `${url}`,

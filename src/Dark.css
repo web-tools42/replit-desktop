@@ -121,6 +121,7 @@ footer {
 .board-nav-nav-item-active, .multiplayer-game-banner-cta a:not(:hover), .profile-hacker-label, #classroomsPage > div > div:nth-child(5) > div:nth-child(2) > div > span, .repls-dashboard-welcome-actions .btn {
     color: #232528 !important
 }
+
 @keyframes rainbowColor {
     0% {
         background-color: #FF1493
@@ -220,6 +221,5 @@ a.jsx-774577553[href="/@ReplTalk"]:not(.user-post-image)::after, a.leaderboard-l
 .error.jsx-3462284709 {
     color: white !important;
     background: #232528 !important;
-=======
->>>>>>> parent of 83d7976... update dark css
+= = = = = = = >>> >>> > parent of 83 d7976 . . . update dark css
 }
