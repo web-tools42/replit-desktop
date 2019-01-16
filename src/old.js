@@ -1,3 +1,11 @@
+/*
+THIS IS THE OLD CODE, NOT MAINTAINED ANYMORE.
+
+This was the original version by me with out Mat1's code, just keeping it as a refoence.
+
+*/
+
+
 // Modules to control application life and create native browser window
 const {app, BrowserWindow, Menu, dialog, ipcMain} = require('electron');
 const DiscordRPC = require('discord-rpc');

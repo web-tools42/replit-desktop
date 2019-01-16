@@ -1,34 +1,44 @@
-const {app, BrowserWindow, Menu, dialog} = require('electron');
+/* Require Packages */
+const {app, BrowserWindow, Menu, dialog, shell} = require('electron');
 const DiscordRPC = require('discord-rpc');
 const fs = require('fs');
 const Store = require('electron-store');
 const ElectronStore = new Store();
+const ElectronPrompt = require('electron-prompt');
+const request = require('request');
+const ChromeErrors = require('chrome-network-errors');
+
+/* Declare Constants */
 let DarkCSS;
-let win;
 var Dark;
+let win;
 var subWindow = undefined;
+
+
+/* Constant Variables */
 const clientId = '498635999274991626';
 console.log(`Conf Path ${ElectronStore.path}`);
 Dark = ElectronStore.get('DarkTheme', false);
 var startTimestamp = new Date();
-
 const rpc = new DiscordRPC.Client({transport: 'ipc'});
-fs.readFile(__dirname + '/Dark.css', function (err, data) {
-    if (err) {
-        throw err;
-    }
-    return DarkCSS = data.toString();
-});
 
 
+/* Menu Template */
+// noinspection SpellCheckingInspection
 const template = [
     {
-        label: 'Files',
+        label: 'Main',
         submenu: [
             {
                 label: 'New Window',
                 accelerator: "CmdOrCtrl+N", click() {
                     startSubWindow(win.webContents.getURL())
+                }
+            },
+            {
+                label: 'Join Multilayer',
+                accelerator: "CmdOrCtrl+L", click() {
+                    startLiveSession()
                 }
             },
             {type: 'separator'},
@@ -248,11 +258,34 @@ if (process.platform === 'darwin') {
     ]
 }
 const menu = Menu.buildFromTemplate(template);
-const message = function (windowObject) {
 
-    return dialog.showMessageBox({
+
+/* Load the dark theme CSS */
+request('https://darktheme.tk/darktheme.css', function (error, response, body) {
+    if (body === undefined) {
+
+
+        if (error) {
+            fs.readFile(__dirname + '/Dark.css', function (err, data) {
+                if (err) {
+                    throw err;
+                }
+                return DarkCSS = data.toString();
+            });
+        }
+    } else {
+
+        return DarkCSS = body.toString()
+    }
+});
+
+//Editor TODO: Font size settings for Editor
+//Editor TODO:Add custom themes from css.
+
+function ErrorMessage(windowObject, errorCode) {
+    dialog.showMessageBox({
         title: "Loading Failed",
-        message: `loading Failed on window ${windowObject.id}, do you want to try again?`,
+        message: `loading Failed on window ${windowObject.InternalId} reason ${ChromeErrors[errorCode]}, do you want to try again?`,
         type: 'error',
         buttons: ["Try again please", "Quit"],
         defaultId: 0
@@ -261,38 +294,9 @@ const message = function (windowObject) {
         if (index === 0) {
             windowObject.reload();
         } else {
-            process.exit()
+            app.quit()
         }
     })
-};
-
-function startSubWindow(url) {
-    if (subWindow !== undefined) {
-        return
-    }
-    subWindow = new BrowserWindow(
-        {
-            width: 1280,
-            height: 800,
-            title: 'Repl.it',
-            icon: '/icon.png'
-        }
-    );
-    if (url) {
-        subWindow.loadURL(url)
-    } else {
-        subWindow.loadURL('https://repl.it/repls')
-    }
-    subWindow.webContents.on('did-frame-finish-load', () => {
-        addDark(subWindow, Dark);
-    });
-    subWindow.on('did-fail-load', () => {
-        message(subWindow)
-    });
-    subWindow.on('close', () => {
-        subWindow.prototype = {};
-        subWindow = undefined;
-    });
 }
 
 
@@ -300,16 +304,57 @@ function addDark(windowObj, arg) {
     if (arg) {
         try {
             windowObj.webContents.insertCSS(DarkCSS);
-            console.debug(`DarkCSS Added for ${windowObj.id}`);
+            console.debug(`DarkCSS Added for ${windowObj.InternalId}`);
             ElectronStore.set('DarkTheme', true);
         } catch (e) {
-            console.error(`Error adding dark theme ${e}`)
+            console.error(`Error adding dark theme on ${e}`)
         }
         return;
     }
-    console.log(`nope for ${windowObj.id}`)
+    console.log(`nope for ${windowObj.InternalId}`)
 }
 
+function startLiveSession() {
+    ElectronPrompt({
+            title: 'Join Multiplayer',
+            label: 'URL:',
+            value: 'https://repl.it/live',
+            inputAttrs:
+                {type: 'url', required: true},
+            customStylesheet: Dark ? __dirname + '/PromptDark.css' : __dirname + '/Prompt.css'
+        }
+    )
+        .then((r) => {
+            if (r === null || r.toString().replace(' ', '') === '' || !r.toString().startsWith('https://repl.it/live')) {
+                dialog.showMessageBox({
+                    title: "",
+                    message: `Please input a valid URL.`,
+                    type: 'info',
+                    buttons: ["Ok"],
+                    defaultId: 0
+                })
+            } else {
+                if (subWindow !== undefined) {
+                    dialog.showMessageBox({
+                        title: "",
+                        message: `Do you want to load ${r} in window 2?`,
+                        type: 'info',
+                        buttons: ["Yes", "No"],
+                        defaultId: 0
+                    }, (index) => {
+                        if (index === 0) {
+                            subWindow.loadURL(r)
+                        } else {
+
+                        }
+                    })
+                } else {
+                    startSubWindow(r)
+                }
+            }
+        })
+        .catch(console.error);
+}
 
 function getUrl() {
     try {
@@ -357,7 +402,7 @@ async function setPlayingDiscord() {
     if (spliturl[0] === 'repls') {
         rpc.setActivity({
             details: `Browsing Repls`,
-            state: `${url}`,
+            state: `repl.it/${url}`,
             startTimestamp,
             largeImageKey: 'logo',
             largeImageText: 'Repl.it',
@@ -366,7 +411,7 @@ async function setPlayingDiscord() {
     } else if (spliturl[0] === 'talk') {
         let viewing;
         if (spliturl[3] !== undefined) {
-            await win.webContents.executeJavaScript("document.getElementsByClassName('board-post-detail-title')[0].textContent", function (result) {
+            win.webContents.executeJavaScript("document.getElementsByClassName('board-post-detail-title')[0].textContent", function (result) {
                 viewing = `Viewing ${result}`
             }) // gets the repl talk post name
         } else {
@@ -435,9 +480,17 @@ async function setPlayingDiscord() {
             'txt': 'txt',
             'Error': 'txt'
         };
+
+        if (rawlang in langsJson) {
+            lang = 'txt';
+            rawlang = 'txt'
+        } else {
+            lang = 'txt';
+            rawlang = 'txt'
+        }
         rpc.setActivity({
-            details: `Editing ${replName}: ${fileName}`,
-            state: `repl.it/${url} `,
+            details: `Editing: ${fileName}`,
+            state: `${url} `,
             startTimestamp,
             smallImageKey: 'logo',
             smallImageText: 'Repl.it',
@@ -501,18 +554,77 @@ function selectInput(focusedWindow) {
     focusedWindow.webContents.executeJavaScript(`document.getElementsByTagName('input')[0].focus().select()`, false);
 }
 
+function startSubWindow(url) {
+    if (subWindow !== undefined) {
+        return
+    }
+    subWindow = new BrowserWindow(
+        {
+            width: win.getSize()[0] - 10,
+            height: win.getSize()[1] - 10,
+            title: 'Repl.it',
+            icon: '/icon.png',
+            parent: win,
+            backgroundColor: '#393c42'
+        }
+    );
+    subWindow.InternalId = 2;
+    if (url) {
+        subWindow.loadURL(url)
+    } else {
+        subWindow.loadURL('https://repl.it/repls')
+    }
+    subWindow.webContents.on('did-frame-finish-load', () => {
+        addDark(subWindow, Dark);
+    });
+    subWindow.webContents.on('did-fail-load', (event, errorCode) => {
+        ErrorMessage(subWindow, errorCode)
+    });
+    subWindow.on('close', () => {
+        subWindow.prototype = {};
+        subWindow = undefined;
+    });
+    subWindow.webContents.on('did-start-navigation', (event, url) => {
+        if (url.toString().includes('repl.it') || url.toString().includes('repl.co') || url.toString().includes('google.com') | url.toString().includes('repl.run')) {
+        } else {
+            //if (subWindow.webContents.canGoBack()) {
+            //    subWindow.webContents.goBack()
+            //} else {
+            //    subWindow.loadURL('https://repl.it/repls')
+            //}
+            dialog.showMessageBox({
+                title: "Confirm External Links",
+                message: `${url} Looks like an external link, would you like to load it externally?`,
+                type: 'info',
+                buttons: ["No", "Yes"],
+                defaultId: 1
+            }, function (index) {
+                if (index === 1) {
+                    shell.openExternal(url);
+                } else {
+
+                }
+            })
+        }
+
+    });
+}
+
 function createWindow() {
     win = new BrowserWindow(
         {
             width: 1280,
             height: 800,
             title: 'Repl.it',
-            icon: '/icon.png'
+            icon: '/icon.png',
+            backgroundColor: '#393c42'
         }
     );
+//    win.loadURL('127.0.0.1:1');
+    win.InternalId = 1;
     win.loadURL('https://repl.it/repls');
-    win.webContents.on('did-fail-load', () => {
-            message(win)
+    win.webContents.on('did-fail-load', (event, errorCode) => {
+            ErrorMessage(win, errorCode)
         }
     );
     Menu.setApplicationMenu(menu);
@@ -520,10 +632,57 @@ function createWindow() {
         addDark(win, Dark);
     });
 
-    win.on('closed', () => {
-        // Dereference the window object, usually you would store windows in an array. if your app supports multi windows, this is the time when you should delete the corresponding element.
-        app.quit()
-    })
+    win.on('close', () => {
+        try {
+            var url = win.webContents.getURL();
+        } catch (e) {
+
+        }
+        return dialog.showMessageBox({
+            title: "Confirm Quit",
+            message: `Are you sure you want to quit?`,
+            type: 'info',
+            buttons: ["Yes", "No"],
+            defaultId: 0
+        }, function (index) {
+            if (index === 1) {
+                delete win;
+                win = createWindow();
+                try {
+                    win.loadURL(url)
+                } catch (e) {
+
+                }
+            } else {
+                app.quit()
+            }
+        })
+    });
+    win.webContents.on('did-start-navigation', (event, url) => {
+        if (url.toString().includes('repl.it') || url.toString().includes('repl.co') || url.toString().includes('google.com') || url.toString().includes('repl.run')) {
+        } else {
+            //if (win.webContents.canGoBack()) {
+            //    win.webContents.goBack()
+            //} else {
+            //    win.loadURL('https://repl.it/repls')
+            //}
+            dialog.showMessageBox({
+                title: "Confirm External Links",
+                message: `${url} Looks like an external link, would you like to load it externally?`,
+                type: 'info',
+                buttons: ["No", "Yes"],
+                defaultId: 1
+            }, function (index) {
+                if (index === 1) {
+                    shell.openExternal(url);
+                } else {
+
+                }
+            })
+        }
+
+    });
+    return win;
 }
 
 rpc.on('ready', () => {
@@ -536,12 +695,8 @@ rpc.on('ready', () => {
 rpc.on('ready', () => {
     setInterval(setUrl, 1000);
 });
-
 app.on('window-all-closed', function () {
-    // On OS X it is common for applications and their menu bar
-    // to stay active until the user quits explicitly with Cmd + Q
-    app.quit();
-    process.exit(0)
+    app.quit()
 });
 app.on('ready', createWindow);
 rpc.login({clientId}).catch(console.error);
