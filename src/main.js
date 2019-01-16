@@ -1,5 +1,11 @@
 /* Require Packages */
-const {app, BrowserWindow, Menu, dialog, shell} = require('electron');
+const {
+    app,
+    BrowserWindow,
+    Menu,
+    dialog,
+    shell
+} = require('electron');
 const DiscordRPC = require('discord-rpc');
 const fs = require('fs');
 const Store = require('electron-store');
@@ -20,35 +26,40 @@ const clientId = '498635999274991626';
 console.log(`Conf Path ${ElectronStore.path}`);
 Dark = ElectronStore.get('DarkTheme', false);
 var startTimestamp = new Date();
-const rpc = new DiscordRPC.Client({transport: 'ipc'});
+const rpc = new DiscordRPC.Client({
+    transport: 'ipc'
+});
 
 
 /* Menu Template */
 // noinspection SpellCheckingInspection
-const template = [
-    {
+const template = [{
         label: 'Main',
-        submenu: [
-            {
+        submenu: [{
                 label: 'New Window',
-                accelerator: "CmdOrCtrl+N", click() {
+                accelerator: "CmdOrCtrl+N",
+                click() {
                     startSubWindow(win.webContents.getURL())
                 }
             },
             {
                 label: 'Join Multilayer',
-                accelerator: "CmdOrCtrl+L", click() {
+                accelerator: "CmdOrCtrl+L",
+                click() {
                     startLiveSession()
                 }
             },
-            {type: 'separator'},
-            {role: 'quit'}
+            {
+                type: 'separator'
+            },
+            {
+                role: 'quit'
+            }
         ],
     },
     {
         label: 'Edit',
-        submenu: [
-            {
+        submenu: [{
                 role: 'undo'
             },
             {
@@ -74,28 +85,32 @@ const template = [
             },
             {
                 role: 'selectall'
+            }, {
+                type: 'separator'
             }
-            , {type: 'separator'}
         ]
     },
     {
         label: 'View',
-        submenu: [
-            {
-                label: 'Go Back', click(item, focusedWindow) {
+        submenu: [{
+                label: 'Go Back',
+                click(item, focusedWindow) {
                     if (focusedWindow.webContents.canGoBack()) {
                         focusedWindow.webContents.goBack()
                     }
                 }
             },
             {
-                label: 'Go Forward', click(item, focusedWindow) {
+                label: 'Go Forward',
+                click(item, focusedWindow) {
                     if (focusedWindow.webContents.canGoForward()) {
                         focusedWindow.webContents.goForward()
                     }
                 }
             },
-            {type: 'separator'},
+            {
+                type: 'separator'
+            },
             {
                 label: 'Dark Mode',
                 accelerator: "F10",
@@ -119,11 +134,15 @@ const template = [
                 }
             },
             {
-                label: 'Select Input', accelerator: 'CmdOrCtrl+f', click(item, focusedWindow) {
+                label: 'Select Input',
+                accelerator: 'CmdOrCtrl+f',
+                click(item, focusedWindow) {
                     selectInput(focusedWindow)
                 }
             },
-            {type: 'separator'},
+            {
+                type: 'separator'
+            },
             {
                 label: 'Reload',
                 accelerator: 'CmdOrCtrl+R',
@@ -160,8 +179,7 @@ const template = [
     },
     {
         role: 'window',
-        submenu: [
-            {
+        submenu: [{
                 role: 'minimize'
             },
             {
@@ -171,22 +189,19 @@ const template = [
     },
     {
         role: 'help',
-        submenu: [
-            {
-                label: 'Learn More',
-                click() {
-                    require('electron').shell.openExternal('https://repl.it')
-                }
+        submenu: [{
+            label: 'Learn More',
+            click() {
+                require('electron').shell.openExternal('https://repl.it')
             }
-        ]
+        }]
     }
 ];
 if (process.platform === 'darwin') {
     const name = app.getName();
     template.unshift({
         label: name,
-        submenu: [
-            {
+        submenu: [{
                 role: 'about'
             },
             {
@@ -211,30 +226,27 @@ if (process.platform === 'darwin') {
             {
                 type: 'separator'
             },
-            {role: 'quit'},
+            {
+                role: 'quit'
+            },
         ]
     });
     // Edit menu.
     template[1].submenu.splice(-1);
-    template[2].submenu.push(
-        {
-            type: 'separator'
-        },
-        {
-            label: 'Speech',
-            submenu: [
-                {
-                    role: 'startspeaking'
-                },
-                {
-                    role: 'stopspeaking'
-                }
-            ]
-        }
-    );
+    template[2].submenu.push({
+        type: 'separator'
+    }, {
+        label: 'Speech',
+        submenu: [{
+                role: 'startspeaking'
+            },
+            {
+                role: 'stopspeaking'
+            }
+        ]
+    });
     // Window menu.
-    template[4].submenu = [
-        {
+    template[4].submenu = [{
             label: 'Close',
             accelerator: 'CmdOrCtrl+W',
             role: 'close'
@@ -319,11 +331,12 @@ function startLiveSession() {
             title: 'Join Multiplayer',
             label: 'URL:',
             value: 'https://repl.it/live',
-            inputAttrs:
-                {type: 'url', required: true},
+            inputAttrs: {
+                type: 'url',
+                required: true
+            },
             customStylesheet: Dark ? __dirname + '/PromptDark.css' : __dirname + '/Prompt.css'
-        }
-    )
+        })
         .then((r) => {
             if (r === null || r.toString().replace(' ', '') === '' || !r.toString().startsWith('https://repl.it/live')) {
                 dialog.showMessageBox({
@@ -388,8 +401,7 @@ if (user.textContent.startsWith('ReplTalk ')) {
 user.classList.add('bot');
 }
 }catch(e){}
-}`).catch((ret) => {
-        })
+}`).catch((ret) => {})
     } catch (e) {
         console.error(e)
     }
@@ -411,7 +423,7 @@ async function setPlayingDiscord() {
     } else if (spliturl[0] === 'talk') {
         let viewing;
         if (spliturl[3] !== undefined) {
-            win.webContents.executeJavaScript("document.getElementsByClassName('board-post-detail-title')[0].textContent", function (result) {
+            await win.webContents.executeJavaScript("document.getElementsByClassName('board-post-detail-title')[0].textContent", function (result) {
                 viewing = `Viewing ${result}`
             }) // gets the repl talk post name
         } else {
@@ -451,7 +463,7 @@ async function setPlayingDiscord() {
     } else if (spliturl[0][0] === '@' && spliturl[1] !== undefined) {
         var fileName = 'Error';
         var replName = 'Error';
-        var replLanguage = 'Error';
+        var replLanguage = 'Unknown';
         await win.webContents.executeJavaScript("document.querySelector('.file-header-name div').textContent", function (result) {
             fileName = result
         });
@@ -462,8 +474,8 @@ async function setPlayingDiscord() {
             replLanguage = result
         });
 
-        var rawlang = fileName.split('.').slice(-1)[0]; // gets the file extension
-        var lang = rawlang;
+        var fileExtension = fileName.split('.').slice(-1)[0]; // gets the file extension
+        var lang = fileExtension;
         if (replLanguage === 'Nodejs') {
             lang = 'node'
         }
@@ -478,15 +490,15 @@ async function setPlayingDiscord() {
             'java': 'java',
             'rb': 'ruby',
             'txt': 'txt',
-            'Error': 'txt'
+            'go': 'go',
+            'lua': 'lua',
+            'sh': 'sh',
+            'Unknown': 'txt'
         };
 
-        if (rawlang in langsJson) {
-            lang = 'txt';
-            rawlang = 'txt'
-        } else {
-            lang = 'txt';
-            rawlang = 'txt'
+        if (!rawlang in langsJson) {
+            lang = 'Unknown';
+            rawlang = 'Unknown';
         }
         rpc.setActivity({
             details: `Editing: ${fileName}`,
@@ -495,7 +507,7 @@ async function setPlayingDiscord() {
             smallImageKey: 'logo',
             smallImageText: 'Repl.it',
             largeImageKey: langsJson[lang],
-            largeImageText: rawlang,
+            largeImageText: langsJson[lang],
             instance: false
         }).catch((ret) => {
             console.debug(`error@editing ${ret}`)
@@ -558,16 +570,14 @@ function startSubWindow(url) {
     if (subWindow !== undefined) {
         return
     }
-    subWindow = new BrowserWindow(
-        {
-            width: win.getSize()[0] - 10,
-            height: win.getSize()[1] - 10,
-            title: 'Repl.it',
-            icon: '/icon.png',
-            parent: win,
-            backgroundColor: '#393c42'
-        }
-    );
+    subWindow = new BrowserWindow({
+        width: win.getSize()[0] - 10,
+        height: win.getSize()[1] - 10,
+        title: 'Repl.it',
+        icon: '/icon.png',
+        parent: win,
+        backgroundColor: '#393c42'
+    });
     subWindow.InternalId = 2;
     if (url) {
         subWindow.loadURL(url)
@@ -585,8 +595,7 @@ function startSubWindow(url) {
         subWindow = undefined;
     });
     subWindow.webContents.on('did-start-navigation', (event, url) => {
-        if (url.toString().includes('repl.it') || url.toString().includes('repl.co') || url.toString().includes('google.com') | url.toString().includes('repl.run')) {
-        } else {
+        if (url.toString().includes('repl.it') || url.toString().includes('repl.co') || url.toString().includes('google.com') | url.toString().includes('repl.run')) {} else {
             //if (subWindow.webContents.canGoBack()) {
             //    subWindow.webContents.goBack()
             //} else {
@@ -611,22 +620,19 @@ function startSubWindow(url) {
 }
 
 function createWindow() {
-    win = new BrowserWindow(
-        {
-            width: 1280,
-            height: 800,
-            title: 'Repl.it',
-            icon: '/icon.png',
-            backgroundColor: '#393c42'
-        }
-    );
-//    win.loadURL('127.0.0.1:1');
+    win = new BrowserWindow({
+        width: 1280,
+        height: 800,
+        title: 'Repl.it',
+        icon: '/icon.png',
+        backgroundColor: '#393c42'
+    });
+    //    win.loadURL('127.0.0.1:1');
     win.InternalId = 1;
     win.loadURL('https://repl.it/repls');
     win.webContents.on('did-fail-load', (event, errorCode) => {
-            ErrorMessage(win, errorCode)
-        }
-    );
+        ErrorMessage(win, errorCode)
+    });
     Menu.setApplicationMenu(menu);
     win.webContents.on('did-frame-finish-load', () => {
         addDark(win, Dark);
@@ -659,8 +665,7 @@ function createWindow() {
         })
     });
     win.webContents.on('did-start-navigation', (event, url) => {
-        if (url.toString().includes('repl.it') || url.toString().includes('repl.co') || url.toString().includes('google.com') || url.toString().includes('repl.run')) {
-        } else {
+        if (url.toString().includes('repl.it') || url.toString().includes('repl.co') || url.toString().includes('google.com') || url.toString().includes('repl.run')) {} else {
             //if (win.webContents.canGoBack()) {
             //    win.webContents.goBack()
             //} else {
@@ -699,4 +704,6 @@ app.on('window-all-closed', function () {
     app.quit()
 });
 app.on('ready', createWindow);
-rpc.login({clientId}).catch(console.error);
+rpc.login({
+    clientId
+}).catch(console.error);

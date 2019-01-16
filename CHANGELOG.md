@@ -10,4 +10,6 @@
 
 5.Added Multiplayer support.
 
-6.Bug Fixes.
+6.Error Prompt improvement.
+
+7.Bug Fixes.
