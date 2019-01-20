@@ -4,49 +4,105 @@ const {
     BrowserWindow,
     Menu,
     dialog,
-    shell
+    shell,
 } = require('electron');
 const DiscordRPC = require('discord-rpc');
 const fs = require('fs');
-const Store = require('electron-store');
-const ElectronStore = new Store();
 const ElectronPrompt = require('electron-prompt');
 const request = require('request');
 const ChromeErrors = require('chrome-network-errors');
+const ElectronPreferences = require('electron-preferences');
+const path = require('path');
+const EBU = require(__dirname + '/electron-basic-updater');
 
 /* Declare Constants */
 let DarkCSS;
 var Dark;
-let win;
+let mainWindow;
 var subWindow = undefined;
+
+let Update;
 
 
 /* Constant Variables */
 const clientId = '498635999274991626';
-console.log(`Conf Path ${ElectronStore.path}`);
-Dark = ElectronStore.get('DarkTheme', false);
 var startTimestamp = new Date();
 const rpc = new DiscordRPC.Client({
     transport: 'ipc'
 });
 
+const Preferences = new ElectronPreferences({
+    'dataStore': path.resolve(app.getPath('userData'), 'app_preferences.json'),
+    'defaults': {
+        'app-theme': {
+            'dark': false
+        }
+    },
+    'onLoad': (data) => {
+
+        return data;
+
+    },
+    'webPreferences': {
+        'devTools': true
+    },
+    'sections': [{
+        'id': 'app-theme',
+        'label': 'App Theme',
+        'icon': 'preferences',
+        'form': {
+            'groups': [{
+                'fields': [{
+                    'label': 'Dark Theme',
+                    'key': 'dark',
+                    'type': 'radio',
+                    'options': [
+                        {'label': 'Yes', 'value': true},
+                        {'label': 'No', 'value': false}
+                    ],
+                    'help': 'Enable/ Disable dark theme.'
+                }
+                ]
+            }
+            ]
+        },
+
+    }, {}]
+});
+Preferences.on('save', (preferences) => {
+    console.log(`Preferences were saved.`, JSON.stringify(preferences, null, 4));
+    Dark = Preferences.value('app-theme').dark;
+    mainWindow.reload();
+    if (subWindow) {
+        subWindow.reload()
+    }
+});
+
+Dark = Preferences.value('app-theme').dark;
+Update = true;
+
 
 /* Menu Template */
-// noinspection SpellCheckingInspection
-const template = [{
+const template = [
+    {
         label: 'Main',
         submenu: [{
-                label: 'New Window',
-                accelerator: "CmdOrCtrl+N",
-                click() {
-                    startSubWindow(win.webContents.getURL())
-                }
-            },
+            label: 'New Window', accelerator: "CmdOrCtrl+N", click() {
+                startSubWindow(mainWindow.webContents.getURL())
+            }
+        },
             {
-                label: 'Join Multilayer',
+                label: 'Join Multiplayer',
                 accelerator: "CmdOrCtrl+L",
                 click() {
                     startLiveSession()
+                }
+            },
+            {
+                label: 'Preference',
+                accelerator: "CmdOrCtrl+,",
+                click() {
+                    startPreferenceWindow()
                 }
             },
             {
@@ -54,14 +110,13 @@ const template = [{
             },
             {
                 role: 'quit'
-            }
-        ],
+            }],
     },
     {
         label: 'Edit',
         submenu: [{
-                role: 'undo'
-            },
+            role: 'undo'
+        },
             {
                 role: 'redo'
             },
@@ -93,13 +148,13 @@ const template = [{
     {
         label: 'View',
         submenu: [{
-                label: 'Go Back',
-                click(item, focusedWindow) {
-                    if (focusedWindow.webContents.canGoBack()) {
-                        focusedWindow.webContents.goBack()
-                    }
+            label: 'Go Back',
+            click(item, focusedWindow) {
+                if (focusedWindow.webContents.canGoBack()) {
+                    focusedWindow.webContents.goBack()
                 }
-            },
+            }
+        },
             {
                 label: 'Go Forward',
                 click(item, focusedWindow) {
@@ -116,7 +171,9 @@ const template = [{
                 accelerator: "F10",
                 click(item, focusedWindow) {
                     Dark = true;
+                    Preferences.value('app-theme', {'dark': true})
                     addDark(focusedWindow, Dark)
+
                 }
             },
             {
@@ -125,7 +182,7 @@ const template = [{
                 click(item, focusedWindow) {
                     Dark = false;
                     try {
-                        ElectronStore.set('DarkTheme', false);
+                        Preferences.value('app-theme', {'dark': false})
                     } catch (e) {
                         console.error(e);
 
@@ -180,8 +237,8 @@ const template = [{
     {
         role: 'window',
         submenu: [{
-                role: 'minimize'
-            },
+            role: 'minimize'
+        },
             {
                 role: 'close'
             }
@@ -195,15 +252,14 @@ const template = [{
                 require('electron').shell.openExternal('https://repl.it')
             }
         }]
-    }
-];
+    }];
 if (process.platform === 'darwin') {
     const name = app.getName();
     template.unshift({
         label: name,
         submenu: [{
-                role: 'about'
-            },
+            role: 'about'
+        },
             {
                 type: 'separator'
             },
@@ -238,8 +294,8 @@ if (process.platform === 'darwin') {
     }, {
         label: 'Speech',
         submenu: [{
-                role: 'startspeaking'
-            },
+            role: 'startspeaking'
+        },
             {
                 role: 'stopspeaking'
             }
@@ -247,10 +303,10 @@ if (process.platform === 'darwin') {
     });
     // Window menu.
     template[4].submenu = [{
-            label: 'Close',
-            accelerator: 'CmdOrCtrl+W',
-            role: 'close'
-        },
+        label: 'Close',
+        accelerator: 'CmdOrCtrl+W',
+        role: 'close'
+    },
         {
             label: 'Minimize',
             accelerator: 'CmdOrCtrl+M',
@@ -293,6 +349,49 @@ request('https://darktheme.tk/darktheme.css', function (error, response, body) {
 
 //Editor TODO: Font size settings for Editor
 //Editor TODO:Add custom themes from css.
+// TODO: Add more preference settings for auto-update.
+
+/* Auto update function */
+function doUpdate() {
+    if (!Update) {
+        return
+    }
+    EBU.init({
+        'api': 'https://replit-electron-updater.leon332157.repl.co/check/' // The API EBU will talk to
+    });
+    EBU.check(function (result) {
+        console.log(result);
+        if (result.toString().startsWith('has_update|')) {
+            dialog.showMessageBox({
+                title: "Update available",
+                message: `New version ${result.toString().split('|')[1]} is available, would you like to update it?`,
+                type: 'info',
+                buttons: ["Yes", "No"],
+                defaultId: 1
+            }, function (index) {
+                if (index === 0) {
+                    //mainWindow.hide();
+                    EBU.download(true, function (result) {
+                        if (result.toString() === 'success') {
+                            dialog.showMessageBox({
+                                title: "Update success",
+                                message: `Update was successful, please restart the app.`,
+                                type: 'info'
+                            });
+                            process.exit(0)
+                        } else {
+                            dialog.showMessageBox({
+                                title: "Update failed",
+                                message: `Update failed, please check log file at ${path.dirname(app.getAppPath() + path.sep) + path.sep}.`,
+                                type: 'info'
+                            })
+                        }
+                    })
+                }
+            })
+        }
+    })
+}
 
 function ErrorMessage(windowObject, errorCode) {
     dialog.showMessageBox({
@@ -317,7 +416,7 @@ function addDark(windowObj, arg) {
         try {
             windowObj.webContents.insertCSS(DarkCSS);
             console.debug(`DarkCSS Added for ${windowObj.InternalId}`);
-            ElectronStore.set('DarkTheme', true);
+            Preferences.value('dark', true)
         } catch (e) {
             console.error(`Error adding dark theme on ${e}`)
         }
@@ -326,19 +425,27 @@ function addDark(windowObj, arg) {
     console.log(`nope for ${windowObj.InternalId}`)
 }
 
+function startPreferenceWindow() {
+    Preferences.show()
+}
+
+
 function startLiveSession() {
     ElectronPrompt({
-            title: 'Join Multiplayer',
-            label: 'URL:',
-            value: 'https://repl.it/live',
-            inputAttrs: {
-                type: 'url',
-                required: true
-            },
-            customStylesheet: Dark ? __dirname + '/PromptDark.css' : __dirname + '/Prompt.css'
-        })
+        title: 'Join Multiplayer',
+        label: 'URL:',
+        value: 'https://repl.it/live',
+        inputAttrs: {
+            type: 'url',
+            //required: true
+        },
+        customStylesheet: Dark ? __dirname + '/PromptDark.css' : __dirname + '/Prompt.css'
+    })
         .then((r) => {
-            if (r === null || r.toString().replace(' ', '') === '' || !r.toString().startsWith('https://repl.it/live')) {
+            if (r === undefined || r === null) {
+                return
+            }
+            if (r.toString().replace(' ', '') === '' || !r.toString().startsWith('https://repl.it/live')) {
                 dialog.showMessageBox({
                     title: "",
                     message: `Please input a valid URL.`,
@@ -371,7 +478,7 @@ function startLiveSession() {
 
 function getUrl() {
     try {
-        var url = win.webContents.getURL().replace(/(^\w+:|^)\/\/repl\.it\//, '');
+        var url = mainWindow.webContents.getURL().replace(/(^\w+:|^)\/\/repl\.it\//, '');
         url = url.split('?')[0];
         return url
     } catch (e) {
@@ -388,11 +495,11 @@ function setUrl() {
     if (urlbefore !== urlnow) {
         startTimestamp = new Date();
     }
-    if (win === undefined) {
+    if (mainWindow === undefined) {
         return
     }
     try {
-        win.webContents.executeJavaScript(`
+        mainWindow.webContents.executeJavaScript(`
 users=document.querySelectorAll('.jsx-1145327309:not(.leaderboard-list-item),a.jsx-774577553')
 for (user in users) {
 try{
@@ -401,9 +508,10 @@ if (user.textContent.startsWith('ReplTalk ')) {
 user.classList.add('bot');
 }
 }catch(e){}
-}`).catch((ret) => {})
+}`).catch((ret) => {
+        })
     } catch (e) {
-        console.error(e)
+
     }
 }
 
@@ -423,7 +531,7 @@ async function setPlayingDiscord() {
     } else if (spliturl[0] === 'talk') {
         let viewing;
         if (spliturl[3] !== undefined) {
-            await win.webContents.executeJavaScript("document.getElementsByClassName('board-post-detail-title')[0].textContent", function (result) {
+            await mainWindow.webContents.executeJavaScript("document.getElementsByClassName('board-post-detail-title')[0].textContent", function (result) {
                 viewing = `Viewing ${result}`
             }) // gets the repl talk post name
         } else {
@@ -464,13 +572,13 @@ async function setPlayingDiscord() {
         var fileName = 'Error';
         var replName = 'Error';
         var replLanguage = 'Unknown';
-        await win.webContents.executeJavaScript("document.querySelector('.file-header-name div').textContent", function (result) {
+        await mainWindow.webContents.executeJavaScript("document.querySelector('.file-header-name div').textContent", function (result) {
             fileName = result
         });
-        await win.webContents.executeJavaScript("document.getElementsByTagName('title')[0].textContent.split('-').pop()", function (result) {
+        await mainWindow.webContents.executeJavaScript("document.getElementsByTagName('title')[0].textContent.split('-').pop()", function (result) {
             replName = result
         });
-        await win.webContents.executeJavaScript("document.querySelector('.workspace-header-description-container img')['title']", function (result) {
+        await mainWindow.webContents.executeJavaScript("document.querySelector('.workspace-header-description-container img')['title']", function (result) {
             replLanguage = result
         });
 
@@ -496,7 +604,7 @@ async function setPlayingDiscord() {
             'Unknown': 'txt'
         };
 
-        if (!rawlang in langsJson) {
+        if (!fileExtension in langsJson) {
             lang = 'Unknown';
             rawlang = 'Unknown';
         }
@@ -571,13 +679,13 @@ function startSubWindow(url) {
         return
     }
     subWindow = new BrowserWindow({
-        width: win.getSize()[0] - 10,
-        height: win.getSize()[1] - 10,
+        width: mainWindow.getSize()[0] - 10,
+        height: mainWindow.getSize()[1] - 10,
         title: 'Repl.it',
-        icon: '/icon.png',
-        parent: win,
-        backgroundColor: '#393c42'
+        icon: path.resolve(__dirname, 'utils/logo.png'),
+        parent: mainWindow,
     });
+    subWindow.setBackgroundColor('#393c42');
     subWindow.InternalId = 2;
     if (url) {
         subWindow.loadURL(url)
@@ -586,6 +694,9 @@ function startSubWindow(url) {
     }
     subWindow.webContents.on('did-frame-finish-load', () => {
         addDark(subWindow, Dark);
+        if (!Dark) {
+            subWindow.setBackgroundColor('#FFF')
+        }
     });
     subWindow.webContents.on('did-fail-load', (event, errorCode) => {
         ErrorMessage(subWindow, errorCode)
@@ -595,7 +706,8 @@ function startSubWindow(url) {
         subWindow = undefined;
     });
     subWindow.webContents.on('did-start-navigation', (event, url) => {
-        if (url.toString().includes('repl.it') || url.toString().includes('repl.co') || url.toString().includes('google.com') | url.toString().includes('repl.run')) {} else {
+        if (url.toString().includes('repl.it') || url.toString().includes('repl.co') || url.toString().includes('google.com') || url.toString().includes('repl.run') || url.toString().startsWith('about:')) {
+        } else {
             //if (subWindow.webContents.canGoBack()) {
             //    subWindow.webContents.goBack()
             //} else {
@@ -620,31 +732,32 @@ function startSubWindow(url) {
 }
 
 function createWindow() {
-    win = new BrowserWindow({
+    mainWindow = new BrowserWindow({
         width: 1280,
         height: 800,
         title: 'Repl.it',
-        icon: '/icon.png',
-        backgroundColor: '#393c42'
+        icon: path.resolve(__dirname, 'utils/logo.png'),
     });
-    //    win.loadURL('127.0.0.1:1');
-    win.InternalId = 1;
-    win.loadURL('https://repl.it/repls');
-    win.webContents.on('did-fail-load', (event, errorCode) => {
-        ErrorMessage(win, errorCode)
+    mainWindow.setBackgroundColor('#393c42');
+    //    mainWindow.loadURL('127.0.0.1:1');
+    mainWindow.InternalId = 1;
+    mainWindow.loadURL('https://repl.it/repls');
+    mainWindow.webContents.on('did-fail-load', (event, errorCode) => {
+        ErrorMessage(mainWindow, errorCode)
     });
     Menu.setApplicationMenu(menu);
-    win.webContents.on('did-frame-finish-load', () => {
-        addDark(win, Dark);
-    });
-
-    win.on('close', () => {
-        try {
-            var url = win.webContents.getURL();
-        } catch (e) {
-
+    mainWindow.webContents.on('did-frame-finish-load', () => {
+        addDark(mainWindow, Dark);
+        if (!Dark) {
+            mainWindow.setBackgroundColor('#FFF')
         }
-        return dialog.showMessageBox({
+    });
+    mainWindow.on('close', () => {
+        try {
+            var url = mainWindow.webContents.getURL();
+        } catch (e) {
+        }
+        dialog.showMessageBox({
             title: "Confirm Quit",
             message: `Are you sure you want to quit?`,
             type: 'info',
@@ -652,24 +765,24 @@ function createWindow() {
             defaultId: 0
         }, function (index) {
             if (index === 1) {
-                delete win;
-                win = createWindow();
+                delete mainWindow;
+                mainWindow = createWindow();
                 try {
-                    win.loadURL(url)
+                    mainWindow.loadURL(url)
                 } catch (e) {
-
                 }
             } else {
-                app.quit()
+                process.exit(0)
             }
         })
     });
-    win.webContents.on('did-start-navigation', (event, url) => {
-        if (url.toString().includes('repl.it') || url.toString().includes('repl.co') || url.toString().includes('google.com') || url.toString().includes('repl.run')) {} else {
-            //if (win.webContents.canGoBack()) {
-            //    win.webContents.goBack()
+    mainWindow.webContents.on('did-start-navigation', (event, url) => {
+        if (url.toString().includes('repl.it') || url.toString().includes('repl.co') || url.toString().includes('google.com') || url.toString().includes('repl.run')) {
+        } else {
+            //if (mainWindow.webContents.canGoBack()) {
+            //    mainWindow.webContents.goBack()
             //} else {
-            //    win.loadURL('https://repl.it/repls')
+            //    mainWindow.loadURL('https://repl.it/repls')
             //}
             dialog.showMessageBox({
                 title: "Confirm External Links",
@@ -685,13 +798,12 @@ function createWindow() {
                 }
             })
         }
-
     });
-    return win;
+    return mainWindow;
 }
 
 rpc.on('ready', () => {
-    win.on('did-finish-load', setPlayingDiscord);
+    mainWindow.on('did-finish-load', setPlayingDiscord);
     // activity can only be set every 15 seconds
     setInterval(() => {
         setPlayingDiscord();
@@ -703,7 +815,10 @@ rpc.on('ready', () => {
 app.on('window-all-closed', function () {
     app.quit()
 });
-app.on('ready', createWindow);
+app.on('ready', () => {
+    doUpdate();
+    createWindow();
+});
 rpc.login({
     clientId
 }).catch(console.error);

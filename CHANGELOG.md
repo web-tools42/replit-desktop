@@ -13,3 +13,7 @@
 6.Error Prompt improvement.
 
 7.Bug Fixes.
+
+## 0.0.6:
+1.Auto Update (Alpha)
+2.Added Preference panel for dark mode.

@@ -1,6 +1,6 @@
 {
   "name": "repl.it",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "electron version of repl.it",
   "main": "main.js",
   "scripts": {
@@ -14,16 +14,19 @@
   ],
   "author": "leon332157",
   "devDependencies": {
-    "electron": "^4.0.1"
+    "electron": "^4.0.1",
+    "electron-store": "^2.0.0"
   },
   "dependencies": {
     "chrome-network-errors": "^1.0.0",
     "discord-rpc": "^3.0.1",
-    "electron-in-page-search": "^1.3.2",
+    "electron-preferences": "^1.2.0",
     "electron-prompt": "^1.3.0",
-    "electron-store": "^2.0.0",
+    "react": "^16.7.0",
     "register-scheme": "github:devsnek/node-register-scheme",
-    "request": "latest"
+    "request": "latest",
+    "restler": "^3.4.0",
+    "zip-local": "^0.3.4"
   },
   "repository": "https://github.com/leon332157/repl.it-electron",
   "license": "MIT"

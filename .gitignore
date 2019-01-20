@@ -5,3 +5,9 @@ repl.it-*
 JetBrains-Discord-Integration-Icons
 .DS_Store
 *distribute
+venv*
+.env
+home*
+update.zip
+updater-log*
+update-window*
