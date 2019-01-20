@@ -9,4 +9,4 @@ Also join repl.it [discord] (https://discord.gg/346Tapr)
 Download the app in [release](https://github.com/leon332157/repl.it-electron/releases) tab for your system. And execute the executable.
 
 # Licence
-MIT, see LICENCE for details.
+Apache, see LICENSE for details.
