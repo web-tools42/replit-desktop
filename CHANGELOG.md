@@ -15,5 +15,5 @@
 7.Bug Fixes.
 
 ## 0.0.6:
-1.Auto Update (Alpha)
+1.Auto Update (Beta)
 2.Added Preference panel for dark mode.

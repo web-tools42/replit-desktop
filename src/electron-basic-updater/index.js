@@ -141,7 +141,7 @@ var Updater = {
 
                         // Store the response
                         Updater.update = response;
-                        Updater.end(undefined, 'has_update|' + response.last)
+                        Updater.end(undefined, 'has_update|' + response.last);
                         return true;
                     } else {
                         Updater.log('No updates available');

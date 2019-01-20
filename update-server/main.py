@@ -107,7 +107,12 @@ def give_update():
         updates_list.append(each.strip('.zip').replace('.', ''))
         updates_list.sort(key=int)
     latest = ".".join(list(updates_list[-1]))
-    return json.dumps({"last": f'{latest}', "source": f"http://replit-electron-updater.leon332157.repl.co/download/{latest}.zip"})
+    client_version = flask.request.get_data().decode('utf8').replace('current=','').replace('.','')
+    if client_version < updates_list[-1]:
+
+     return json.dumps({"last": f'{latest}', "source": f"http://replit-electron-updater.leon332157.repl.co/download/{latest}.zip"})
+    else:
+            return json.dumps({"last": f'{latest}', "source": False})
 
 
 @app.route('/ping_google/')
