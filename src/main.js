@@ -32,10 +32,13 @@ const rpc = new DiscordRPC.Client({
 });
 
 const Preferences = new ElectronPreferences({
-    'dataStore': path.resolve(app.getPath('userData'), 'app_preferences.json'),
+    'dataStore': path.resolve(app.getPath('userData'), 'Preferences.json'),
     'defaults': {
         'app-theme': {
             'dark': false
+        },
+        'update-settings': {
+            'auto-update': true
         }
     },
     'onLoad': (data) => {
@@ -63,11 +66,33 @@ const Preferences = new ElectronPreferences({
                     'help': 'Enable/ Disable dark theme.'
                 }
                 ]
-            }
-            ]
-        },
-
-    }, {}]
+            }]
+        }},
+    {
+        'id': 'update-settings',
+        'label': 'Update Settings',
+        'icon': 'square-download',
+        'form': {
+            'groups': [{
+                'fields': [{
+                    'label': 'Auto Update',
+                    'key': 'auto-update',
+                    'type': 'radio',
+                    'options': [{
+                        'label': 'Yes',
+                        'value': true
+                    },
+                        {
+                            'label': 'No',
+                            'value': false
+                        }
+                    ],
+                    'help': 'Enable/ Disable auto update.'
+                }]
+            }]
+        }
+    }
+    ]
 });
 Preferences.on('save', (preferences) => {
     console.log(`Preferences were saved.`, JSON.stringify(preferences, null, 4));
@@ -79,7 +104,7 @@ Preferences.on('save', (preferences) => {
 });
 
 Dark = Preferences.value('app-theme').dark;
-Update = true;
+Update = Preferences.value('update-settings')['auto-update'];
 
 
 /* Menu Template */
@@ -349,7 +374,6 @@ request('https://darktheme.tk/darktheme.css', function (error, response, body) {
 
 //Editor TODO: Font size settings for Editor
 //Editor TODO:Add custom themes from css.
-// TODO: Add more preference settings for auto-update.
 
 /* Auto update function */
 function doUpdate() {

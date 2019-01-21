@@ -16,10 +16,10 @@ electron-installer-zip ../pre-distribute/repl.it-win32-x64/repl.it.exe 'repl.it-
 
 electron-installer-dmg ../pre-distribute/repl.it-darwin-x64/repl.it.app repl.it --debug --icon='/Users/lynnzheng/Desktop/repl.it/logos/icns/logo_256x256.icns'
 
-#cd ~/desktop/repl.it
+cd ~/desktop/repl.it
 
-#echo "Started uploading update"
+echo "Started uploading update"
 
-#python3 utils/upload-update.py
+python3 utils/upload-update.py
 
 echo "Done"
