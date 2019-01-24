@@ -14,6 +14,7 @@ const ChromeErrors = require('chrome-network-errors');
 const ElectronPreferences = require('electron-preferences');
 const path = require('path');
 const EBU = require(__dirname + '/electron-basic-updater');
+const ElectronContext = require('electron-context-menu');
 
 /* Declare Constants */
 let DarkCSS;
@@ -31,6 +32,7 @@ const rpc = new DiscordRPC.Client({
     transport: 'ipc'
 });
 
+/* Preferences */
 const Preferences = new ElectronPreferences({
     'dataStore': path.resolve(app.getPath('userData'), 'Preferences.json'),
     'defaults': {
@@ -67,31 +69,46 @@ const Preferences = new ElectronPreferences({
                 }
                 ]
             }]
-        }},
-    {
-        'id': 'update-settings',
-        'label': 'Update Settings',
-        'icon': 'square-download',
-        'form': {
-            'groups': [{
-                'fields': [{
-                    'label': 'Auto Update',
-                    'key': 'auto-update',
-                    'type': 'radio',
-                    'options': [{
-                        'label': 'Yes',
-                        'value': true
-                    },
-                        {
-                            'label': 'No',
-                            'value': false
-                        }
-                    ],
-                    'help': 'Enable/ Disable auto update.'
-                }]
-            }]
         }
-    }
+    },
+        {
+            'id': 'update-settings',
+            'label': 'Update Settings',
+            'icon': 'square-download',
+            'form': {
+                'groups': [{
+                    'fields': [{
+                        'label': 'Auto Update',
+                        'key': 'auto-update',
+                        'type': 'radio',
+                        'options': [{
+                            'label': 'Yes',
+                            'value': true
+                        },
+                            {
+                                'label': 'No',
+                                'value': false
+                            }
+                        ],
+                        'help': 'Enable/ Disable auto update.'
+                    }]
+                }]
+            }
+        }, {
+            'id': 'editor-settings',
+            'label': 'Editor Settings',
+            'icon': 'single-folded-content',
+            'form': {
+                'groups': [{
+                    'fields': [{
+                        'label': 'Font size',
+                        'key': 'font-size',
+                        'type': 'text',
+                        'help': 'Font size in px for the editor.'
+                    }]
+                }]
+            }
+        }
     ]
 });
 Preferences.on('save', (preferences) => {
@@ -374,6 +391,7 @@ request('https://darktheme.tk/darktheme.css', function (error, response, body) {
 
 //Editor TODO: Font size settings for Editor
 //Editor TODO:Add custom themes from css.
+//TODO: Add change log for new updates.
 
 /* Auto update function */
 function doUpdate() {
@@ -388,7 +406,11 @@ function doUpdate() {
         if (result.toString().startsWith('has_update|')) {
             dialog.showMessageBox({
                 title: "Update available",
-                message: `New version ${result.toString().split('|')[1]} is available, would you like to update it?`,
+                message: `New version ${result.toString().split('|')[1]} is available, would you like to update it?
+
+New features:
+${result.toString().split('|')[2]}
+`,
                 type: 'info',
                 buttons: ["Yes", "No"],
                 defaultId: 1
@@ -440,7 +462,6 @@ function addDark(windowObj, arg) {
         try {
             windowObj.webContents.insertCSS(DarkCSS);
             console.debug(`DarkCSS Added for ${windowObj.InternalId}`);
-            Preferences.value('dark', true)
         } catch (e) {
             console.error(`Error adding dark theme on ${e}`)
         }
@@ -595,7 +616,7 @@ async function setPlayingDiscord() {
     } else if (spliturl[0][0] === '@' && spliturl[1] !== undefined) {
         var fileName = 'Error';
         var replName = 'Error';
-        var replLanguage = 'Unknown';
+        var replLanguage = 'Error';
         await mainWindow.webContents.executeJavaScript("document.querySelector('.file-header-name div').textContent", function (result) {
             fileName = result
         });
@@ -628,9 +649,8 @@ async function setPlayingDiscord() {
             'Unknown': 'txt'
         };
 
-        if (!fileExtension in langsJson) {
+        if (!(lang in langsJson)) {
             lang = 'Unknown';
-            rawlang = 'Unknown';
         }
         rpc.setActivity({
             details: `Editing: ${fileName}`,
@@ -826,11 +846,14 @@ function createWindow() {
     return mainWindow;
 }
 
+ElectronContext({
+    showCopyImageAddress: true, showSaveImageAs: true, showInspectElement: false,
+});
 rpc.on('ready', () => {
     mainWindow.on('did-finish-load', setPlayingDiscord);
     // activity can only be set every 15 seconds
     setInterval(() => {
-        setPlayingDiscord();
+        setPlayingDiscord().catch({});
     }, 15e3);
 });
 rpc.on('ready', () => {

@@ -13,10 +13,8 @@ const path = require('path');
 const fs = require('fs');
 const AppPath = Application.getAppPath() + path.sep;
 const UpperAppPath = path.dirname(AppPath) + path.sep;
-//const ipcMain = require('electron').ipcMain;
-process.noAsar = true;
 
-//let updateWindowWebContents;
+
 
 const errors = [
     'version_not_specified',
@@ -141,7 +139,10 @@ var Updater = {
 
                         // Store the response
                         Updater.update = response;
-                        Updater.end(undefined, 'has_update|' + response.last);
+                        if (!(response.change_log)) {
+                            change_log = undefined
+                        }
+                        Updater.end(undefined, 'has_update|' + response.last+'|'+response.change_log);
                         return true;
                     } else {
                         Updater.log('No updates available');
@@ -220,7 +221,9 @@ var Updater = {
             this.log(`zip file path: ${this.update.file}`);
             this.log(`app path: ${AppPath}`);
             this.log('extraction started');
+            process.noAsar = true;
             Zip.sync.unzip(this.update.file).save(UpperAppPath);
+            process.noAsar = false;
             this.log('ended');
             this.log('New update files were extracted.');
             this.log('End of update.');

@@ -5,7 +5,7 @@ import platform
 import threading
 import time
 from datetime import datetime
-
+import base64
 import dotenv
 import flask
 import requests
@@ -32,6 +32,7 @@ if platform != 'darwin':
         filemode='a',
         level=logging.INFO,
         format="%(asctime)s %(message)s")
+changelog = json.load(open(os.getcwd() + 'home/runner/updates/changelog.json'))
 app = flask.Flask(__name__, root_path=os.getcwd())
 
 
@@ -47,6 +48,12 @@ def log():
         return flask.send_file('home/runner/log.txt')
     except OSError as e:
         return str(e)
+
+
+@app.route('/changelog')
+@app.route('/changelog.json')
+def show_change_log():
+    return flask.send_file(os.getcwd() + 'home/runner/updates/changelog.json')
 
 
 @app.route('/updates/')
@@ -68,6 +75,10 @@ def add_release():
     version = flask.request.args.get('version', None)
     if not token == TOKEN or not version:
         return flask.abort(403)
+    change_log = flask.request.args.get('change_log', None)
+    changelog[version] = base64.urlsafe_b64decode(change_log).decode('utf8')
+    json.dump(changelog, open(os.getcwd() +
+                              'home/runner/updates/changelog.json', 'w'))
     f = flask.request.files['file']
     os.makedirs('home/runner/updates/', exist_ok=True)
     f.save(os.getcwd() + 'home/runner/updates/' + secure_filename(f.filename))
@@ -104,13 +115,20 @@ def delete_release(name):
 def give_update():
     updates_list = []
     for each in os.listdir(os.getcwd() + 'home/runner/updates/'):
-        updates_list.append(each.strip('.zip').replace('.', ''))
+        if (each.strip('.zip').replace('.', '')).isdigit():
+            updates_list.append(each.strip('.zip').replace('.', ''))
         updates_list.sort(key=int)
     latest = ".".join(list(updates_list[-1]))
-    client_version = flask.request.get_data().decode('utf8').replace('current=', '').replace('.', '')
+    client_version = flask.request.get_data().decode(
+        'utf8').replace('current=', '').replace('.', '')
     if client_version < updates_list[-1]:
-        return json.dumps(
-            {"last": f'{latest}', "source": f"http://replit-electron-updater.leon332157.repl.co/download/{latest}.zip"})
+        try:
+            return json.dumps(
+                {"last": f'{latest}', "source": f"http://replit-electron-updater.leon332157.repl.co/download/{latest}.zip",
+                 "change_log": json.load(open(os.getcwd() + 'home/runner/updates/changelog.json'))[latest]})
+        except KeyError:
+            return json.dumps(
+                {"last": f'{latest}', "source": f"http://replit-electron-updater.leon332157.repl.co/download/{latest}.zip"})
     else:
         return json.dumps({"last": f'{latest}', "source": False})
 
@@ -132,7 +150,8 @@ def favicon():
 
 def ping_myself():
     while True:
-        requests.get('https://replit-electron-updater.leon332157.repl.co/ping/')
+        requests.get(
+            'https://replit-electron-updater.leon332157.repl.co/ping/')
         time.sleep(300)
 
 

@@ -1,6 +1,6 @@
 {
   "name": "repl.it",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "electron version of repl.it",
   "main": "main.js",
   "scripts": {
@@ -20,6 +20,7 @@
   "dependencies": {
     "chrome-network-errors": "^1.0.0",
     "discord-rpc": "^3.0.1",
+    "electron-context-menu": "^0.10.1",
     "electron-preferences": "^1.2.0",
     "electron-prompt": "^1.3.0",
     "react": "^16.7.0",
