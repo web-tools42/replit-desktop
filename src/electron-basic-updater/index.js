@@ -15,7 +15,6 @@ const AppPath = Application.getAppPath() + path.sep;
 const UpperAppPath = path.dirname(AppPath) + path.sep;
 
 
-
 const errors = [
     'version_not_specified',
     'cannot_connect_to_api',
@@ -142,7 +141,7 @@ var Updater = {
                         if (!(response.change_log)) {
                             change_log = undefined
                         }
-                        Updater.end(undefined, 'has_update|' + response.last+'|'+response.change_log);
+                        Updater.end(undefined, 'has_update|' + response.last + '|' + response.change_log);
                         return true;
                     } else {
                         Updater.log('No updates available');

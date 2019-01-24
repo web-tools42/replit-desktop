@@ -65,7 +65,7 @@ const Preferences = new ElectronPreferences({
                         {'label': 'Yes', 'value': true},
                         {'label': 'No', 'value': false}
                     ],
-                    'help': 'Enable/ Disable dark theme.'
+                    'help': 'Enable/Disable dark theme.'
                 }
                 ]
             }]
@@ -90,11 +90,12 @@ const Preferences = new ElectronPreferences({
                                 'value': false
                             }
                         ],
-                        'help': 'Enable/ Disable auto update.'
+                        'help': 'Enable/Disable auto update.'
                     }]
                 }]
             }
-        }, {
+        },
+        /*{
             'id': 'editor-settings',
             'label': 'Editor Settings',
             'icon': 'single-folded-content',
@@ -108,7 +109,7 @@ const Preferences = new ElectronPreferences({
                     }]
                 }]
             }
-        }
+        }*/
     ]
 });
 Preferences.on('save', (preferences) => {
@@ -134,10 +135,10 @@ const template = [
             }
         },
             {
-                label: 'Join Multiplayer',
+                label: 'Join Multiplayer/Custom Repl.it Links',
                 accelerator: "CmdOrCtrl+L",
                 click() {
-                    startLiveSession()
+                    startCustomSession()
                 }
             },
             {
@@ -475,11 +476,11 @@ function startPreferenceWindow() {
 }
 
 
-function startLiveSession() {
+function startCustomSession() {
     ElectronPrompt({
         title: 'Join Multiplayer',
         label: 'URL:',
-        value: 'https://repl.it/live',
+        value: 'https://repl.it/',
         inputAttrs: {
             type: 'url',
             //required: true
@@ -490,12 +491,12 @@ function startLiveSession() {
             if (r === undefined || r === null) {
                 return
             }
-            if (r.toString().replace(' ', '') === '' || !r.toString().startsWith('https://repl.it/live')) {
+            if (r.toString().replace(' ', '') === '' || !r.toString().startsWith('https://repl.it/')) {
                 dialog.showMessageBox({
                     title: "",
                     message: `Please input a valid URL.`,
                     type: 'info',
-                    buttons: ["Ok"],
+                    buttons: ["OK"],
                     defaultId: 0
                 })
             } else {
@@ -752,11 +753,6 @@ function startSubWindow(url) {
     subWindow.webContents.on('did-start-navigation', (event, url) => {
         if (url.toString().includes('repl.it') || url.toString().includes('repl.co') || url.toString().includes('google.com') || url.toString().includes('repl.run') || url.toString().startsWith('about:')) {
         } else {
-            //if (subWindow.webContents.canGoBack()) {
-            //    subWindow.webContents.goBack()
-            //} else {
-            //    subWindow.loadURL('https://repl.it/repls')
-            //}
             dialog.showMessageBox({
                 title: "Confirm External Links",
                 message: `${url} Looks like an external link, would you like to load it externally?`,
@@ -783,7 +779,6 @@ function createWindow() {
         icon: path.resolve(__dirname, 'utils/logo.png'),
     });
     mainWindow.setBackgroundColor('#393c42');
-    //    mainWindow.loadURL('127.0.0.1:1');
     mainWindow.InternalId = 1;
     mainWindow.loadURL('https://repl.it/repls');
     mainWindow.webContents.on('did-fail-load', (event, errorCode) => {
@@ -823,11 +818,6 @@ function createWindow() {
     mainWindow.webContents.on('did-start-navigation', (event, url) => {
         if (url.toString().includes('repl.it') || url.toString().includes('repl.co') || url.toString().includes('google.com') || url.toString().includes('repl.run')) {
         } else {
-            //if (mainWindow.webContents.canGoBack()) {
-            //    mainWindow.webContents.goBack()
-            //} else {
-            //    mainWindow.loadURL('https://repl.it/repls')
-            //}
             dialog.showMessageBox({
                 title: "Confirm External Links",
                 message: `${url} Looks like an external link, would you like to load it externally?`,

@@ -33,3 +33,9 @@
 2. Fixed missing icons.
 
 3. Added right-click menus.
+
+# 0.0.9
+
+1. Changed some details on the UI.
+   
+2. Bug Fix.

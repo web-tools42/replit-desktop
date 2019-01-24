@@ -1,6 +1,6 @@
 {
   "name": "repl.it",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "electron version of repl.it",
   "main": "main.js",
   "scripts": {
@@ -30,5 +30,5 @@
     "zip-local": "^0.3.4"
   },
   "repository": "https://github.com/leon332157/repl.it-electron",
-  "license": "MIT"
+  "license": "Apache-2.0"
 }

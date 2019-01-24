@@ -17,7 +17,7 @@ electron-installer-zip ../pre-distribute/repl.it-win32-ia32/repl.it.exe 'repl.it
 
 electron-installer-zip ../pre-distribute/repl.it-linux-ia32/repl.it 'repl.it-linux-x32.zip' --verbose
 
-electron-installer-zip ../pre-distribute/repl.it-win32-x64/repl.it.exe 'repl.it-x64.zip' --verbose
+electron-installer-zip ../pre-distribute/repl.it-win32-x64/repl.it.exe 'repl.it-win-x64.zip' --verbose
 
 electron-installer-zip ../pre-distribute/repl.it-linux-x64/repl.it 'repl.it-linux-x64.zip' --verbose
 
