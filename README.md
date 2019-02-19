@@ -1,7 +1,7 @@
 # repl.it-electron
 Native Un-Official Electron app for [repl.it](https://repl.it).
 
-Supports Discord rich presence using DiscordRPC library.
+Supports Discord Rich Presence using DiscordRPC library.
 
 Supports working with two windows at a time. Compared to browsers with tabs.
 
