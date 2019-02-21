@@ -5,9 +5,8 @@ This was the original version by me with out Mat1's code, just keeping it as a r
 
 */
 
-
 // Modules to control application life and create native browser window
-const {app, BrowserWindow, Menu, dialog, ipcMain} = require('electron');
+const { app, BrowserWindow, Menu, dialog, ipcMain } = require('electron');
 const DiscordRPC = require('discord-rpc');
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -16,14 +15,14 @@ let DarkCSS;
 let Dark;
 const clientId = '494756536644665347';
 const fs = require('fs');
-fs.readFile(__dirname + '/Dark.css', function (err, data) {
+fs.readFile(__dirname + '/Dark.css', function(err, data) {
     if (err) {
         throw err;
     }
-    return DarkCSS = data.toString();
+    return (DarkCSS = data.toString());
 });
 
-const rpc = new DiscordRPC.Client({transport: 'ipc'});
+const rpc = new DiscordRPC.Client({ transport: 'ipc' });
 
 const template = [
     {
@@ -63,32 +62,36 @@ const template = [
         submenu: [
             {
                 label: 'Dark Mode',
-                accelerator: "F10",
+                accelerator: 'F10',
                 click(item, focusedWindow) {
                     Dark = true;
-                    addDark(item, focusedWindow)
+                    addDark(item, focusedWindow);
                 }
             },
             {
                 label: 'Dark Mode Off',
-                accelerator: "F11",
+                accelerator: 'F11',
                 click(item, focusedWindow) {
                     Dark = false;
-                    focusedWindow.reload()
+                    focusedWindow.reload();
                 }
             },
             {
                 label: 'Reload',
                 accelerator: 'CmdOrCtrl+R',
                 click(item, focusedWindow) {
-                    if (focusedWindow) focusedWindow.reload()
+                    if (focusedWindow) focusedWindow.reload();
                 }
             },
             {
                 label: 'Toggle Developer Tools',
-                accelerator: process.platform === 'darwin' ? 'Alt+Command+I' : 'Ctrl+Shift+I',
+                accelerator:
+                    process.platform === 'darwin'
+                        ? 'Alt+Command+I'
+                        : 'Ctrl+Shift+I',
                 click(item, focusedWindow) {
-                    if (focusedWindow) focusedWindow.webContents.toggleDevTools()
+                    if (focusedWindow)
+                        focusedWindow.webContents.toggleDevTools();
                 }
             },
             {
@@ -128,7 +131,9 @@ const template = [
             {
                 label: 'Learn More',
                 click() {
-                    require('electron').shell.openExternal('https://github.com/leon332157/repl.it-electron')
+                    require('electron').shell.openExternal(
+                        'https://github.com/leon332157/repl.it-electron'
+                    );
                 }
             }
         ]
@@ -209,78 +214,75 @@ if (process.platform === 'darwin') {
             label: 'Bring All to Front',
             role: 'front'
         }
-    ]
+    ];
 }
 
 const menu = Menu.buildFromTemplate(template);
 const langs = {
-        'has': 'Haskell',
-        'kot': 'Kotlin',
-        'qba': 'QBasic',
-        'for': 'Forth',
-        'lol': 'LOLCODE',
-        'bra': 'BrainFuck',
-        'emo': 'Emoticon',
-        'blo': 'Bloop',
-        'unl': 'Unlambda',
-        'jav': 'Java',
-        'cof': 'CoffeeScript',
-        'sch': 'Scheme',
-        'apl': 'APL',
-        'lua': 'Lua',
-        'pyt': 'Python',
-        'rub': 'Ruby',
-        'roy': 'Roy',
-        'php': 'PHP',
-        'nod': 'Nodejs',
-        'enz': 'Enzyme',
-        'go': 'Go',
-        'cpp': 'C++',
-        'c': 'C',
-        'csh': 'C#',
-        'fsh': 'F#',
-        'htm': 'HTML5',
-        'rus': 'Rust',
-        'swi': 'Swift',
-        'jes': 'Jest',
-        'dja': 'Django',
-        'exp': 'Express',
-        'sin': 'Sinatra',
-        'r': 'R',
-        'nex': 'Next.js',
-        'gat': 'GatsbyJS',
-        'rea': 'React',
-        'bas': 'bash',
-        'qui': 'Quil'
-    }
-;
-
+    has: 'Haskell',
+    kot: 'Kotlin',
+    qba: 'QBasic',
+    for: 'Forth',
+    lol: 'LOLCODE',
+    bra: 'BrainFuck',
+    emo: 'Emoticon',
+    blo: 'Bloop',
+    unl: 'Unlambda',
+    jav: 'Java',
+    cof: 'CoffeeScript',
+    sch: 'Scheme',
+    apl: 'APL',
+    lua: 'Lua',
+    pyt: 'Python',
+    rub: 'Ruby',
+    roy: 'Roy',
+    php: 'PHP',
+    nod: 'Nodejs',
+    enz: 'Enzyme',
+    go: 'Go',
+    cpp: 'C++',
+    c: 'C',
+    csh: 'C#',
+    fsh: 'F#',
+    htm: 'HTML5',
+    rus: 'Rust',
+    swi: 'Swift',
+    jes: 'Jest',
+    dja: 'Django',
+    exp: 'Express',
+    sin: 'Sinatra',
+    r: 'R',
+    nex: 'Next.js',
+    gat: 'GatsbyJS',
+    rea: 'React',
+    bas: 'bash',
+    qui: 'Quil'
+};
 function addDark() {
     if (Dark) {
         mainWindow.webContents.insertCSS(DarkCSS);
     }
 }
 
-
-const message = function () {
-
-    return dialog.showMessageBox({
-        title: "Internet Failed",
-        message: "Internet Failed, do you want to try again?",
-        type: 'error',
-        buttons: ["Try again please", "Quit"],
-        defaultId: 0
-    }, function (index) {
-        // if clicked "Try again please"
-        if (index === 0) {
-            mainWindow.reload();
-        } else {
-            app.quit()
-
+const message = function() {
+    return dialog.showMessageBox(
+        {
+            title: 'Internet Failed',
+            message: 'Internet Failed, do you want to try again?',
+            type: 'error',
+            buttons: ['Try again please', 'Quit'],
+            defaultId: 0
+        },
+        function(index) {
+            // if clicked "Try again please"
+            if (index === 0) {
+                mainWindow.reload();
+            } else {
+                app.quit();
+            }
         }
-    })
+    );
 };
-
 
 async function setActivity() {
     if (!rpc || !mainWindow) {
@@ -293,14 +295,20 @@ async function setActivity() {
     var last = url_list[url_list.length - 1];
     var owner = url_list[url_list.length - 2];
     if (owner.startsWith('@')) {
-        mainWindow.webContents.executeJavaScript(`require('electron').ipcRenderer.send('a',document.body.innerHTML.match(/"contentLength"..."language":".../g))`);
+        mainWindow.webContents.executeJavaScript(
+            `require('electron').ipcRenderer.send('a',document.body.innerHTML.match(/"contentLength"..."language":".../g))`
+        );
         ipcMain.on('a', (_, language_array) => {
             let abbr_lang;
             try {
-                abbr_lang = language_array[0].toString().replace('\"contentLength":0,"language\":\"', '').replace('"', '').replace(',', '')
+                abbr_lang = language_array[0]
+                    .toString()
+                    .replace('"contentLength":0,"language":"', '')
+                    .replace('"', '')
+                    .replace(',', '');
             } catch (e) {
                 console.log(e);
-                abbr_lang = 'Unk'
+                abbr_lang = 'Unk';
             }
             try {
                 console.log(abbr_lang);
@@ -312,13 +320,12 @@ async function setActivity() {
                     largeImageText: langs[abbr_lang],
                     smallImageKey: 'logo',
                     smallImageText: 'repl.it',
-                    instance: false,
-                })
+                    instance: false
+                });
             } catch (e) {
-                console.log(e)
+                console.log(e);
             }
-
-        })
+        });
     } else if (url.includes('https://repl.it/talk')) {
         rpc.setActivity({
             details: `In Repl Talk`,
@@ -328,7 +335,7 @@ async function setActivity() {
             largeImageText: 'Repl Talk',
             smallImageKey: 'logo',
             smallImageText: 'repl.it',
-            instance: false,
+            instance: false
         });
     } else {
         rpc.setActivity({
@@ -337,7 +344,7 @@ async function setActivity() {
             //startTimestamp,
             largeImageKey: 'logo',
             largeImageText: 'repl.it',
-            instance: false,
+            instance: false
         });
     }
     /*rpc.setActivity({
@@ -359,28 +366,28 @@ rpc.on('ready', () => {
     }, 5e3);
 });
 
-rpc.login({clientId}).catch(console.error);
+rpc.login({ clientId }).catch(console.error);
 
 function checkConn() {
-    mainWindow.webContents.on('did-fail-load', message)
+    mainWindow.webContents.on('did-fail-load', message);
 }
 
 function createWindow() {
     // Create the browser window.
-    mainWindow = new BrowserWindow({width: 1280, height: 800});
+    mainWindow = new BrowserWindow({ width: 1280, height: 800 });
     Menu.setApplicationMenu(menu);
     checkConn();
     mainWindow.loadURL('https://repl.it');
     mainWindow.on('focus', checkConn);
     mainWindow.webContents.on('did-frame-finish-load', addDark);
     // Emitted when the window is closed.
-    mainWindow.on('closed', function () {
+    mainWindow.on('closed', function() {
         // Dereference the window object, usually you would store windows
         // in an array if your app supports multi windows, this is the time
         // when you should delete the corresponding element.
         mainWindow = null;
-        app.quit()
-    })
+        app.quit();
+    });
 }
 
 // This method will be called when Electron has finished
@@ -389,19 +396,19 @@ function createWindow() {
 app.on('ready', createWindow);
 
 // Quit when all windows are closed.
-app.on('window-all-closed', function () {
+app.on('window-all-closed', function() {
     // On OS X it is common for applications and their menu bar
     // to stay active until the user quits explicitly with Cmd + Q
     if (process.platform !== 'darwin') {
-        app.quit()
+        app.quit();
     }
 });
 
-app.on('activate', function () {
+app.on('activate', function() {
     // On OS X it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
     if (mainWindow === null) {
-        createWindow()
+        createWindow();
     }
 });
 
