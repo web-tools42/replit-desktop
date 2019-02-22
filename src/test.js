@@ -32,6 +32,9 @@ async function getAllThemes() {
         Themes[theme] = res.data
     }
     print(Themes)
+    return Themes;
 }
 
-getAllThemes().finally();
+getAllThemes().finally((ret)=>{
+    print(ret)
+});
