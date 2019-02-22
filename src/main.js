@@ -16,7 +16,7 @@ var Dark;
 let mainWindow;
 var subWindow = undefined;
 let Update;
-let Themes = {'Dark (Old)': 'old_dark'};
+Themes = {'Dark (Old)': 'old_dark'};
 const clientId = '498635999274991626';
 var startTimestamp = new Date();
 const rpc = new DiscordRPC.Client({
@@ -458,7 +458,6 @@ if (process.platform === 'darwin') {
 const menu = Menu.buildFromTemplate(template);
 
 //TODO:Add custom themes from css.
-//Update: TODO: Use github to do updates.
 
 /* Auto update function */
 function doUpdate() {
