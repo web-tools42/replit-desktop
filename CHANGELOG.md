@@ -42,3 +42,7 @@
 2. Brand new Theme system with [darktheme.tk](www.darktheme.tk/themes)
 
 3. Bug Fix.
+
+# 1.0.1 
+
+1. Hot fix for a messed up submodule.
