@@ -10,9 +10,9 @@ const requests = require('axios');
 
 /* Declare Constants */
 let mainWindow;
-var subWindow = undefined;
+let subWindow = undefined;
 const clientId = '498635999274991626';
-var startTimestamp = new Date();
+let startTimestamp = new Date();
 const rpc = new DiscordRPC.Client({
     transport: 'ipc'
 });
@@ -29,16 +29,16 @@ Array.prototype.append = Array.prototype.push;
 /* App SetUp's */
 
 async function appSetup() {
-    var Themes = {};
-    var themes = {};
+    let Themes = {};
+    let themes = {};
     try {
-        var res = await requests.get('https://www.darktheme.tk/themes.json');
+        let res = await requests.get('https://www.darktheme.tk/themes.json');
     } catch (e) {
         console.error(e)
         return;
     }
-    var theme_instert = [];
-    var raw_themes = res.data;
+    let theme_instert = [];
+    let raw_themes = res.data;
     for (let key in raw_themes) {
         if (raw_themes.hasOwnProperty(key)) {
             themes[key.capitalize()] = raw_themes[key]
@@ -49,7 +49,7 @@ async function appSetup() {
     theme_instert.append({'label': 'Default White', 'value': 'Default White'});
     for (let theme in themes) {
         if (themes.hasOwnProperty(theme)) {
-            var resp = await requests.get(`https://www.darktheme.tk/theme.css?${themes[theme]}`);
+            let resp = await requests.get(`https://www.darktheme.tk/theme.css?${themes[theme]}`);
             Themes[theme] = resp.data.toString();
             theme_instert.append({'label': theme.toString(), 'value': theme.toString()})
         }
@@ -187,7 +187,7 @@ async function appSetup() {
                     label: 'Send Sub to Main Window',
                     click() {
                         if (subWindow) {
-                            var subUrl = subWindow.getURL();
+                            let subUrl = subWindow.getURL();
                             dialog.showMessageBox({
                                 title: "",
                                 message: `Do you want to load ${subUrl} in window 1?`,
@@ -504,7 +504,7 @@ ${result.toString().split('|')[2]}
 }
 
 function ErrorMessage(windowObject, errorCode, errorDescription) {
-    var id = windowObject.InternalId;
+    let id = windowObject.InternalId;
     console.log(errorCode > -6);
     if (errorCode > -6) {
         return;
@@ -590,7 +590,7 @@ function startCustomSession() {
 
 function getUrl() {
     try {
-        var url = mainWindow.webContents
+        let url = mainWindow.webContents
             .getURL()
             .replace(/(^\w+:|^)\/\/repl\.it\//, '');
         url = url.split('?')[0];
@@ -600,8 +600,8 @@ function getUrl() {
     }
 }
 
-var urlbefore = '';
-var urlnow = '';
+let urlbefore = '';
+let urlnow = '';
 
 function setUrl() {
     urlbefore = urlnow;
@@ -633,8 +633,8 @@ user.classList.add('bot');
 }
 
 async function setPlayingDiscord() {
-    var url = getUrl();
-    var spliturl = url.split('/');
+    let url = getUrl();
+    let spliturl = url.split('/');
 
     if (spliturl[0] === 'repls') {
         rpc.setActivity({
@@ -657,7 +657,7 @@ async function setPlayingDiscord() {
         } else {
             viewing = url;
         }
-        var talkBoard = 'error';
+        let talkBoard = 'error';
         switch (spliturl[1]) {
             case 'announcements':
                 talkBoard = 'Announcements';
@@ -689,9 +689,9 @@ async function setPlayingDiscord() {
             instance: false
         }).then();
     } else if (spliturl[0][0] === '@' && spliturl[1] !== undefined) {
-        var fileName = 'Error';
-        var replName = 'Error';
-        var replLanguage = 'Error';
+        let fileName = 'Error';
+        let replName = 'Error';
+        let replLanguage = 'Error';
         await mainWindow.webContents.executeJavaScript(
             "document.querySelector('.file-header-name div').textContent",
             function (result) {
@@ -711,7 +711,7 @@ async function setPlayingDiscord() {
             }
         );
 
-        var lang = fileName.split('.').slice(-1)[0]; // gets the file extension
+        let lang = fileName.split('.').slice(-1)[0]; // gets the file extension
         if (replLanguage === 'Nodejs') {
             lang = 'node';
         }
