@@ -46,3 +46,7 @@
 # 1.0.1 
 
 1. Hot fix for a messed up submodule.
+
+# 1.0.2 
+
+1. Various Bug fixes. Including the annoying ABORTED bug.
