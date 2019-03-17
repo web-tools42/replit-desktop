@@ -1,4 +1,7 @@
 # repl.it-electron
+
+[![Build Status](https://travis-ci.org/repl-it-discord/repl.it-electron.svg?branch=master)](https://travis-ci.org/repl-it-discord/repl.it-electron)
+
 Native Un-Official Electron app for [repl.it](https://repl.it).
 
 Supports Discord Rich Presence using DiscordRPC library.
@@ -19,6 +22,15 @@ git clone --recurse-submodules https://github.com/repl-it-discord/repl.it-electr
 cd "repl.it-electron/src"
 npm install --global --production windows-build-tools # windows
 npm install
+```
+And checkout [CONTRIBUTING.md](https://github.com/repl-it-discord/repl.it-electron/blob/master/CONTRIBUTING.md) for PR process and branch naming rules.
+
+## Testing
+
+Runs Jest test suite at `./test`
+
+```bash
+npm test
 ```
 
 # Licence
