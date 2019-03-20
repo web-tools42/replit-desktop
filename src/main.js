@@ -1,5 +1,5 @@
 /* Require Packages */
-const {app, BrowserWindow, Menu, dialog} = require('electron');
+const { app, BrowserWindow, Menu, dialog, session } = require('electron');
 const path = require('path');
 const DiscordRPC = require('discord-rpc');
 const ElectronPrompt = require('electron-prompt');
@@ -7,11 +7,14 @@ const ElectronContext = require('electron-context-menu');
 const requests = require('axios');
 
 /* Local libs */
+
 const ElectronPreferences = require(path.resolve(
     __dirname,
     'lib',
     'electron-preferences'
 ));
+
+/* Require files */
 
 const {
     addTheme,
@@ -21,11 +24,12 @@ const {
     getUrl,
     handleExternalLink,
     selectInput,
-    setDiscordStatus,
+    setDiscordStatus
 } = require(path.resolve(__dirname, 'lib', 'functions'));
-const {appMenuSetup} = require(path.resolve(__dirname, 'lib', 'constants'));
+const { appMenuSetup } = require(path.resolve(__dirname, 'lib', 'constants'));
 
 /* Declare Constants */
+
 let mainWindow;
 let subWindow = undefined;
 const clientId = '498635999274991626';
@@ -33,6 +37,7 @@ let startTimestamp = new Date();
 const rpc = new DiscordRPC.Client({
     transport: 'ipc'
 });
+let defaultUserAgent;
 
 /* App SetUp's */
 
@@ -81,6 +86,9 @@ async function appSetup() {
             },
             'update-settings': {
                 'auto-update': true
+            },
+            'editor-settings': {
+                editor: 'monaco'
             }
         },
         onLoad: data => {
@@ -159,22 +167,30 @@ async function appSetup() {
                         }
                     ]
                 }
-            }
-            /*{
-                'id': 'editor-settings',
-                'label': 'Editor Settings',
-                'icon': 'single-folded-content',
-                'form': {
-                    'groups': [{
-                        'fields': [{
-                            'label': 'Font size',
-                            'key': 'font-size',
-                            'type': 'text',
-                            'help': 'Font size in px for the editor.'
-                        }]
-                    }]
+            },
+            {
+                id: 'editor-settings',
+                label: 'Editor Settings',
+                icon: 'single-folded-content',
+                form: {
+                    groups: [
+                        {
+                            fields: [
+                                {
+                                    label: 'Editor Selection',
+                                    key: 'editor',
+                                    type: 'dropdown',
+                                    options: [
+                                        { label: 'Monaco', value: 'monaco' },
+                                        { label: 'Ace', value: 'ace' }
+                                    ],
+                                    help: 'The editor to be used in repl.it'
+                                }
+                            ]
+                        }
+                    ]
                 }
-            }*/
+            }
         ]
     });
     Menu.setApplicationMenu(
@@ -184,7 +200,8 @@ async function appSetup() {
                 Preferences,
                 startCustomSession,
                 sendSubToMain,
-                selectInput
+                selectInput,
+                doUpdate
             )
         )
     );
@@ -202,26 +219,41 @@ async function appSetup() {
                 mainWindow,
                 Themes[Preferences.value('app-theme')['theme']]
             );
+            if (Preferences.value('editor-settings')['editor'] === 'ace') {
+                mainWindow.webContents.setUserAgent(
+                    `Mozilla/5.0 (iPad) repl.it/${app.getVersion()}`
+                );
+                mainWindow.reload();
+            } else {
+                mainWindow.webContents.setUserAgent(defaultUserAgent);
+                mainWindow.reload();
+            }
         }
         if (subWindow) {
             addTheme(
                 subWindow,
                 Themes[Preferences.value('app-theme')['theme']]
             );
+            if (Preferences.value('editor-settings')['editor'] === 'ace') {
+                subWindow.webContents.setUserAgent(
+                    `Mozilla/5.0 (iPad) repl.it/${app.getVersion()}`
+                );
+                subWindow.reload();
+            } else {
+                mainWindow.webContents.setUserAgent(defaultUserAgent);
+                subWindow.reload();
+            }
         }
     });
 
-    doUpdate(Preferences.value('update-settings')['auto-update']);
+    doUpdate(Preferences.value('update-settings')['auto-update'], false);
     if (mainWindow) {
-        mainWindow.on('ready-to-show', () => {
-            addTheme(
-                mainWindow,
-                Themes[Preferences.value('app-theme')['theme']]
+        if (Preferences.value('editor-settings')['editor'] === 'ace') {
+            mainWindow.webContents.setUserAgent(
+                `Mozilla/5.0 (iPad) repl.it/${app.getVersion()}`
             );
-            mainWindow.show();
-        })
-        addTheme(mainWindow, Themes[Preferences.value('app-theme')['theme']]);
-        mainWindow.webContents.on('did-stop-loading', () => {
+        }
+        mainWindow.webContents.on('did-start-navigation', () => {
             addTheme(
                 mainWindow,
                 Themes[Preferences.value('app-theme')['theme']]
@@ -230,7 +262,7 @@ async function appSetup() {
     }
     if (subWindow) {
         addTheme(subWindow, Themes[Preferences.value('app-theme')['theme']]);
-        subWindow.webContents.on('did-stop-loading', () => {
+        subWindow.webContents.on('did-start-navigation', () => {
             addTheme(
                 subWindow,
                 Themes[Preferences.value('app-theme')['theme']]
@@ -278,7 +310,7 @@ function startCustomSession() {
                     defaultId: 0
                 });
             } else {
-                if (subWindow !== undefined) {
+                if (!subWindow.isVisible()) {
                     dialog.showMessageBox(
                         {
                             title: '',
@@ -336,7 +368,7 @@ async function setPlayingDiscord() {
             }
         );
     } else if (spliturl[0][0] === '@' && spliturl[1] !== undefined) {
-        setDiscordStatus.editing(spliturl, mainWindow).then(
+        setDiscordStatus.editing(mainWindow).then(
             res => {
                 rpc.setActivity({
                     details: `Editing: ${res.fileName}`,
@@ -404,45 +436,6 @@ async function setPlayingDiscord() {
     }
 }
 
-function startSubWindow() {
-    let url = mainWindow.webContents.getURL();
-    if (!url) {
-        url = 'https://repl.it/repls';
-    }
-    if (subWindow !== undefined) {
-        return;
-    }
-    subWindow = new BrowserWindow({
-        width: mainWindow.getSize()[0] - 10,
-        height: mainWindow.getSize()[1] - 10,
-        minWidth: 600,
-        minHeight: 600,
-        title: 'Repl.it',
-        icon: path.resolve(__dirname, 'utils/logo.png'),
-        parent: mainWindow,
-        webPreferences: {nodeIntegration: false}
-    });
-    subWindow.setBackgroundColor('#393c42');
-    subWindow.InternalId = 2;
-    if (url) {
-        subWindow.loadURL(url);
-    } else {
-        subWindow.loadURL('https://repl.it/repls');
-    }
-    subWindow.webContents.on(
-        'did-fail-load',
-        (event, errorCode, errorDescription) => {
-            errorMessage(subWindow, errorCode, errorDescription);
-        }
-    );
-    subWindow.webContents.on('did-start-loading', (event, url) => {
-        handleExternalLink(subWindow, url);
-    });
-    subWindow.on('unresponsive', () => {
-        subWindow.reload(true);
-    });
-}
-
 function sendSubToMain() {
     if (subWindow) {
         let subUrl = subWindow.getURL();
@@ -463,6 +456,48 @@ function sendSubToMain() {
         );
     }
 }
+function startSubWindow() {
+    if (subWindow.isVisible()) {
+        return;
+    }
+    let url = mainWindow.webContents.getURL();
+    if (!url) {
+        url = 'https://repl.it/repls';
+    }
+    subWindow.loadURL(url);
+    subWindow.show();
+}
+function createSubWindow() {
+    subWindow = new BrowserWindow({
+        width: mainWindow.getSize()[0] - 10,
+        height: mainWindow.getSize()[1] - 10,
+        minWidth: 600,
+        minHeight: 600,
+        title: 'Repl.it',
+        icon: path.resolve(__dirname, 'utils/logo.png'),
+        parent: mainWindow,
+        webPreferences: { nodeIntegration: false },
+        show: false
+    });
+    subWindow.setBackgroundColor('#393c42');
+    subWindow.InternalId = 2;
+    subWindow.webContents.on(
+        'did-fail-load',
+        (event, errorCode, errorDescription) => {
+            errorMessage(subWindow, errorCode, errorDescription);
+        }
+    );
+    subWindow.webContents.on('will-navigate', (event, url) => {
+        handleExternalLink(subWindow, url);
+    });
+    subWindow.on('unresponsive', () => {
+        subWindow.reload();
+    });
+    subWindow.on('close', event => {
+        event.preventDefault();
+        subWindow.hide();
+    });
+}
 
 function createWindow() {
     mainWindow = new BrowserWindow({
@@ -471,11 +506,10 @@ function createWindow() {
         minWidth: 600,
         minHeight: 600,
         title: 'Repl.it',
-        webPreferences: {nodeIntegration: false},
-        //show:false,
+        webPreferences: { nodeIntegration: false },
         icon: path.resolve(__dirname, 'utils/logo.png')
     });
-    mainWindow.setBackgroundColor('#393c42');
+    defaultUserAgent = mainWindow.webContents.getUserAgent();
     mainWindow.InternalId = 1;
     mainWindow.webContents.on(
         'did-fail-load',
@@ -484,16 +518,16 @@ function createWindow() {
         }
     );
     mainWindow.on('close', () => {
-        app.quit();
+        process.exit(0);
     });
     mainWindow.webContents.on('will-navigate', (event, url) => {
         handleExternalLink(mainWindow, url);
     });
     mainWindow.on('unresponsive', () => {
         mainWindow.reload();
-    })
+    });
     mainWindow.loadURL('https://repl.it/repls');
-
+    createSubWindow();
 }
 
 ElectronContext({
@@ -505,18 +539,18 @@ ElectronContext({
 rpc.on('ready', () => {
     // activity can only be set every 15 seconds
     setInterval(() => {
-        setPlayingDiscord().catch((reason) => {
+        setPlayingDiscord().catch(reason => {
             console.log('Failed to update Discord status. ' + reason);
         });
     }, 15e3);
 });
-app.on('window-all-closed', function () {
+app.on('window-all-closed', function() {
     app.quit();
 });
 app.on('ready', () => {
     createWindow();
 });
 
-rpc.login({clientId: clientId}).catch((error) => {
+rpc.login({ clientId: clientId }).catch(error => {
     console.error(error);
 });
