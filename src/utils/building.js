@@ -1,5 +1,7 @@
-process.env['DEBUG'] = 'electron-packager';
+const packager = require('electron-packager');
 const path = require('path');
+
+process.env['DEBUG'] = 'electron-packager';
 let sourceDir = path.resolve('..', 'src');
 let windowsIconPath = '/Users/lynnzheng/Desktop/repl.it/logos/ico/logo.ico';
 let macIconPath = '/Users/lynnzheng/Desktop/repl.it/logos/icns/icon.icns';
@@ -13,12 +15,6 @@ if ('TRAVIS' in process.env && 'CI' in process.env) {
     Debug = false;
     process.env['DEBUG'] = '';
 }
-const packager = require(path.resolve(
-    '..',
-    'src',
-    'node_modules',
-    'electron-packager'
-));
 
 function shouldIgnore(filePath) {
     //console.log(filePath);

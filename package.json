@@ -6,7 +6,7 @@
     "scripts": {
         "start": "electron .",
         "test": "jest --debug --detectOpenHandles",
-        "build": "node ../utils/building.js"
+        "build": "node src/utils/building.js"
     },
     "keywords": [
         "Electron",

@@ -1,5 +1,5 @@
 const path = require('path');
-const capitalizeFn = require(path.join('src', 'lib', 'functions', 'capitalize'));
+const capitalizeFn = require(path.join('..', 'src', 'lib', 'functions', 'capitalize'));
 
 describe('capitalize', function () {
     test('one word', function() {
