@@ -35,7 +35,7 @@ const rpc = new DiscordRPC.Client({
 });
 let defaultUserAgent;
 
-/* App SetUp's */
+/* App's Setup */
 
 async function appSetup() {
     let Themes = {};

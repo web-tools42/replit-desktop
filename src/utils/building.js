@@ -6,14 +6,14 @@ let sourceDir = path.resolve('..');
 let windowsIconPath = path.resolve('..', 'assets', 'logo', 'ico', 'logo.ico');
 let macIconPath = path.resolve('..', 'assets', 'logo', 'icns', 'icon.icns');
 let linuxIconPath = path.resolve(__dirname, 'logo.png ');
-let Debug = true;
+let debug = true;
 
 if ('TRAVIS' in process.env && 'CI' in process.env) {
     windowsIconPath = '';
     macIconPath = '';
     linuxIconPath = '';
     sourceDir = path.resolve('.');
-    Debug = false;
+    debug = false;
     process.env['DEBUG'] = '';
 }
 
@@ -26,7 +26,7 @@ function shouldIgnore(filePath) {
         path.basename(filePath).startsWith('.') ||
         filePath.includes('coverage')
     ) {
-        if (Debug) {
+        if (debug) {
             console.log(`Ignored ${filePath}`);
         }
         return true;
@@ -37,7 +37,7 @@ function shouldIgnore(filePath) {
                 filePath
             )
         ) {
-            if (Debug) {
+            if (debug) {
                 console.log(`Ignored ${filePath}`);
             }
             return true;
@@ -47,7 +47,7 @@ function shouldIgnore(filePath) {
                 path.basename(filePath)
             )
         ) {
-            if (Debug) {
+            if (debug) {
                 console.log(`Ignored ${filePath}`);
             }
             return true;
