@@ -2,11 +2,12 @@ const packager = require('electron-packager');
 const path = require('path');
 
 process.env['DEBUG'] = 'electron-packager';
-let sourceDir = path.resolve('..', 'src');
-let windowsIconPath = '/Users/lynnzheng/Desktop/repl.it/logos/ico/logo.ico';
-let macIconPath = '/Users/lynnzheng/Desktop/repl.it/logos/icns/icon.icns';
-let linuxIconPath = '/Users/lynnzheng/Desktop/repl.it/utils/logo.png ';
+let sourceDir = path.resolve('..');
+let windowsIconPath = path.resolve('..', 'assets', 'logo', 'ico', 'logo.ico');
+let macIconPath = path.resolve('..', 'assets', 'logo', 'icns', 'icon.icns');
+let linuxIconPath = path.resolve(__dirname, 'logo.png ');
 let Debug = true;
+
 if ('TRAVIS' in process.env && 'CI' in process.env) {
     windowsIconPath = '';
     macIconPath = '';
