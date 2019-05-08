@@ -1,18 +1,19 @@
-const path = require('path');
+let addTheme = require('./addTheme');
+let capitalize = require('./capitalize');
+let doUpdate = require('./doUpdate');
+let errorMessage = require('./errorMessage');
+let getUrl = require('./getUrl');
+let handleExternalLink = require('./handleExternalLink');
+let selectInput = require('./selectInput');
+let setDiscordStatus = require('./setDiscordStatus');
 
-exports.addTheme = require(path.resolve(__dirname,'addTheme'));
-
-exports.capitalize = require(path.resolve(__dirname,'capitalize'));
-
-exports.doUpdate = require(path.resolve(__dirname,'doUpdate'));
-
-exports.errorMessage = require(path.resolve(__dirname,'errorMessage'));
-
-exports.getUrl = require(path.resolve(__dirname,'getUrl'));
-
-exports.handleExternalLink = require(path.resolve(__dirname,'handleExternalLink'));
-
-exports.selectInput = require(path.resolve(__dirname,'selectInput'));
-
-exports.setDiscordStatus = require(path.resolve(__dirname,'setDiscordStatus'));
-
+module.exports = {
+  addTheme,
+  capitalize,
+  doUpdate,
+  errorMessage,
+  getUrl,
+  handleExternalLink,
+  selectInput,
+  setDiscordStatus
+};

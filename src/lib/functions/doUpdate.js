@@ -60,4 +60,5 @@ ${result.toString().split('|')[2]}
         }
     });
 }
+
 module.exports = doUpdate;

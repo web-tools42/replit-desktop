@@ -19,7 +19,7 @@ Download the app in [release](https://github.com/leon332157/repl.it-electron/rel
 
 ```bash
 git clone --recurse-submodules https://github.com/repl-it-discord/repl.it-electron
-cd "repl.it-electron/src"
+cd "repl.it-electron"
 npm install --global --production windows-build-tools # windows
 npm install
 ```
@@ -27,7 +27,7 @@ And checkout [CONTRIBUTING.md](https://github.com/repl-it-discord/repl.it-electr
 
 ## Testing
 
-Runs Jest test suite at `src/__test__`
+Runs Jest test suite at `test`
 
 ```bash
 npm test
