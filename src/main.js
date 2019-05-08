@@ -8,7 +8,7 @@ const requests = require('axios');
 
 /* Local libs */
 
-const ElectronPreferences = require('electron-preferences');
+const ElectronPreferences = require(path.resolve(__dirname, 'lib', 'electron-preferences'));
 
 /* Require files */
 
