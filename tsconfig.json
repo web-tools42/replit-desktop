@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    // "baseUrl": ".",
+    "removeComments": false,
+    "sourceMap": true
+  },
+  "exclude": [
+    "node_modules"
+  ]
+}
