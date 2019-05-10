@@ -1,5 +1,5 @@
 let path = require('path');
-let appMenuSetup = require(path.resolve(__dirname, 'appMenuSetup'));
+let appMenuSetup = require('./appMenuSetup');
 
 module.exports = {
   appMenuSetup

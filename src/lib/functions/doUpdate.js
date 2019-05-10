@@ -1,6 +1,6 @@
 const { dialog, app } = require('electron');
 const path = require('path');
-const EBU = require(path.join(__dirname, '../electron-basic-updater'));
+const EBU = require('../electron-basic-updater');
 
 function doUpdate(Update, Manual) {
     if (!Update) {

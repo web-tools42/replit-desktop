@@ -8,7 +8,7 @@ const requests = require('axios');
 
 /* Local libs */
 
-const ElectronPreferences = require(path.resolve(__dirname, 'lib', 'electron-preferences'));
+const ElectronPreferences = require('./lib/electron-preferences');
 
 /* Require files */
 
@@ -21,8 +21,8 @@ const {
     handleExternalLink,
     selectInput,
     setDiscordStatus
-} = require(path.resolve(__dirname, 'lib', 'functions'));
-const { appMenuSetup } = require(path.resolve(__dirname, 'lib', 'constants'));
+} = require('./lib/functions');
+const { appMenuSetup } = require('./lib/constants');
 
 /* Declare Constants */
 

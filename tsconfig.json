@@ -1,10 +1,34 @@
 {
   "compilerOptions": {
-    // "baseUrl": ".",
-    "removeComments": false,
-    "sourceMap": true
+    "module": "commonjs",
+    "esModuleInterop": true,
+    "target": "es6",
+    "noImplicitAny": true,
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "outDir": "dist",
+    "baseUrl": ".",
+    "allowJs": true,
+    "paths": {
+      "*": [
+        "node_modules/*",
+        "src/types/*"
+      ]
+    }
+    // "module": "commonjs",
+    // "baseUrl": "./",
+    // "outDir": "dist",
+    // "removeComments": false,
+    // "sourceMap": true,
+    // "declaration": true,
+    // "target": "es2015",
+    // "strict": true,
+    // "outFile": "outfile.js"
   },
-  "exclude": [
-    "node_modules"
-  ]
+  "include": [
+    "src/**/* "
+  ],
+  // "exclude": [
+  //   "node_modules"
+  // ]
 }
