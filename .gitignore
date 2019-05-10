@@ -14,3 +14,4 @@ update-window*
 *bashrc
 *nyc*
 dev*
+package-lock.json
