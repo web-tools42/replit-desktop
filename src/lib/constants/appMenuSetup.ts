@@ -1,4 +1,5 @@
-import {app, shell, clipboard, BrowserWindow} from 'electron';
+import {app, shell, clipboard} from 'electron';
+import {ElectronWindow} from "../classes";
 
 function appMenuSetup(
     startSubWindow: Function,
@@ -89,7 +90,7 @@ function appMenuSetup(
                                 },
                                 {
                                         label: 'Copy URL to clipboard',
-                                        click(item: any, focusedWindow: BrowserWindow) {
+                                        click(item: any, focusedWindow: ElectronWindow) {
                                                 clipboard.writeText(focusedWindow.webContents.getURL());
                                         }
                                 }
@@ -100,7 +101,7 @@ function appMenuSetup(
                         submenu: [
                                 {
                                         label: 'Go Back',
-                                        click(item: any, focusedWindow: BrowserWindow) {
+                                        click(item: any, focusedWindow: ElectronWindow) {
                                                 if (focusedWindow.webContents.canGoBack()) {
                                                         focusedWindow.webContents.goBack();
                                                 }
@@ -108,7 +109,7 @@ function appMenuSetup(
                                 },
                                 {
                                         label: 'Go Forward',
-                                        click(item: any, focusedWindow: BrowserWindow) {
+                                        click(item: any, focusedWindow: ElectronWindow) {
                                                 if (focusedWindow.webContents.canGoForward()) {
                                                         focusedWindow.webContents.goForward();
                                                 }
@@ -119,20 +120,20 @@ function appMenuSetup(
                                 },
                                 {
                                         label: 'Open Current Link externally',
-                                        click(item: any, focusedWindow: BrowserWindow) {
+                                        click(item: any, focusedWindow: ElectronWindow) {
                                                 shell.openExternal(focusedWindow.webContents.getURL());
                                         }
                                 },
                                 {
                                         label: 'Restore Blank Page',
-                                        click(item: any, focusedWindow: BrowserWindow) {
+                                        click(item: any, focusedWindow: ElectronWindow) {
                                                 focusedWindow.loadURL('https://repl.it/repls');
                                         }
                                 },
                                 {
                                         label: 'Select Input',
                                         accelerator: 'CmdOrCtrl+f',
-                                        click(item: any, focusedWindow: BrowserWindow) {
+                                        click(item: any, focusedWindow: ElectronWindow) {
                                                 selectInput(focusedWindow);
                                         }
                                 },
@@ -142,7 +143,7 @@ function appMenuSetup(
                                 {
                                         label: 'Reload',
                                         accelerator: 'CmdOrCtrl+R',
-                                        click(item: any, focusedWindow: BrowserWindow) {
+                                        click(item: any, focusedWindow: ElectronWindow) {
                                                 if (focusedWindow) focusedWindow.reload();
                                         }
                                 },
@@ -152,7 +153,7 @@ function appMenuSetup(
                                             process.platform === 'darwin'
                                                 ? 'Alt+Command+I'
                                                 : 'Ctrl+Shift+I',
-                                        click(item: any, focusedWindow: BrowserWindow) {
+                                        click(item: any, focusedWindow: ElectronWindow) {
                                                 if (focusedWindow)
                                                         focusedWindow.webContents.toggleDevTools();
                                         }

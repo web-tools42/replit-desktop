@@ -1,6 +1,7 @@
 import {dialog} from 'electron';
+import {ElectronWindow} from "../classes";
 
-function errorMessage(windowObject: any, errorCode: any, errorDescription: any) {
+function errorMessage(windowObject: ElectronWindow, errorCode: any, errorDescription: any) {
         let id = windowObject.InternalId;
         if (errorCode > -6 || errorCode <= -300) {
                 return;

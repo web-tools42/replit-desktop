@@ -8,6 +8,7 @@ module.exports = {
     target: 'electron-main',
     context: path.resolve(__dirname),
     watch: true,
+
     entry: ['@babel/polyfill', './src/main.ts'],
     output: {
         publicPath: './',

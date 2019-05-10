@@ -1,10 +1,12 @@
-async function talkBoard(spliturl: string, windowObj: any) {
+import {ElectronWindow} from "../classes";
+
+async function talkBoard(spliturl: Array<string>, windowObj: ElectronWindow) {
         let viewing;
         console.log(spliturl);
         if (spliturl[3] !== undefined) {
                 await windowObj.webContents.executeJavaScript(
                     "document.getElementsByClassName('board-post-detail-title')[0].textContent",
-                    function (result: string) {
+                    false, function (result: string) {
                             viewing = `Viewing ${result}`;
                     }
                 ); // gets the repl talk post name
@@ -38,18 +40,18 @@ async function talkBoard(spliturl: string, windowObj: any) {
 }
 
 
-async function editing(windowObj: any) {
+async function editing(windowObj: ElectronWindow) {
         let fileName = 'Error';
         let replLanguage = 'Error';
         await windowObj.webContents.executeJavaScript(
             "document.querySelector('.file-header-name div').textContent",
-            (result: string) => {
+            false, (result: string) => {
                     fileName = result;
             }
         );
         await windowObj.webContents.executeJavaScript(
             "document.querySelector('.workspace-header-description-container img')['title']",
-            (result: string) => {
+            false, (result: string) => {
                     replLanguage = result;
             }
         );

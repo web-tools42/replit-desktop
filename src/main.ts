@@ -1,5 +1,5 @@
 /* Require Packages */
-import {app, BrowserWindow, Menu, dialog} from 'electron'
+import {app, Menu, dialog} from 'electron'
 // @ts-ignore
 import path from 'path';
 // @ts-ignore
@@ -14,6 +14,7 @@ import requests from 'axios';
 /* Local libs */
 
 import ElectronPreferences from './lib/electron-preferences';
+import {ElectronWindow} from "./lib/classes";
 
 /* Require files */
 
@@ -485,7 +486,7 @@ function startSubWindow() {
 }
 
 function createSubWindow() {
-        subWindow = new BrowserWindow({
+        subWindow = new ElectronWindow({
                 width: mainWindow.getSize()[0] - 10,
                 height: mainWindow.getSize()[1] - 10,
                 minWidth: 600,
@@ -519,7 +520,7 @@ function createSubWindow() {
 }
 
 function createWindow() {
-        mainWindow = new BrowserWindow({
+        mainWindow = new ElectronWindow({
                 width: 1280,
                 height: 800,
                 minWidth: 600,

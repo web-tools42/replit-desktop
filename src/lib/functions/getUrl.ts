@@ -1,4 +1,6 @@
-function getUrl(windowObj: any) {
+import {ElectronWindow} from "../classes";
+
+function getUrl(windowObj: ElectronWindow) {
         try {
                 let url = windowObj.webContents
                     .getURL()

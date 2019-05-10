@@ -1,6 +1,7 @@
 import {dialog, shell} from 'electron'
+import {ElectronWindow} from "../classes";
 
-function handleExternalLink(windowObj: any, url: string) {
+function handleExternalLink(windowObj: ElectronWindow, url: string) {
         console.log(`External URL: ${url}`);
         if (!url) {
                 return;
