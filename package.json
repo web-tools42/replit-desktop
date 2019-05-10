@@ -12,7 +12,7 @@
         "test": "jest --debug --detectOpenHandles"
     },
     "keywords": [
-        "Electron",
+        "electron",
         "repl.it",
         "discord-rpc"
     ],
