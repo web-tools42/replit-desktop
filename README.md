@@ -18,8 +18,8 @@ Download the app in [release](https://github.com/leon332157/repl.it-electron/rel
 ## Contributing
 
 ```bash
-git clone --recurse-submodules https://github.com/repl-it-discord/repl.it-electron
-cd "repl.it-electron/src"
+git clone --recurse-submodules https://github.com/repl-it-discord/repl-it-electron
+cd "repl-it-electron/src"
 npm install --global --production windows-build-tools # windows
 npm install
 ```
