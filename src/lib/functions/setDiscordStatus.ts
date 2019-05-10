@@ -1,17 +1,16 @@
-async function talkBoard(spliturl, windowObj) {
+async function talkBoard(spliturl: string, windowObj: any) {
     let viewing;
     console.log(spliturl);
     if (spliturl[3] !== undefined) {
         await windowObj.webContents.executeJavaScript(
             "document.getElementsByClassName('board-post-detail-title')[0].textContent",
-            function(result) {
+            function (result: string) {
                 viewing = `Viewing ${result}`;
             }
         ); // gets the repl talk post name
-    } else if (spliturl[2]!==undefined) {
+    } else if (spliturl[2] !== undefined) {
         viewing = `Viewing ${spliturl[2]}`;
-    }
-    else {
+    } else {
         viewing = `Viewing ${spliturl[1]}`;
     }
     let talkBoard = 'error';
@@ -35,23 +34,22 @@ async function talkBoard(spliturl, windowObj) {
             talkBoard = '';
     }
     console.log(viewing);
-    return { viewing: viewing, talkBoard: talkBoard };
+    return {viewing: viewing, talkBoard: talkBoard};
 }
 
-module.exports.talkBoard = talkBoard;
 
-async function editing(windowObj) {
+async function editing(windowObj: any) {
     let fileName = 'Error';
     let replLanguage = 'Error';
     await windowObj.webContents.executeJavaScript(
         "document.querySelector('.file-header-name div').textContent",
-        result => {
+        (result: string) => {
             fileName = result;
         }
     );
     await windowObj.webContents.executeJavaScript(
         "document.querySelector('.workspace-header-description-container img')['title']",
-        result => {
+        (result: string) => {
             replLanguage = result;
         }
     );
@@ -80,6 +78,7 @@ async function editing(windowObj) {
     if (!(lang in langsJson)) {
         lang = 'Unknown';
     }
-    return { fileName: fileName, lang: lang };
+    return {fileName: fileName, lang: lang};
 }
-module.exports.editing = editing;
+
+export {editing, talkBoard}

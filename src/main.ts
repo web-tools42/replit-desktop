@@ -1,46 +1,54 @@
 /* Require Packages */
-const { app, BrowserWindow, Menu, dialog, session } = require('electron');
-const path = require('path');
-const DiscordRPC = require('discord-rpc');
-const ElectronPrompt = require('electron-prompt');
-const ElectronContext = require('electron-context-menu');
-const requests = require('axios');
+import {app, BrowserWindow, Menu, dialog} from 'electron'
+// @ts-ignore
+import path from 'path';
+// @ts-ignore
+import DiscordRPC from 'discord-rpc';
+// @ts-ignore
+import ElectronPrompt from 'electron-prompt';
+// @ts-ignore
+import ElectronContext from 'electron-context-menu';
+// @ts-ignore
+import requests from 'axios';
 
 /* Local libs */
 
-const ElectronPreferences = require('./lib/electron-preferences');
+import ElectronPreferences from './lib/electron-preferences';
 
 /* Require files */
 
-const {
+import {
     addTheme,
     capitalize,
     doUpdate,
+    editing,
     errorMessage,
     getUrl,
     handleExternalLink,
     selectInput,
-    setDiscordStatus
-} = require('./lib/functions');
-const { appMenuSetup } = require('./lib/constants');
+    talkBoard
+} from './lib/functions';
+
+import {appMenuSetup} from './lib/constants';
 
 /* Declare Constants */
 
-let mainWindow;
-let subWindow = undefined;
+let mainWindow: any;
+let subWindow: any = undefined;
 const clientId = '498635999274991626';
 let startTimestamp = new Date();
 const rpc = new DiscordRPC.Client({
     transport: 'ipc'
 });
-let defaultUserAgent;
+let defaultUserAgent: string;
 
 /* App's Setup */
 
 async function appSetup() {
-    let Themes = {};
-    let themes = {};
+    let Themes: object = {};
+    let themes: object = {};
     try {
+        // @ts-ignore
         var res = await requests.get('https://www.darktheme.tk/themes.json');
     } catch (e) {
         console.error(e);
@@ -50,10 +58,12 @@ async function appSetup() {
     let raw_themes = res.data;
     for (let key in raw_themes) {
         if (raw_themes.hasOwnProperty(key)) {
+            // @ts-ignore
             themes[capitalize(key)] = raw_themes[key];
         }
     }
 
+    // @ts-ignore
     Themes['Default White'] = '';
     theme_instert.push({
         label: 'Default White',
@@ -61,9 +71,12 @@ async function appSetup() {
     });
     for (let theme in themes) {
         if (themes.hasOwnProperty(theme)) {
+            // @ts-ignore
             let resp = await requests.get(
+                // @ts-ignore
                 `https://www.darktheme.tk/theme.css?${themes[theme]}`
             );
+            // @ts-ignore
             Themes[theme] = resp.data.toString();
             theme_instert.push({
                 label: theme.toString(),
@@ -87,7 +100,7 @@ async function appSetup() {
                 editor: 'monaco'
             }
         },
-        onLoad: data => {
+        onLoad: (data: any) => {
             return data;
         },
         webPreferences: {
@@ -177,8 +190,8 @@ async function appSetup() {
                                     key: 'editor',
                                     type: 'dropdown',
                                     options: [
-                                        { label: 'Monaco', value: 'monaco' },
-                                        { label: 'Ace', value: 'ace' }
+                                        {label: 'Monaco', value: 'monaco'},
+                                        {label: 'Ace', value: 'ace'}
                                     ],
                                     help: 'The editor to be used in repl.it'
                                 }
@@ -191,6 +204,7 @@ async function appSetup() {
     });
     Menu.setApplicationMenu(
         Menu.buildFromTemplate(
+            // @ts-ignore
             appMenuSetup(
                 startSubWindow,
                 Preferences,
@@ -202,7 +216,7 @@ async function appSetup() {
         )
     );
 
-    Preferences.on('save', preferences => {
+    Preferences.on('save', (preferences: object) => {
         console.log(
             `Preferences were saved. at ${path.resolve(
                 app.getPath('userData'),
@@ -213,6 +227,7 @@ async function appSetup() {
         if (mainWindow) {
             addTheme(
                 mainWindow,
+                // @ts-ignore
                 Themes[Preferences.value('app-theme')['theme']]
             );
             if (Preferences.value('editor-settings')['editor'] === 'ace') {
@@ -228,6 +243,7 @@ async function appSetup() {
         if (subWindow) {
             addTheme(
                 subWindow,
+                // @ts-ignore
                 Themes[Preferences.value('app-theme')['theme']]
             );
             if (Preferences.value('editor-settings')['editor'] === 'ace') {
@@ -252,15 +268,18 @@ async function appSetup() {
         mainWindow.webContents.on('did-start-navigation', () => {
             addTheme(
                 mainWindow,
+                // @ts-ignore
                 Themes[Preferences.value('app-theme')['theme']]
             );
         });
     }
     if (subWindow) {
+        // @ts-ignore
         addTheme(subWindow, Themes[Preferences.value('app-theme')['theme']]);
         subWindow.webContents.on('did-start-navigation', () => {
             addTheme(
                 subWindow,
+                // @ts-ignore
                 Themes[Preferences.value('app-theme')['theme']]
             );
         });
@@ -287,7 +306,7 @@ function startCustomSession() {
         },
         customStylesheet: path.resolve(__dirname, 'promptDark.css')
     })
-        .then(r => {
+        .then((r: any) => {
             if (r === undefined || r === null) {
                 return;
             }
@@ -296,7 +315,7 @@ function startCustomSession() {
                 !r.toString().startsWith('https://repl.it/') ||
                 !r
                     .toString()
-                    .includes('repl.co' || !r.toString().includes('repl.run'))
+                    .includes(<string>'repl.co' || !r.toString().includes('repl.run'))
             ) {
                 dialog.showMessageBox({
                     title: '',
@@ -323,7 +342,7 @@ function startCustomSession() {
                         }
                     );
                 } else {
-                    startSubWindow(r);
+                    startSubWindow();
                 }
             }
         })
@@ -344,8 +363,8 @@ async function setPlayingDiscord() {
             instance: false
         }).then();
     } else if (spliturl[0] === 'talk') {
-        setDiscordStatus.talkBoard(spliturl, mainWindow).then(
-            res => {
+        talkBoard(spliturl, mainWindow).then(
+            (res: any) => {
                 rpc.setActivity({
                     state: `${res.viewing}`,
                     details: `In Repl Talk ${res.talkBoard}`,
@@ -355,17 +374,17 @@ async function setPlayingDiscord() {
                     smallImageKey: 'talk',
                     smallImageText: 'Repl Talk',
                     instance: false
-                }).catch(reason => {
+                }).catch((reason: string) => {
                     console.error(`error@talk board ${reason}`);
                 });
             },
-            reason => {
+            (reason: string) => {
                 console.error(`Set Talk board Failed ${reason}`);
             }
         );
     } else if (spliturl[0][0] === '@' && spliturl[1] !== undefined) {
-        setDiscordStatus.editing(mainWindow).then(
-            res => {
+        editing(mainWindow).then(
+            (res: any) => {
                 rpc.setActivity({
                     details: `Editing: ${res.fileName}`,
                     state: `${url} `,
@@ -375,11 +394,11 @@ async function setPlayingDiscord() {
                     largeImageKey: res.lang,
                     largeImageText: res.lang,
                     instance: false
-                }).catch(reason => {
+                }).catch((reason: string) => {
                     console.error(`error@editing ${reason}`);
                 });
             },
-            reason => {
+            (reason: string) => {
                 console.error(`Set editing failed ${reason}`);
             }
         );
@@ -393,7 +412,7 @@ async function setPlayingDiscord() {
             smallImageKey: 'logo',
             smallImageText: 'Repl.it',
             instance: false
-        }).catch(reason => {
+        }).catch((reason: string) => {
             console.error(`error@talk ${reason}`);
         });
     } else if (spliturl[0][0] === '@') {
@@ -404,7 +423,7 @@ async function setPlayingDiscord() {
             largeImageKey: 'logo',
             largeImageText: 'Repl.it',
             instance: false
-        }).catch(reason => {
+        }).catch((reason: string) => {
             console.debug(`error@profile ${reason}`);
         });
     } else if (spliturl[0] === 'account') {
@@ -415,7 +434,7 @@ async function setPlayingDiscord() {
             largeImageKey: 'logo',
             largeImageText: 'Repl.it',
             instance: false
-        }).catch(reason => {
+        }).catch((reason: string) => {
             console.debug(`error@acount ${reason}`);
         });
     } else {
@@ -426,7 +445,7 @@ async function setPlayingDiscord() {
             largeImageKey: 'logo',
             largeImageText: 'Repl.it',
             instance: false
-        }).catch(reason => {
+        }).catch((reason: string) => {
             console.error(`error@main ${reason}`);
         });
     }
@@ -452,6 +471,7 @@ function sendSubToMain() {
         );
     }
 }
+
 function startSubWindow() {
     if (subWindow.isVisible()) {
         return;
@@ -463,6 +483,7 @@ function startSubWindow() {
     subWindow.loadURL(url);
     subWindow.show();
 }
+
 function createSubWindow() {
     subWindow = new BrowserWindow({
         width: mainWindow.getSize()[0] - 10,
@@ -472,24 +493,26 @@ function createSubWindow() {
         title: 'Repl.it',
         icon: path.resolve(__dirname, 'utils/logo.png'),
         parent: mainWindow,
-        webPreferences: { nodeIntegration: false },
+        webPreferences: {nodeIntegration: false},
         show: false
     });
     subWindow.setBackgroundColor('#393c42');
     subWindow.InternalId = 2;
     subWindow.webContents.on(
         'did-fail-load',
-        (event, errorCode, errorDescription) => {
+        (event: any, errorCode: number, errorDescription: string) => {
+            // @ts-ignore
             errorMessage(subWindow, errorCode, errorDescription);
         }
     );
-    subWindow.webContents.on('will-navigate', (event, url) => {
+    subWindow.webContents.on('will-navigate', (event: any, url: string) => {
+        // @ts-ignore
         handleExternalLink(subWindow, url);
     });
     subWindow.on('unresponsive', () => {
         subWindow.reload();
     });
-    subWindow.on('close', event => {
+    subWindow.on('close', (event: any) => {
         event.preventDefault();
         subWindow.hide();
     });
@@ -502,21 +525,23 @@ function createWindow() {
         minWidth: 600,
         minHeight: 600,
         title: 'Repl.it',
-        webPreferences: { nodeIntegration: false },
+        webPreferences: {nodeIntegration: false},
         icon: path.resolve(__dirname, 'utils/logo.png')
     });
     defaultUserAgent = mainWindow.webContents.getUserAgent();
     mainWindow.InternalId = 1;
     mainWindow.webContents.on(
         'did-fail-load',
-        (event, errorCode, errorDescription) => {
+        (event: any, errorCode: number, errorDescription: string) => {
+            // @ts-ignore
             errorMessage(mainWindow, errorCode, errorDescription);
         }
     );
     mainWindow.on('close', () => {
         process.exit(0);
     });
-    mainWindow.webContents.on('will-navigate', (event, url) => {
+    mainWindow.webContents.on('will-navigate', (event: any, url: string) => {
+        // @ts-ignore
         handleExternalLink(mainWindow, url);
     });
     mainWindow.on('unresponsive', () => {
@@ -540,13 +565,13 @@ rpc.on('ready', () => {
         });
     }, 15e3);
 });
-app.on('window-all-closed', function() {
+app.on('window-all-closed', function () {
     app.quit();
 });
 app.on('ready', () => {
     createWindow();
 });
 
-rpc.login({ clientId: clientId }).catch(error => {
+rpc.login({clientId: clientId}).catch((error: any) => {
     console.error(error);
 });

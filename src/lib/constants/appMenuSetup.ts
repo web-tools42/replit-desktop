@@ -1,12 +1,12 @@
-const { app, shell, clipboard } = require('electron');
+import {app, shell, clipboard, BrowserWindow} from 'electron';
 
 function appMenuSetup(
-    startSubWindow,
-    Preferences,
-    startCustomSession,
-    sendSubToMain,
-    selectInput,
-    doUpdate
+    startSubWindow: Function,
+    Preferences: any,
+    startCustomSession: Function,
+    sendSubToMain: Function,
+    selectInput: Function,
+    doUpdate: Function
 ) {
     const template = [
         {
@@ -89,7 +89,7 @@ function appMenuSetup(
                 },
                 {
                     label: 'Copy URL to clipboard',
-                    click(item, focusedWindow) {
+                    click(item: any, focusedWindow: BrowserWindow) {
                         clipboard.writeText(focusedWindow.webContents.getURL());
                     }
                 }
@@ -100,7 +100,7 @@ function appMenuSetup(
             submenu: [
                 {
                     label: 'Go Back',
-                    click(item, focusedWindow) {
+                    click(item: any, focusedWindow: BrowserWindow) {
                         if (focusedWindow.webContents.canGoBack()) {
                             focusedWindow.webContents.goBack();
                         }
@@ -108,7 +108,7 @@ function appMenuSetup(
                 },
                 {
                     label: 'Go Forward',
-                    click(item, focusedWindow) {
+                    click(item: any, focusedWindow: BrowserWindow) {
                         if (focusedWindow.webContents.canGoForward()) {
                             focusedWindow.webContents.goForward();
                         }
@@ -119,20 +119,20 @@ function appMenuSetup(
                 },
                 {
                     label: 'Open Current Link externally',
-                    click(item, focusedWindow) {
-                        shell.openExternal(focusedWindow.getURL());
+                    click(item: any, focusedWindow: BrowserWindow) {
+                        shell.openExternal(focusedWindow.webContents.getURL());
                     }
                 },
                 {
                     label: 'Restore Blank Page',
-                    click(item, focusedWindow) {
+                    click(item: any, focusedWindow: BrowserWindow) {
                         focusedWindow.loadURL('https://repl.it/repls');
                     }
                 },
                 {
                     label: 'Select Input',
                     accelerator: 'CmdOrCtrl+f',
-                    click(item, focusedWindow) {
+                    click(item: any, focusedWindow: BrowserWindow) {
                         selectInput(focusedWindow);
                     }
                 },
@@ -142,7 +142,7 @@ function appMenuSetup(
                 {
                     label: 'Reload',
                     accelerator: 'CmdOrCtrl+R',
-                    click(item, focusedWindow) {
+                    click(item: any, focusedWindow: BrowserWindow) {
                         if (focusedWindow) focusedWindow.reload();
                     }
                 },
@@ -152,7 +152,7 @@ function appMenuSetup(
                         process.platform === 'darwin'
                             ? 'Alt+Command+I'
                             : 'Ctrl+Shift+I',
-                    click(item, focusedWindow) {
+                    click(item: any, focusedWindow: BrowserWindow) {
                         if (focusedWindow)
                             focusedWindow.webContents.toggleDevTools();
                     }
@@ -216,6 +216,7 @@ function appMenuSetup(
                 },
                 {
                     role: 'services',
+                    // @ts-ignore
                     submenu: []
                 },
                 {
@@ -241,6 +242,7 @@ function appMenuSetup(
         // Edit menu.
         template[1].submenu.splice(-1);
         template[2].submenu.push(
+            // @ts-ignore
             {
                 type: 'separator'
             },
@@ -257,6 +259,7 @@ function appMenuSetup(
             }
         );
         // Window menu.
+        // @ts-ignore
         template[4].submenu = [
             {
                 label: 'Close',
@@ -282,6 +285,7 @@ function appMenuSetup(
         ];
     }
     if (process.platform !== 'darwin') {
+        // @ts-ignore
         template[template.length - 1].submenu.push({
             role: 'about'
         });
@@ -289,4 +293,4 @@ function appMenuSetup(
     return template;
 }
 
-module.exports = appMenuSetup;
+export {appMenuSetup}

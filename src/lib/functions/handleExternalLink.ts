@@ -1,6 +1,6 @@
-const {dialog,shell} = require('electron');
+import {dialog, shell} from 'electron'
 
-function handleExternalLink(windowObj, url) {
+function handleExternalLink(windowObj: any, url: string) {
     console.log(`External URL: ${url}`);
     if (!url) {
         return;
@@ -22,7 +22,7 @@ function handleExternalLink(windowObj, url) {
                 buttons: ['No', 'Yes'],
                 defaultId: 1
             },
-            function(index) {
+            function (index) {
                 if (index === 1) {
                     shell.openExternal(url);
                     if (windowObj.webContents.canGoBack()) {
@@ -38,4 +38,4 @@ function handleExternalLink(windowObj, url) {
     }
 }
 
-module.exports = handleExternalLink;
+export {handleExternalLink};

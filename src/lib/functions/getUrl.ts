@@ -1,4 +1,4 @@
-function getUrl(windowObj) {
+function getUrl(windowObj: any) {
     try {
         let url = windowObj.webContents
             .getURL()
@@ -10,4 +10,4 @@ function getUrl(windowObj) {
     }
 }
 
-module.exports=getUrl;
+export {getUrl}

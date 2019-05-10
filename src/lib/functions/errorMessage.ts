@@ -1,6 +1,6 @@
-const {dialog} = require('electron')
+import {dialog} from 'electron';
 
-function errorMessage(windowObject, errorCode, errorDescription) {
+function errorMessage(windowObject: any, errorCode: any, errorDescription: any) {
     let id = windowObject.InternalId;
     if (errorCode > -6 || errorCode <= -300) {
         return;
@@ -24,4 +24,4 @@ function errorMessage(windowObject, errorCode, errorDescription) {
     );
 }
 
-module.exports = errorMessage;
+export {errorMessage};
