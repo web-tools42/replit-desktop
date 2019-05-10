@@ -1,6 +1,6 @@
 # repl-it-electron
 
-[![Build Status](https://travis-ci.org/repl-it-discord/repl.it-electron.svg?branch=master)](https://travis-ci.org/repl-it-discord/repl.it-electron)
+[![Build Status](https://travis-ci.org/repl-it-discord/repl.it-electron.svg?branch=master)](https://travis-ci.org/repl-it-discord/repl-it-electron)
 
 ## Summary
 
@@ -15,7 +15,7 @@ Many thanks for [@mat1](https://repl.it/@mat1) for the page details code. Also, 
 
 ## Usage
 
-Download the app in [release](https://github.com/leon332157/repl.it-electron/releases) tab for your system. And execute the executable.
+Download the app in [release](https://github.com/leon332157/repl-it-electron/releases) tab for your system. And execute the executable.
 
 ## Contributing
 
@@ -28,7 +28,7 @@ npm install -g --production windows-build-tools # windows
 npm install
 ```
 
-And checkout [CONTRIBUTING.md](https://github.com/repl-it-discord/repl.it-electron/blob/master/CONTRIBUTING.md) for PR process and branch naming rules.
+And checkout [CONTRIBUTING.md](https://github.com/repl-it-discord/repl-it-electron/blob/master/CONTRIBUTING.md) for PR process and branch naming rules.
 
 ## Testing
 
