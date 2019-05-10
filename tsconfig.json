@@ -1,11 +1,9 @@
 {
   "compilerOptions": {
     "module": "commonjs",
-    "esModuleInterop": true,
     "sourceMap": true,
-    // "outDir": "dist",
+    "outDir": "dist",
     // "baseUrl": ".",
-    // "allowJs": true,
 
     // Target latest version of ECMAScript.
     "target": "esnext",
@@ -18,7 +16,7 @@
     // Enable strictest settings like strictNullChecks & noImplicitAny.
     "strict": true,
     // Disallow features that require cross-file information for emit.
-    "isolatedModules": true,
+    "isolatedModules": false,
     // Import non-ES modules as default imports.
     "esModuleInterop": true
   },

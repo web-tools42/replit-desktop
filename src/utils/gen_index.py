@@ -10,12 +10,12 @@ for folder in os.listdir(os.getcwd()):
     scripts = []
 
     for each in os.listdir(folder):
-        if each == 'index.js':
+        if each == 'index.ts':
             continue
         scripts.append(each.split('.')[0])
     scripts.sort()
 
-    with open(os.path.join(folder, 'index.js'), 'w') as f:
+    with open(os.path.join(folder, 'index.ts'), 'w') as f:
         f.write("const path = require('path');\n\n")
         for each in scripts:
-            f.write(f"exports.{each} = require(path.resolve(__dirname,'{each}'));\n\n")
+            f.write(f"export {{each}}\n\n")

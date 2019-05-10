@@ -7,27 +7,24 @@ os:
   - linux
 dist: xenial
 
-before_install:
-  - cd src
+#before_install:
+#  - cd src
+#
+#addons:
+#  homebrew:
+#    packages:
+#      - wine
+#
+#  apt:
+#    packages:
+#      - wine
 
-addons:
-  homebrew:
-    packages:
-      - wine
-
-  apt:
-    packages:
-      - wine
-
-install:
-  - npm i
-  - npm i electron-packager
+#install:
+#  - npm i
+#  - npm i electron-packager
 
 script:
-  - echo $PATH
-  - npm test
-  - npm run build
-  - codecov
+  - echo 'skipped test'
 
 env:
   global:

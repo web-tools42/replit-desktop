@@ -15,7 +15,7 @@
         "repl.it",
         "discord-rpc"
     ],
-    "author": "leon332157&repl.it-discord",
+    "author": "leon332157&repl-it-discord",
     "devDependencies": {
         "@babel/cli": "^7.4.4",
         "@babel/core": "^7.4.4",
@@ -31,7 +31,6 @@
         "acorn": "^6.1.1",
         "babel-loader": "^8.0.5",
         "clean-webpack-plugin": "^2.0.2",
-        "codecov": "^3.2.0",
         "concurrently": "^4.1.0",
         "core-js": "^3.0.1",
         "discord-rpc": "^3.0.1",
@@ -46,6 +45,7 @@
         "nodemon": "^1.19.0",
         "prettier": "^1.16.4",
         "restler": "^3.4.0",
+        "tslint": "^5.16.0",
         "typescript": "^3.4.5",
         "webpack": "^4.30.0",
         "webpack-cli": "^3.3.2",

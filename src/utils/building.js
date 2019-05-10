@@ -9,96 +9,96 @@ let linuxIconPath = path.resolve(__dirname, 'logo.png ');
 let debug = true;
 
 if ('TRAVIS' in process.env && 'CI' in process.env) {
-    windowsIconPath = '';
-    macIconPath = '';
-    linuxIconPath = '';
-    sourceDir = path.resolve('.');
-    debug = false;
-    process.env['DEBUG'] = '';
+        windowsIconPath = '';
+        macIconPath = '';
+        linuxIconPath = '';
+        sourceDir = path.resolve('.');
+        debug = false;
+        process.env['DEBUG'] = '';
 }
 
 function shouldIgnore(filePath) {
-    //console.log(filePath);
-    if (
-        filePath.includes('test') ||
-        filePath.includes('WorkInProgress') ||
-        filePath.includes('.git') ||
-        path.basename(filePath).startsWith('.') ||
-        filePath.includes('coverage')
-    ) {
-        if (debug) {
-            console.log(`Ignored ${filePath}`);
-        }
-        return true;
-    }
-    if (/node_modules/.test(filePath)) {
+        //console.log(filePath);
         if (
-            /\/(obj|test.*?|spec.*?|htdocs|demo|dist|example.*?|sample.*?)[\/$]/i.test(
-                filePath
-            )
+            filePath.includes('test') ||
+            filePath.includes('WorkInProgress') ||
+            filePath.includes('.git') ||
+            path.basename(filePath).startsWith('.') ||
+            filePath.includes('coverage')
         ) {
-            if (debug) {
-                console.log(`Ignored ${filePath}`);
-            }
-            return true;
+                if (debug) {
+                        console.log(`Ignored ${filePath}`);
+                }
+                return true;
         }
-        if (
-            /^(\..*|.*\.(sln|pdb|exp|lib|map|md|sh|gypi|gyp|h|cpp|xml|yml|html)|vcxproj.*|LICENSE|README|CONTRIBUTORS|vagrant|Dockerfile|Makefile)$/i.test(
-                path.basename(filePath)
-            )
-        ) {
-            if (debug) {
-                console.log(`Ignored ${filePath}`);
-            }
-            return true;
+        if (/node_modules/.test(filePath)) {
+                if (
+                    /\/(obj|test.*?|spec.*?|htdocs|demo|dist|example.*?|sample.*?)[\/$]/i.test(
+                        filePath
+                    )
+                ) {
+                        if (debug) {
+                                console.log(`Ignored ${filePath}`);
+                        }
+                        return true;
+                }
+                if (
+                    /^(\..*|.*\.(sln|pdb|exp|lib|map|md|sh|gypi|gyp|h|cpp|xml|yml|html)|vcxproj.*|LICENSE|README|CONTRIBUTORS|vagrant|Dockerfile|Makefile)$/i.test(
+                        path.basename(filePath)
+                    )
+                ) {
+                        if (debug) {
+                                console.log(`Ignored ${filePath}`);
+                        }
+                        return true;
+                }
         }
-    }
 }
 
 packager({
-    dir: sourceDir,
-    asar: true,
-    platform: 'win32',
-    arch: 'ia32',
-    icon: windowsIconPath,
-    ignore: shouldIgnore
+        dir: sourceDir,
+        asar: true,
+        platform: 'win32',
+        arch: 'ia32',
+        icon: windowsIconPath,
+        ignore: shouldIgnore
 }).then(
     appPath => {
-        console.log(`Win32 ${appPath}`);
+            console.log(`Win32 ${appPath}`);
     },
     error => {
-        console.error(error);
+            console.error(error);
     }
 );
 
 packager({
-    dir: sourceDir,
-    asar: true,
-    platform: 'win32',
-    arch: 'x64',
-    icon: windowsIconPath,
-    ignore: shouldIgnore
+        dir: sourceDir,
+        asar: true,
+        platform: 'win32',
+        arch: 'x64',
+        icon: windowsIconPath,
+        ignore: shouldIgnore
 }).then(
     appPath => {
-        console.log(`Win64 ${appPath}`);
+            console.log(`Win64 ${appPath}`);
     },
     error => {
-        console.error(error);
+            console.error(error);
     }
 );
 
 packager({
-    dir: sourceDir,
-    asar: true,
-    platform: 'darwin',
-    icon: macIconPath,
-    ignore: shouldIgnore
+        dir: sourceDir,
+        asar: true,
+        platform: 'darwin',
+        icon: macIconPath,
+        ignore: shouldIgnore
 }).then(
     appPath => {
-        console.log(`Mac ${appPath}`);
+            console.log(`Mac ${appPath}`);
     },
     error => {
-        console.error(error);
+            console.error(error);
     }
 );
 /*
@@ -116,17 +116,17 @@ packager({
 });
 */
 packager({
-    dir: sourceDir,
-    asar: true,
-    platform: 'linux',
-    arch: 'x64',
-    icon: linuxIconPath,
-    ignore: shouldIgnore
+        dir: sourceDir,
+        asar: true,
+        platform: 'linux',
+        arch: 'x64',
+        icon: linuxIconPath,
+        ignore: shouldIgnore
 }).then(
     appPath => {
-        console.log(`Linux64 ${appPath}`);
+            console.log(`Linux64 ${appPath}`);
     },
     error => {
-        console.error(error);
+            console.error(error);
     }
 );
