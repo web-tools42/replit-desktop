@@ -2,7 +2,7 @@ import {BrowserWindow} from 'electron'
 
 class ElectronWindow extends BrowserWindow {
 
-        InternalId: number = -1;
+        public InternalId = -1;
 
 
 }

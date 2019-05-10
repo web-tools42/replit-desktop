@@ -1,31 +1,33 @@
 import {app, shell, clipboard} from 'electron';
 import {ElectronWindow} from "../classes";
 
+// @ts-ignore
 function appMenuSetup(
     startSubWindow: Function,
-    Preferences: any,
+    Preferences: object,
     startCustomSession: Function,
     sendSubToMain: Function,
     selectInput: Function,
-    doUpdate: Function
-) {
+    doUpdate: Function,
+): object {
         const template = [
                 {
                         label: 'Main',
                         submenu: [
                                 {
-                                        label: 'Sub Window',
                                         accelerator: 'CmdOrCtrl+N',
                                         click() {
                                                 startSubWindow();
-                                        }
+                                        },
+                                        label: 'Sub Window',
                                 },
                                 {
-                                        label: 'Join Multiplayer/Custom Repl.it Links',
                                         accelerator: 'CmdOrCtrl+L',
                                         click() {
                                                 startCustomSession();
-                                        }
+                                        },
+                                        label: 'Join Multiplayer/Custom Repl.it Links',
+
                                 },
                                 {
                                         label: 'Send Sub to Main Window',
@@ -43,15 +45,16 @@ function appMenuSetup(
                                         }
                                 },
                                 {
-                                        label: 'Preferences',
                                         accelerator: 'CmdOrCtrl+,',
                                         click() {
+                                                // @ts-ignore
                                                 Preferences.show();
-                                        }
+                                        },
+                                        label: 'Preferences',
                                 },
 
                                 {
-                                        role: 'quit'
+                                        role: 'quit',
                                 }
                         ]
                 },
@@ -59,34 +62,34 @@ function appMenuSetup(
                         label: 'Edit',
                         submenu: [
                                 {
-                                        role: 'undo'
+                                        role: 'undo',
                                 },
                                 {
-                                        role: 'redo'
+                                        role: 'redo',
                                 },
                                 {
-                                        type: 'separator'
+                                        type: 'separator',
                                 },
                                 {
-                                        role: 'cut'
+                                        role: 'cut',
                                 },
                                 {
-                                        role: 'copy'
+                                        role: 'copy',
                                 },
                                 {
-                                        role: 'paste'
+                                        role: 'paste',
                                 },
                                 {
-                                        role: 'pasteandmatchstyle'
+                                        role: 'pasteandmatchstyle',
                                 },
                                 {
-                                        role: 'delete'
+                                        role: 'delete',
                                 },
                                 {
-                                        role: 'selectall'
+                                        role: 'selectall',
                                 },
                                 {
-                                        type: 'separator'
+                                        type: 'separator',
                                 },
                                 {
                                         label: 'Copy URL to clipboard',
@@ -131,8 +134,8 @@ function appMenuSetup(
                                         }
                                 },
                                 {
-                                        label: 'Select Input',
                                         accelerator: 'CmdOrCtrl+f',
+                                        label: 'Select Input',
                                         click(item: any, focusedWindow: ElectronWindow) {
                                                 selectInput(focusedWindow);
                                         }
@@ -141,11 +144,11 @@ function appMenuSetup(
                                         type: 'separator'
                                 },
                                 {
-                                        label: 'Reload',
                                         accelerator: 'CmdOrCtrl+R',
                                         click(item: any, focusedWindow: ElectronWindow) {
                                                 if (focusedWindow) focusedWindow.reload();
-                                        }
+                                        },
+                                        label: 'Reload',
                                 },
                                 {
                                         label: 'Toggle Developer Tools',
@@ -241,6 +244,7 @@ function appMenuSetup(
                         ]
                 });
                 // Edit menu.
+                // @ts-ignore
                 template[1].submenu.splice(-1);
                 template[2].submenu.push(
                     // @ts-ignore
