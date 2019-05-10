@@ -7,10 +7,11 @@ module.exports = {
     devtool: 'cheap-module-source-map',
     target: 'electron-main',
     context: path.resolve(__dirname),
+    watch: process.env.NODE_ENV === "one" ? false : true,
     entry: ['@babel/polyfill', './src/main.js'],
     output: {
         publicPath: './',
-        path: path.resolve(__dirname, 'dist'),
+        path: path.resolve(__dirname, 'dist', 'dev'),
         filename: '[name].bundle.js'
     },
     resolve: {

@@ -4,15 +4,12 @@
     "description": "electron version of repl.it",
     "main": "main.js",
     "scripts": {
-        "start": "npm run dev:reload",
-        "dev:one": "electron src/main.js",
-        "dev:live": "nodemon -e js,ts,json,html,css --exec electron src/main.js",
-        "test": "jest --debug --detectOpenHandles",
-        "b": "concurrently \"npm:build:wp\" \"electron dist/main.js\"",
-        "build:wp": "webpack --config webpack.config.js",
-        "build:one": "babel-node src/main.js",
-        "build:live": "nodemon -e js,ts,json,html,css --exec babel-node src/main.js",
-        "build": "node src/utils/building.js"
+        "start": "npm run dev:main",
+        "dev:main": "concurrently \"npm:dev:main:webpack\" \"npm:dev:main:electron\"",
+        "dev:main:electron": "nodemon -w dist/dev -e js,ts,json,html,css --exec electron dist/dev/main.bundle.js",
+        "dev:main:webpack": "webpack --config webpack.config.js",
+        "package": "node src/utils/building.js",
+        "test": "jest --debug --detectOpenHandles"
     },
     "keywords": [
         "Electron",
@@ -56,9 +53,6 @@
         "lodash": "^4.17.4",
         "restler": "^3.4.0",
         "zip-local": "^0.3.4"
-    },
-    "resolutions": {
-        "spectron/**/electron-chromedriver": "^4.0.0-beta.1"
     },
     "repository": "https://github.com/repl-it-discord/repl.it-electron",
     "license": "Apache-2.0",
