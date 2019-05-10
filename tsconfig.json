@@ -2,33 +2,27 @@
   "compilerOptions": {
     "module": "commonjs",
     "esModuleInterop": true,
-    "target": "es6",
-    "noImplicitAny": true,
-    "moduleResolution": "node",
     "sourceMap": true,
-    "outDir": "dist",
-    "baseUrl": ".",
-    "allowJs": true,
-    "paths": {
-      "*": [
-        "node_modules/*",
-        "src/types/*"
-      ]
-    }
-    // "module": "commonjs",
-    // "baseUrl": "./",
     // "outDir": "dist",
-    // "removeComments": false,
-    // "sourceMap": true,
-    // "declaration": true,
-    // "target": "es2015",
-    // "strict": true,
-    // "outFile": "outfile.js"
+    // "baseUrl": ".",
+    // "allowJs": true,
+
+    // Target latest version of ECMAScript.
+    "target": "esnext",
+    // Search under node_modules for non-relative imports.
+    "moduleResolution": "node",
+    // Process & infer types from .js files.
+    "allowJs": true,
+    // Don't emit; allow Babel to transform files.
+    "noEmit": true,
+    // Enable strictest settings like strictNullChecks & noImplicitAny.
+    "strict": true,
+    // Disallow features that require cross-file information for emit.
+    "isolatedModules": true,
+    // Import non-ES modules as default imports.
+    "esModuleInterop": true
   },
   "include": [
-    "src/**/* "
-  ],
-  // "exclude": [
-  //   "node_modules"
-  // ]
+    "src"
+  ]
 }
