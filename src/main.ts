@@ -34,8 +34,8 @@ import {appMenuSetup} from './lib/constants';
 
 /* Declare Constants */
 
-let mainWindow: any;
-let subWindow: any = undefined;
+let mainWindow: ElectronWindow;
+let subWindow: ElectronWindow;
 const clientId = '498635999274991626';
 let startTimestamp = new Date();
 const rpc = new DiscordRPC.Client({
@@ -314,9 +314,8 @@ function startCustomSession() {
                     if (
                         r.toString().replace(' ', '') === '' ||
                         !r.toString().startsWith('https://repl.it/') ||
-                        !r
-                            .toString()
-                            .includes(<string>'repl.co' || !r.toString().includes('repl.run'))
+                        !r.toString().includes('repl.co')
+                        || !r.toString().includes('repl.run')
                     ) {
                             dialog.showMessageBox({
                                     title: '',
@@ -454,7 +453,7 @@ async function setPlayingDiscord() {
 
 function sendSubToMain() {
         if (subWindow) {
-                let subUrl = subWindow.getURL();
+                let subUrl = subWindow.webContents.getURL();
                 dialog.showMessageBox(
                     {
                             title: '',
