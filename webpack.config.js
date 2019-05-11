@@ -40,7 +40,11 @@ module.exports = {
                         },
                     },
                 ],
-                exclude: /node_modules/,
+                exclude: [
+                    /node_modules/,
+                    /electron-basic-updater/,
+                    /electron-preferences/,
+                ],
             },
             {
                 test: /\.json$/,
@@ -53,6 +57,11 @@ module.exports = {
                             quiet: false,
                         },
                     },
+                ],
+                exclude: [
+                    /node_modules/,
+                    /electron-basic-updater/,
+                    /electron-preferences/,
                 ],
             },
         ],
