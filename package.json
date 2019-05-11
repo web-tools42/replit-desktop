@@ -63,7 +63,8 @@
         "axios": "^0.18.0",
         "concurrently": "^4.1.0",
         "fs-extra": "^5.0.0",
-        "lodash": "^4.17.4"
+        "lodash": "^4.17.4",
+        "node-fetch": "^2.5.0"
     },
     "repository": "https://github.com/repl-it-discord/repl.it-electron",
     "license": "Apache-2.0"
