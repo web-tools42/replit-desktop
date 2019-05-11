@@ -51,7 +51,6 @@ function appMenuSetup(
                     },
                     label: 'Preferences',
                 },
-
                 {
                     role: 'quit',
                 },

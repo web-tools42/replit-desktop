@@ -1,24 +1,24 @@
-let path = require("path")
-let CleanWebpackPlugin = require("clean-webpack-plugin")
-let ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin")
+let path = require('path')
+let CleanWebpackPlugin = require('clean-webpack-plugin')
+let ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
 
 module.exports = {
-    mode: "development",
-    devtool: "cheap-module-source-map",
-    target: "electron-main",
+    mode: 'development',
+    devtool: 'cheap-module-source-map',
+    target: 'electron-main',
     context: path.resolve(__dirname),
     watch: true,
 
-    entry: ["@babel/polyfill", "./src/main.ts"],
+    entry: ['@babel/polyfill', './src/main.ts'],
     output: {
-        publicPath: "./",
-        path: path.resolve(__dirname, "dist", "dev"),
-        filename: "[name].bundle.js",
+        publicPath: './',
+        path: path.resolve(__dirname, 'dist', 'dev'),
+        filename: '[name].bundle.js',
     },
     resolve: {
-        extensions: [".ts", ".js", ".json"],
+        extensions: ['.ts', '.js', '.json'],
         alias: {
-            "@": "./src",
+            '@': './src',
         },
     },
     plugins: [new CleanWebpackPlugin(), new ForkTsCheckerWebpackPlugin()],
@@ -30,16 +30,15 @@ module.exports = {
             {
                 test: /\.(js|ts)$/,
                 use: [
-                    "babel-loader",
-                    // {
-                    //     loader: 'eslint-loader',
-                    //     options: {
-                    //         fix: true, // Automatically fixes source files
-                    //         cache: true,
-                    //         quiet: false
-
-                    //     }
-                    // }
+                    'babel-loader',
+                    {
+                        loader: 'eslint-loader',
+                        options: {
+                            fix: false, // Automatically fixes source files
+                            cache: true,
+                            quiet: false,
+                        },
+                    },
                 ],
                 exclude: /node_modules/,
             },

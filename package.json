@@ -5,9 +5,10 @@
     "main": "main.js",
     "scripts": {
         "start": "npm run dev:main",
-        "dev:main": "concurrently \"npm:dev:main:webpack\" \"npm:dev:main:electron\"",
+        "dev:main": "npm run dev:main:webpack && dev:main:electron",
         "dev:main:electron": "nodemon -w dist/dev -e js,ts,json,html,css --exec electron dist/dev/main.bundle.js",
-        "types:watch": "nodemon -w dist/dev --exec eslint .",
+        "watch-types": "nodemon -w dist/dev --exec eslint src/**/*",
+        "watch-types:auto-fix": "nodemon -w dist/dev --exec eslint src/**/* --fix",
         "dev:main:webpack": "webpack --config webpack.config.js",
         "package": "node src/utils/building.js"
     },
@@ -34,7 +35,6 @@
         "acorn": "^6.1.1",
         "babel-loader": "^8.0.5",
         "clean-webpack-plugin": "^2.0.2",
-        "concurrently": "^4.1.0",
         "core-js": "^3.0.1",
         "discord-rpc": "^3.0.1",
         "electron": "^5.0.1",

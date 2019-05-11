@@ -121,8 +121,9 @@ async function appSetup() {
                                     type: 'dropdown',
                                     options: theme_instert,
                                     help: 'Select a theme',
-                                } /*{
-                        'label': 'Custom CSS import',
+                                } /*{    
+                        'label':
+                         'Custom CSS import',
                         'key': 'css_string',
                         'type': 'Text',
                         'options': [{label: 'Yes', value: true}],
