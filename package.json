@@ -67,8 +67,5 @@
         "lodash": "^4.17.4"
     },
     "repository": "https://github.com/repl-it-discord/repl.it-electron",
-    "license": "Apache-2.0",
-    "browserslist": [
-        "Electron > 5.0.1"
-    ]
+    "license": "Apache-2.0"
 }
