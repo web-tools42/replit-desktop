@@ -1,3 +1,3 @@
-import { ElectronWindow } from './ElectronWindow';
+import { ElectronWindow } from './ElectronWindow'
 
-export { ElectronWindow };
+export { ElectronWindow }
