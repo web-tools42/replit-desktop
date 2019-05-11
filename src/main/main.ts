@@ -13,8 +13,8 @@ import requests from 'axios'
 
 /* Local libs */
 
-import ElectronPreferences from './lib/electron-preferences'
-import { ElectronWindow } from './lib/classes'
+import ElectronPreferences from '../lib/electron-preferences'
+import { ElectronWindow } from '../lib/ts-class'
 
 /* Require files */
 import {
@@ -27,9 +27,9 @@ import {
     handleExternalLink,
     selectInput,
     talkBoard,
-} from './lib/functions'
+} from '../util'
 
-import { appMenuSetup } from './lib/constants'
+import { appMenuSetup } from '../main/menu'
 
 /* Declare Constants */
 

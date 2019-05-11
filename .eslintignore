@@ -1,3 +1,4 @@
-**/electron-basic-updater/*
-**/electron-preferences/*
-**/dist/*
+electron-basic-updater
+electron-preferences
+node_modules
+**/dist/

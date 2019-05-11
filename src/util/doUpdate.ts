@@ -1,6 +1,6 @@
 import { dialog, app } from 'electron'
 import path from 'path'
-import EBU from '../electron-basic-updater'
+import EBU from '../lib/electron-basic-updater'
 
 function doUpdate(Update: boolean, Manual: boolean) {
     if (!Update) {

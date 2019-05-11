@@ -1,5 +1,5 @@
 import { dialog, shell } from 'electron'
-import { ElectronWindow } from '../classes'
+import { ElectronWindow } from '../lib/ts-class'
 
 function handleExternalLink(windowObj: ElectronWindow, url: string) {
     console.log(`External URL: ${url}`)

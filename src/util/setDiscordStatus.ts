@@ -1,4 +1,4 @@
-import { ElectronWindow } from '../classes'
+import { ElectronWindow } from '../lib/ts-class'
 
 async function talkBoard(spliturl: Array<string>, windowObj: ElectronWindow) {
     let viewing

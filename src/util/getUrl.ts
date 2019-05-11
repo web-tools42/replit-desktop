@@ -1,4 +1,4 @@
-import { ElectronWindow } from '../classes'
+import { ElectronWindow } from '../lib/ts-class'
 
 function getUrl(windowObj: ElectronWindow) {
     try {

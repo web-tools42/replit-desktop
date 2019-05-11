@@ -9,16 +9,17 @@ module.exports = {
     context: path.resolve(__dirname),
     watch: true,
 
-    entry: ['@babel/polyfill', './src/main.ts'],
+    entry: ['@babel/polyfill', './src/main/main.ts'],
     output: {
         publicPath: './',
-        path: path.resolve(__dirname, 'dist', 'dev'),
+        path: path.join(__dirname, 'dist', 'dev'),
         filename: '[name].bundle.js',
     },
     resolve: {
         extensions: ['.ts', '.js', '.json'],
         alias: {
-            '@': './src',
+            '@': path.resolve(__dirname, 'src'),
+            DDD: path.resolve(__dirname, 'src'),
         },
     },
     plugins: [new CleanWebpackPlugin(), new ForkTsCheckerWebpackPlugin()],
@@ -40,11 +41,7 @@ module.exports = {
                         },
                     },
                 ],
-                exclude: [
-                    /node_modules/,
-                    /electron-basic-updater/,
-                    /electron-preferences/,
-                ],
+                exclude: /(node_modules|electron-basic-updater|electron-preferences)/,
             },
             {
                 test: /\.json$/,
