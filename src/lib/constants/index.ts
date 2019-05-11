@@ -1,3 +1,3 @@
-import {appMenuSetup} from "./appMenuSetup";
+import { appMenuSetup } from './appMenuSetup';
 
-export {appMenuSetup}
+export { appMenuSetup };

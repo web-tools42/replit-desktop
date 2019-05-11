@@ -1,14 +1,14 @@
-import {app, shell, clipboard} from 'electron';
-import {ElectronWindow} from "../classes";
+import { app, shell, clipboard } from 'electron';
+import { ElectronWindow } from "../classes";
 
 // @ts-ignore
 function appMenuSetup(
-    startSubWindow: Function,
-    Preferences: object,
-    startCustomSession: Function,
-    sendSubToMain: Function,
-    selectInput: Function,
-    doUpdate: Function,
+        startSubWindow: Function,
+        Preferences: object,
+        startCustomSession: Function,
+        sendSubToMain: Function,
+        selectInput: Function,
+        doUpdate: Function,
 ): object {
         const template = [
                 {
@@ -153,9 +153,9 @@ function appMenuSetup(
                                 {
                                         label: 'Toggle Developer Tools',
                                         accelerator:
-                                            process.platform === 'darwin'
-                                                ? 'Alt+Command+I'
-                                                : 'Ctrl+Shift+I',
+                                                process.platform === 'darwin'
+                                                        ? 'Alt+Command+I'
+                                                        : 'Ctrl+Shift+I',
                                         click(item: any, focusedWindow: ElectronWindow) {
                                                 if (focusedWindow)
                                                         focusedWindow.webContents.toggleDevTools();
@@ -247,21 +247,21 @@ function appMenuSetup(
                 // @ts-ignore
                 template[1].submenu.splice(-1);
                 template[2].submenu.push(
-                    // @ts-ignore
-                    {
-                            type: 'separator'
-                    },
-                    {
-                            label: 'Speech',
-                            submenu: [
-                                    {
-                                            role: 'startspeaking'
-                                    },
-                                    {
-                                            role: 'stopspeaking'
-                                    }
-                            ]
-                    }
+                        // @ts-ignore
+                        {
+                                type: 'separator'
+                        },
+                        {
+                                label: 'Speech',
+                                submenu: [
+                                        {
+                                                role: 'startspeaking'
+                                        },
+                                        {
+                                                role: 'stopspeaking'
+                                        }
+                                ]
+                        }
                 );
                 // Window menu.
                 // @ts-ignore
@@ -298,4 +298,4 @@ function appMenuSetup(
         return template;
 }
 
-export {appMenuSetup}
+export { appMenuSetup }

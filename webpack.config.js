@@ -30,16 +30,16 @@ module.exports = {
             {
                 test: /\.(js|ts)$/,
                 use: [
-                    'babel-loader',
-                    {
-                        loader: 'eslint-loader',
-                        options: {
-                            fix: false, // Automatically fixes source files
-                            cache: true,
-                            quiet: false
+                    'babel-loader'
+                    // {
+                    //     loader: 'eslint-loader',
+                    //     options: {
+                    //         fix: true, // Automatically fixes source files
+                    //         cache: true,
+                    //         quiet: false
 
-                        }
-                    }
+                    //     }
+                    // }
                 ],
                 exclude: /node_modules/
             }
