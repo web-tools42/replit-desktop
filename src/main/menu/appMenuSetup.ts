@@ -1,7 +1,6 @@
 import { app, shell, clipboard } from 'electron';
 import { ElectronWindow } from '../../class';
 
-// @ts-ignore
 function appMenuSetup(
     startSubWindow: Function,
     Preferences: object,
@@ -12,7 +11,7 @@ function appMenuSetup(
 ): object {
     const template = [
         {
-            label: 'Main',
+            label: 'File',
             submenu: [
                 {
                     accelerator: 'CmdOrCtrl+N',

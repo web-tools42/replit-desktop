@@ -19,11 +19,9 @@ function doUpdate(Update: boolean, Manual: boolean) {
                     title: 'Update available',
                     message: `New version ${
                         result.toString().split('|')[1]
-                    } is available, would you like to update it?
-
-New features:
-${result.toString().split('|')[2]}
-`,
+                    } is available, would you like to update it? New features: ${
+                        result.toString().split('|')[2]
+                    }`,
                     type: 'info',
                     buttons: ['Yes', 'No'],
                     defaultId: 1
