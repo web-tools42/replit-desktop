@@ -1,19 +1,19 @@
-const packager = require('electron-packager')
-const path = require('path')
+const packager = require('electron-packager');
+const path = require('path');
 
-process.env['DEBUG'] = 'electron-packager'
-let sourceDir = path.resolve('..')
-let windowsIconPath = path.resolve('..', 'assets', 'logo', 'ico', 'logo.ico')
-let macIconPath = path.resolve('..', 'assets', 'logo', 'icns', 'icon.icns')
-let linuxIconPath = path.resolve(__dirname, 'logo.png ')
-let debug = true
+process.env['DEBUG'] = 'electron-packager';
+let sourceDir = path.resolve('..');
+let windowsIconPath = path.resolve('..', 'assets', 'logo', 'ico', 'logo.ico');
+let macIconPath = path.resolve('..', 'assets', 'logo', 'icns', 'icon.icns');
+let linuxIconPath = path.resolve(__dirname, 'logo.png ');
+let debug = true;
 
 if ('TRAVIS' in process.env && 'CI' in process.env) {
-    windowsIconPath = ''
-    macIconPath = ''
-    linuxIconPath = ''
-    sourceDir = path.resolve('.')
-    debug = false
+    windowsIconPath = '';
+    macIconPath = '';
+    linuxIconPath = '';
+    sourceDir = path.resolve('.');
+    debug = false;
     process.env['DEBUG'] = ''
 }
 
@@ -69,7 +69,7 @@ packager({
     error => {
         console.error(error)
     }
-)
+);
 
 packager({
     dir: sourceDir,
@@ -85,7 +85,7 @@ packager({
     error => {
         console.error(error)
     }
-)
+);
 
 packager({
     dir: sourceDir,
@@ -100,7 +100,7 @@ packager({
     error => {
         console.error(error)
     }
-)
+);
 /*
 packager({
     dir: sourceDir,
@@ -129,4 +129,4 @@ packager({
     error => {
         console.error(error)
     }
-)
+);

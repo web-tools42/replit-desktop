@@ -13,3 +13,4 @@ update-window*
 .bashrc
 dev*
 package-lock*
+pnpm-lock*
