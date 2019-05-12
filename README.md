@@ -18,6 +18,7 @@ git clone --recurse-submodules https://github.com/repl-it-discord/repl-it-electr
 cd repl-it-electron
 npm install -g --production windows-build-tools # windows
 npm install
+npm start
 ```
 
 See [CONTRIBUTING.md](./.github/CONTRIBUTING.md) before contributing
