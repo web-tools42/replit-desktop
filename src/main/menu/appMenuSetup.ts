@@ -1,5 +1,5 @@
 import { app, shell, clipboard } from 'electron';
-import { ElectronWindow } from '../../lib/ts-class';
+import { ElectronWindow } from '../../class';
 
 // @ts-ignore
 function appMenuSetup(

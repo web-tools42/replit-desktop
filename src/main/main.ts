@@ -12,8 +12,9 @@ import ElectronContext from 'electron-context-menu';
 import requests from 'axios';
 
 /* Local libs */
+// @ts-ignore
 import ElectronPreferences from '../lib/electron-preferences';
-import { ElectronWindow } from '../lib/ts-class';
+import { ElectronWindow } from '../class';
 
 /* Require files */
 import {
@@ -28,7 +29,7 @@ import {
     talkBoard
 } from '../util';
 
-import { appMenuSetup } from '../main/menu';
+import { appMenuSetup } from './menu';
 
 /* Declare Constants */
 let mainWindow: ElectronWindow;
@@ -215,7 +216,7 @@ async function appSetup() {
         )
     );
 
-    Preferences.on('save', (preferences: object) => {
+    Preferences.on('save', () => {
         console.log(
             `Preferences were saved. at ${path.resolve(
                 app.getPath('userData'),

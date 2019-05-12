@@ -1,5 +1,5 @@
 import { dialog } from 'electron';
-import { ElectronWindow } from '../lib/ts-class';
+import { ElectronWindow } from '../class';
 
 function errorMessage(
     windowObject: ElectronWindow,

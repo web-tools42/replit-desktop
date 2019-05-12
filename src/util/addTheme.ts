@@ -1,6 +1,6 @@
-//import {BrowserWindow} from 'electron'
+import {ElectronWindow} from '../class';
 
-function addTheme(windowObj: any, CSSString: string) {
+function addTheme(windowObj: ElectronWindow, CSSString: string) {
     for (let i = 1; i <= 3; i++) {
         try {
             windowObj.webContents.insertCSS(CSSString);

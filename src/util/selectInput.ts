@@ -1,4 +1,4 @@
-import { ElectronWindow } from '../lib/ts-class';
+import { ElectronWindow } from '../class';
 
 function selectInput(focusedWindow: ElectronWindow) {
     focusedWindow.webContents.executeJavaScript(
