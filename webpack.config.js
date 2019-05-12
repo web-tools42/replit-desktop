@@ -1,6 +1,5 @@
 let path = require('path')
 let CleanWebpackPlugin = require('clean-webpack-plugin')
-let ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
 
 module.exports = {
     mode: 'development',
@@ -22,7 +21,7 @@ module.exports = {
             DDD: path.resolve(__dirname, 'src'),
         },
     },
-    plugins: [new CleanWebpackPlugin(), new ForkTsCheckerWebpackPlugin()],
+    plugins: [new CleanWebpackPlugin()],
     optimization: {
         minimize: false,
     },
