@@ -1,15 +1,15 @@
-import { ElectronWindow } from '../lib/ts-class'
+import { ElectronWindow } from '../lib/ts-class';
 
 function getUrl(windowObj: ElectronWindow) {
     try {
         let url = windowObj.webContents
             .getURL()
-            .replace(/(^\w+:|^)\/\/repl\.it\//, '')
-        url = url.split('?')[0]
-        return url
+            .replace(/(^\w+:|^)\/\/repl\.it\//, '');
+        url = url.split('?')[0];
+        return url;
     } catch (e) {
-        return ''
+        return '';
     }
 }
 
-export { getUrl }
+export { getUrl };

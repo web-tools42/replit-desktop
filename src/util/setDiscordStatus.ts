@@ -1,66 +1,66 @@
-import { ElectronWindow } from '../lib/ts-class'
+import { ElectronWindow } from '../lib/ts-class';
 
 async function talkBoard(spliturl: Array<string>, windowObj: ElectronWindow) {
-    let viewing
-    console.log(spliturl)
+    let viewing;
+    console.log(spliturl);
     if (spliturl[3] !== undefined) {
         await windowObj.webContents.executeJavaScript(
             "document.getElementsByClassName('board-post-detail-title')[0].textContent",
             false,
             function(result: string) {
-                viewing = `Viewing ${result}`
+                viewing = `Viewing ${result}`;
             }
-        ) // gets the repl talk post name
+        ); // gets the repl talk post name
     } else if (spliturl[2] !== undefined) {
-        viewing = `Viewing ${spliturl[2]}`
+        viewing = `Viewing ${spliturl[2]}`;
     } else {
-        viewing = `Viewing ${spliturl[1]}`
+        viewing = `Viewing ${spliturl[1]}`;
     }
-    let talkBoard = 'error'
+    let talkBoard = 'error';
     switch (spliturl[1]) {
         case 'announcements':
-            talkBoard = 'Announcements'
-            break
+            talkBoard = 'Announcements';
+            break;
         case 'ask':
-            talkBoard = 'Ask'
-            break
+            talkBoard = 'Ask';
+            break;
         case 'challenge':
-            talkBoard = 'Challenge'
-            break
+            talkBoard = 'Challenge';
+            break;
         case 'learn':
-            talkBoard = 'Learn'
-            break
+            talkBoard = 'Learn';
+            break;
         case 'share':
-            talkBoard = 'Share'
-            break
+            talkBoard = 'Share';
+            break;
         default:
-            talkBoard = ''
+            talkBoard = '';
     }
-    console.log(viewing)
-    return { viewing: viewing, talkBoard: talkBoard }
+    console.log(viewing);
+    return { viewing: viewing, talkBoard: talkBoard };
 }
 
 async function editing(windowObj: ElectronWindow) {
-    let fileName = 'Error'
-    let replLanguage = 'Error'
+    let fileName = 'Error';
+    let replLanguage = 'Error';
     await windowObj.webContents.executeJavaScript(
         "document.querySelector('.file-header-name div').textContent",
         false,
         (result: string) => {
-            fileName = result
+            fileName = result;
         }
-    )
+    );
     await windowObj.webContents.executeJavaScript(
         "document.querySelector('.workspace-header-description-container img')['title']",
         false,
         (result: string) => {
-            replLanguage = result
+            replLanguage = result;
         }
-    )
+    );
 
-    let lang = fileName.split('.').slice(-1)[0] // gets the file extension
+    let lang = fileName.split('.').slice(-1)[0]; // gets the file extension
     if (replLanguage === 'Nodejs') {
-        lang = 'node'
+        lang = 'node';
     }
     const langsJson = {
         py: 'python',
@@ -76,13 +76,13 @@ async function editing(windowObj: ElectronWindow) {
         go: 'go',
         lua: 'lua',
         sh: 'sh',
-        Unknown: 'txt',
-    }
+        Unknown: 'txt'
+    };
 
     if (!(lang in langsJson)) {
-        lang = 'Unknown'
+        lang = 'Unknown';
     }
-    return { fileName: fileName, lang: lang }
+    return { fileName: fileName, lang: lang };
 }
 
-export { editing, talkBoard }
+export { editing, talkBoard };

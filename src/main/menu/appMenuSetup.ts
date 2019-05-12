@@ -1,5 +1,5 @@
-import { app, shell, clipboard } from 'electron'
-import { ElectronWindow } from '../../lib/ts-class'
+import { app, shell, clipboard } from 'electron';
+import { ElectronWindow } from '../../lib/ts-class';
 
 // @ts-ignore
 function appMenuSetup(
@@ -17,85 +17,85 @@ function appMenuSetup(
                 {
                     accelerator: 'CmdOrCtrl+N',
                     click() {
-                        startSubWindow()
+                        startSubWindow();
                     },
-                    label: 'Sub Window',
+                    label: 'Sub Window'
                 },
                 {
                     accelerator: 'CmdOrCtrl+L',
                     click() {
-                        startCustomSession()
+                        startCustomSession();
                     },
-                    label: 'Join Multiplayer/Custom Repl.it Links',
+                    label: 'Join Multiplayer/Custom Repl.it Links'
                 },
                 {
                     label: 'Send Sub to Main Window',
                     click() {
-                        sendSubToMain()
-                    },
+                        sendSubToMain();
+                    }
                 },
                 {
-                    type: 'separator',
+                    type: 'separator'
                 },
                 {
                     label: 'Check Update Manually',
                     click() {
-                        doUpdate(true, true)
-                    },
+                        doUpdate(true, true);
+                    }
                 },
                 {
                     accelerator: 'CmdOrCtrl+,',
                     click() {
                         // @ts-ignore
-                        Preferences.show()
+                        Preferences.show();
                     },
-                    label: 'Preferences',
+                    label: 'Preferences'
                 },
                 {
-                    role: 'quit',
-                },
-            ],
+                    role: 'quit'
+                }
+            ]
         },
         {
             label: 'Edit',
             submenu: [
                 {
-                    role: 'undo',
+                    role: 'undo'
                 },
                 {
-                    role: 'redo',
+                    role: 'redo'
                 },
                 {
-                    type: 'separator',
+                    type: 'separator'
                 },
                 {
-                    role: 'cut',
+                    role: 'cut'
                 },
                 {
-                    role: 'copy',
+                    role: 'copy'
                 },
                 {
-                    role: 'paste',
+                    role: 'paste'
                 },
                 {
-                    role: 'pasteandmatchstyle',
+                    role: 'pasteandmatchstyle'
                 },
                 {
-                    role: 'delete',
+                    role: 'delete'
                 },
                 {
-                    role: 'selectall',
+                    role: 'selectall'
                 },
                 {
-                    type: 'separator',
+                    type: 'separator'
                 },
                 {
                     label: 'Copy URL to clipboard',
                     click(item: any, focusedWindow: ElectronWindow) {
-                        clipboard.writeText(focusedWindow.webContents.getURL())
-                    },
-                },
-            ],
+                        clipboard.writeText(focusedWindow.webContents.getURL());
+                    }
+                }
+            ]
         },
         {
             label: 'View',
@@ -104,49 +104,49 @@ function appMenuSetup(
                     label: 'Go Back',
                     click(item: any, focusedWindow: ElectronWindow) {
                         if (focusedWindow.webContents.canGoBack()) {
-                            focusedWindow.webContents.goBack()
+                            focusedWindow.webContents.goBack();
                         }
-                    },
+                    }
                 },
                 {
                     label: 'Go Forward',
                     click(item: any, focusedWindow: ElectronWindow) {
                         if (focusedWindow.webContents.canGoForward()) {
-                            focusedWindow.webContents.goForward()
+                            focusedWindow.webContents.goForward();
                         }
-                    },
+                    }
                 },
                 {
-                    type: 'separator',
+                    type: 'separator'
                 },
                 {
                     label: 'Open Current Link externally',
                     click(item: any, focusedWindow: ElectronWindow) {
-                        shell.openExternal(focusedWindow.webContents.getURL())
-                    },
+                        shell.openExternal(focusedWindow.webContents.getURL());
+                    }
                 },
                 {
                     label: 'Restore Blank Page',
                     click(item: any, focusedWindow: ElectronWindow) {
-                        focusedWindow.loadURL('https://repl.it/repls')
-                    },
+                        focusedWindow.loadURL('https://repl.it/repls');
+                    }
                 },
                 {
                     accelerator: 'CmdOrCtrl+f',
                     label: 'Select Input',
                     click(item: any, focusedWindow: ElectronWindow) {
-                        selectInput(focusedWindow)
-                    },
+                        selectInput(focusedWindow);
+                    }
                 },
                 {
-                    type: 'separator',
+                    type: 'separator'
                 },
                 {
                     accelerator: 'CmdOrCtrl+R',
                     click(item: any, focusedWindow: ElectronWindow) {
-                        if (focusedWindow) focusedWindow.reload()
+                        if (focusedWindow) focusedWindow.reload();
                     },
-                    label: 'Reload',
+                    label: 'Reload'
                 },
                 {
                     label: 'Toggle Developer Tools',
@@ -156,144 +156,144 @@ function appMenuSetup(
                             : 'Ctrl+Shift+I',
                     click(item: any, focusedWindow: ElectronWindow) {
                         if (focusedWindow)
-                            focusedWindow.webContents.toggleDevTools()
-                    },
+                            focusedWindow.webContents.toggleDevTools();
+                    }
                 },
                 {
-                    type: 'separator',
+                    type: 'separator'
                 },
                 {
-                    role: 'resetzoom',
+                    role: 'resetzoom'
                 },
                 {
-                    role: 'zoomin',
+                    role: 'zoomin'
                 },
                 {
-                    role: 'zoomout',
+                    role: 'zoomout'
                 },
                 {
-                    type: 'separator',
+                    type: 'separator'
                 },
                 {
-                    role: 'togglefullscreen',
-                },
-            ],
+                    role: 'togglefullscreen'
+                }
+            ]
         },
         {
             role: 'window',
             submenu: [
                 {
-                    role: 'minimize',
+                    role: 'minimize'
                 },
                 {
-                    role: 'close',
-                },
-            ],
+                    role: 'close'
+                }
+            ]
         },
         {
             role: 'help',
             submenu: [
                 {
-                    type: 'separator',
+                    type: 'separator'
                 },
                 {
                     label: 'Learn More about repl.it',
                     click() {
-                        shell.openExternal('https://repl.it/site/about')
-                    },
-                },
-            ],
-        },
-    ]
+                        shell.openExternal('https://repl.it/site/about');
+                    }
+                }
+            ]
+        }
+    ];
     if (process.platform === 'darwin') {
-        const name = app.getName()
+        const name = app.getName();
         template.unshift({
             label: name,
             submenu: [
                 {
-                    role: 'about',
+                    role: 'about'
                 },
                 {
-                    type: 'separator',
+                    type: 'separator'
                 },
                 {
                     role: 'services',
                     // @ts-ignore
-                    submenu: [],
+                    submenu: []
                 },
                 {
-                    type: 'separator',
+                    type: 'separator'
                 },
                 {
-                    role: 'hide',
+                    role: 'hide'
                 },
                 {
-                    role: 'hideothers',
+                    role: 'hideothers'
                 },
                 {
-                    role: 'unhide',
+                    role: 'unhide'
                 },
                 {
-                    type: 'separator',
+                    type: 'separator'
                 },
                 {
-                    role: 'quit',
-                },
-            ],
-        })
+                    role: 'quit'
+                }
+            ]
+        });
         // Edit menu.
         // @ts-ignore
-        template[1].submenu.splice(-1)
+        template[1].submenu.splice(-1);
         template[2].submenu.push(
             // @ts-ignore
             {
-                type: 'separator',
+                type: 'separator'
             },
             {
                 label: 'Speech',
                 submenu: [
                     {
-                        role: 'startspeaking',
+                        role: 'startspeaking'
                     },
                     {
-                        role: 'stopspeaking',
-                    },
-                ],
+                        role: 'stopspeaking'
+                    }
+                ]
             }
-        )
+        );
         // Window menu.
         // @ts-ignore
         template[4].submenu = [
             {
                 label: 'Close',
                 accelerator: 'CmdOrCtrl+W',
-                role: 'close',
+                role: 'close'
             },
             {
                 label: 'Minimize',
                 accelerator: 'CmdOrCtrl+M',
-                role: 'minimize',
+                role: 'minimize'
             },
             {
                 label: 'Zoom',
-                role: 'zoom',
+                role: 'zoom'
             },
             {
-                type: 'separator',
+                type: 'separator'
             },
             {
                 label: 'Bring All to Front',
-                role: 'front',
-            },
-        ]
+                role: 'front'
+            }
+        ];
     }
     if (process.platform !== 'darwin') {
         // @ts-ignore
         template[template.length - 1].submenu.push({
-            role: 'about',
-        })
+            role: 'about'
+        });
     }
-    return template
+    return template;
 }
 
-export { appMenuSetup }
+export { appMenuSetup };
