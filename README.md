@@ -27,4 +27,4 @@ See feature implementation details on the [roadmap](https://github.com/repl-it-d
 
 ## Acknowledgements
 
-[@mat1](https://repl.it/@mat1) for Discord Rich Presence
+[@mat1](https://repl.it/@mat1) for Discord Rich Presence Integration
