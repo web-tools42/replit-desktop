@@ -505,7 +505,6 @@ function createSubWindow() {
         }
     );
     subWindow.webContents.on('will-navigate', (event: any, url: string) => {
-        // @ts-ignore
         handleExternalLink(subWindow, url);
     });
     subWindow.on('unresponsive', () => {
@@ -532,7 +531,6 @@ function createWindow() {
     mainWindow.webContents.on(
         'did-fail-load',
         (event: any, errorCode: number, errorDescription: string) => {
-            // @ts-ignore
             errorMessage(mainWindow, errorCode, errorDescription);
         }
     );

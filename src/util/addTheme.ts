@@ -1,4 +1,4 @@
-import {ElectronWindow} from '../class';
+import { ElectronWindow } from '../class';
 
 function addTheme(windowObj: ElectronWindow, CSSString: string) {
     for (let i = 1; i <= 3; i++) {
