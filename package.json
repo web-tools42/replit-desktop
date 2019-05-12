@@ -8,7 +8,7 @@
         "dev:main": "concurrently \"npm:dev:main:webpack\" \"npm:dev:main:electron\"",
         "dev:main:electron": "nodemon -w dist/dev -e js,ts,json,html,css --exec electron dist/dev/main.bundle.js",
         "dev:main:webpack": "webpack --config webpack.config.js",
-        "fix-types": "eslint \"src/**/*.{js,js,json}\" --fix",
+        "lint:fix": "eslint \"src/**/*.{js,ts,json}\" --fix",
         "package": "node src/utils/building.js"
     },
     "keywords": [

@@ -1,4 +1,4 @@
-electron-basic-updater
-electron-preferences
+electron-basic-updater/
+electron-preferences/
 node_modules
 **/dist/
