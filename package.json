@@ -53,7 +53,6 @@
         "prettier": "^1.17.0",
         "restler": "^3.4.0",
         "tslint": "^5.16.0",
-        "tslint-config-prettier": "^1.18.0",
         "typescript": "^3.4.5",
         "webpack": "^4.30.0",
         "webpack-cli": "^3.3.2",

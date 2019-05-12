@@ -12,7 +12,6 @@ import ElectronContext from 'electron-context-menu';
 import requests from 'axios';
 
 /* Local libs */
-
 import ElectronPreferences from '../lib/electron-preferences';
 import { ElectronWindow } from '../lib/ts-class';
 
@@ -32,7 +31,6 @@ import {
 import { appMenuSetup } from '../main/menu';
 
 /* Declare Constants */
-
 let mainWindow: ElectronWindow;
 let subWindow: ElectronWindow;
 const clientId = '498635999274991626';
@@ -43,7 +41,6 @@ const rpc = new DiscordRPC.Client({
 let defaultUserAgent: string;
 
 /* App's Setup */
-
 async function appSetup() {
     let Themes: object = {};
     let themes: object = {};
@@ -84,6 +81,7 @@ async function appSetup() {
             });
         }
     }
+
     /* Preferences */
     const Preferences = new ElectronPreferences({
         dataStore: path.resolve(app.getPath('userData'), 'Preferences.json'),
