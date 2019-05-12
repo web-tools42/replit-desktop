@@ -24,6 +24,28 @@ See [CONTRIBUTING.md](./.github/CONTRIBUTING.md) before contributing
 
 See feature implementation details on the [roadmap](https://github.com/repl-it-discord/repl-it-electron/projects)
 
+## Scripts
+
+### `npm run dev:main`
+
+Runs `npm run dev:main:electron` and `npm run dev:main:webpack` concurrently.
+
+### `npm run dev:main:electron`
+
+Starts electron main process. Watches files in `dist/dev` with `nodemon` and restarts Electron when changes are found.
+
+### `npm run dev:main:webpack`
+
+Starts Webpack ts compilation and js transpilation that outputs to `dist/dev`. Restarts webpack bundling when changes in `src` are found.
+
+### `npm run lint:fix`
+
+Automatically fixes all linting issues with eslint. Lints TypeScript as well as JavaScript. Also formats code according to Prettier style guides.
+
+### `npm run package`
+
+Package the app before release.
+
 ## Acknowledgements
 
 [@mat1](https://repl.it/@mat1) for Discord Rich Presence
