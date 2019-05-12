@@ -4,7 +4,7 @@
 
 ## Summary
 
-[repl.it](https://repl.it) is an online coding platform that provides an IDE. `repl-it-electron` is an unofficial native desktop application that interfaces wth repl.it. It intends to improve developer experience through simplicity.
+[repl.it](https://repl.it) is an online coding platform that provides an IDE. `repl-it-electron` is an unofficial native desktop application that interfaces wth repl.it. It intends to improve developer experience through simplicity. As an electron app you can use it on Mac OS, Windows 7,8 and 10.
 
 ## Features
 * Discord Rich Presence (using DiscordRPC)
