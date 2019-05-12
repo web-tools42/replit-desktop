@@ -7,7 +7,6 @@ module.exports = {
     target: 'electron-main',
     context: path.resolve(__dirname),
     watch: true,
-
     entry: ['@babel/polyfill', './src/main/main.ts'],
     output: {
         publicPath: './',
@@ -17,8 +16,7 @@ module.exports = {
     resolve: {
         extensions: ['.ts', '.js', '.json'],
         alias: {
-            '@': path.resolve(__dirname, 'src'),
-            DDD: path.resolve(__dirname, 'src')
+            '@': path.resolve(__dirname, 'src')
         }
     },
     plugins: [new CleanWebpackPlugin()],
@@ -41,24 +39,6 @@ module.exports = {
                     }
                 ],
                 exclude: /(node_modules|electron-basic-updater|electron-preferences)/
-            },
-            {
-                test: /\.json$/,
-                use: [
-                    {
-                        loader: 'eslint-loader',
-                        options: {
-                            fix: false, // Automatically fixes source files
-                            cache: true,
-                            quiet: false
-                        }
-                    }
-                ],
-                exclude: [
-                    /node_modules/,
-                    /electron-basic-updater/,
-                    /electron-preferences/
-                ]
             }
         ]
     }
