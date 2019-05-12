@@ -1,5 +1,5 @@
-let path = require('path')
-let CleanWebpackPlugin = require('clean-webpack-plugin')
+let path = require('path');
+let CleanWebpackPlugin = require('clean-webpack-plugin');
 
 module.exports = {
     mode: 'development',
@@ -12,18 +12,18 @@ module.exports = {
     output: {
         publicPath: './',
         path: path.join(__dirname, 'dist', 'dev'),
-        filename: '[name].bundle.js',
+        filename: '[name].bundle.js'
     },
     resolve: {
         extensions: ['.ts', '.js', '.json'],
         alias: {
             '@': path.resolve(__dirname, 'src'),
-            DDD: path.resolve(__dirname, 'src'),
-        },
+            DDD: path.resolve(__dirname, 'src')
+        }
     },
     plugins: [new CleanWebpackPlugin()],
     optimization: {
-        minimize: false,
+        minimize: false
     },
     module: {
         rules: [
@@ -36,11 +36,11 @@ module.exports = {
                         options: {
                             fix: false, // Automatically fixes source files
                             cache: true,
-                            quiet: false,
-                        },
-                    },
+                            quiet: false
+                        }
+                    }
                 ],
-                exclude: /(node_modules|electron-basic-updater|electron-preferences)/,
+                exclude: /(node_modules|electron-basic-updater|electron-preferences)/
             },
             {
                 test: /\.json$/,
@@ -50,16 +50,16 @@ module.exports = {
                         options: {
                             fix: false, // Automatically fixes source files
                             cache: true,
-                            quiet: false,
-                        },
-                    },
+                            quiet: false
+                        }
+                    }
                 ],
                 exclude: [
                     /node_modules/,
                     /electron-basic-updater/,
-                    /electron-preferences/,
-                ],
-            },
-        ],
-    },
-}
+                    /electron-preferences/
+                ]
+            }
+        ]
+    }
+};
