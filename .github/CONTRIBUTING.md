@@ -1,36 +1,38 @@
 # Contributing
 
-When contributing to this repository, create a Pull Request and your changes will be reviewed by Leon and Edwin.
+👋 Hey! Thank's for thinking about contributing. Make sure you read the following before contributing.
 
-If you are contributing code, please make a Pull Request unless the change is obvious and uncontroversial.
+## Branch Naming
+Use tokens to categorize branches. Add blurb about branch, separated by token with forward slash. See [this](https://stackoverflow.com/a/6065944) for more information.
 
-## Branch Naming Rules
+### Tokens
 
-#### When naming branches, use short tokens, followed by a 1-3 words of what your branch has. EXCEPT bug fixes, you need to put the target version number of the fix.
-
-##### Please use the following tokens (words) for grouping.
-- fix
-  - For bug fixes.
-  
-- misc
-  - For changes in the repo itself, for example file directory changes.
-
-- wip
-  - Any work in progress, for example creating tests etc.
-
-- feat
-  - New features in progress.
-  
-#### Examples
-
+```bash
+fix  # Bug fixes, hotfixes
+misc # Miscellaneous
+wip  # New feature with unclear completion time
+feat # New feature with clear completion time
 ```
-fix/1.0.3
-misc/BranchNaming
-wip/Add-tests
-feat/offline-editing
-```
-## Pull Request Process
 
-1. Make sure your code works
-2. Create a detailed description of your changes, or detailed commit messages.
-3. We will review the changes and decide to merge or not.
+### Examples
+
+```bash
+fix/webpack-fail-start
+misc/org-assets # organize assets directory
+wip/offline-editing
+feat/util-tests
+```
+
+## Pull Requests
+
+Before, you make a PR
+
+1. *Create an Issue of what you plan to add*
+
+While making commits for the PR
+
+1. Write tests, if possible
+2. Write detailed commit messages.
+3. We'll offer feedback and iterate until merge has complete
+
+PRs will be reviewed by [Leon](https://github.com/leon332157) and [Edwin](https://github.com/EanKeen).
