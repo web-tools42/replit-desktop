@@ -9,7 +9,7 @@
         "dev:main:electron": "nodemon -w dist/dev -e js,ts,json,html,css --exec electron dist/dev/main.bundle.js",
         "dev:main:webpack": "webpack --config webpack.config.js",
         "lint:fix": "eslint \"src/**/*.{js,ts,json}\" --fix",
-        "package": "node src/utils/building.js"
+        "package": "node build/building.js"
     },
     "keywords": [
         "electron",
@@ -59,6 +59,7 @@
         "zip-local": "^0.3.4"
     },
     "dependencies": {
+        "@types/axios": "^0.14.0",
         "axios": "^0.18.0",
         "concurrently": "^4.1.0",
         "fs-extra": "^5.0.0",

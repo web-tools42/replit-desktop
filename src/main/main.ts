@@ -1,6 +1,4 @@
-/* Require Packages */
 import { app, Menu, dialog } from 'electron';
-// @ts-ignore
 import path from 'path';
 // @ts-ignore
 import DiscordRPC from 'discord-rpc';
@@ -8,8 +6,7 @@ import DiscordRPC from 'discord-rpc';
 import ElectronPrompt from 'electron-prompt';
 // @ts-ignore
 import ElectronContext from 'electron-context-menu';
-// @ts-ignore
-import requests from 'axios';
+import axios from 'axios';
 
 /* Local libs */
 // @ts-ignore
@@ -45,9 +42,10 @@ let defaultUserAgent: string;
 async function appSetup() {
     let Themes: object = {};
     let themes: object = {};
+    let res;
     try {
         // @ts-ignore
-        var res = await requests.get('https://www.darktheme.tk/themes.json');
+        res = await axios.get('https://www.darktheme.tk/themes.json');
     } catch (e) {
         console.error(e);
         return;
@@ -70,7 +68,7 @@ async function appSetup() {
     for (let theme in themes) {
         if (themes.hasOwnProperty(theme)) {
             // @ts-ignore
-            let resp = await requests.get(
+            let resp = await axios.get(
                 // @ts-ignore
                 `https://www.darktheme.tk/theme.css?${themes[theme]}`
             );
@@ -500,12 +498,10 @@ function createSubWindow() {
     subWindow.webContents.on(
         'did-fail-load',
         (event: any, errorCode: number, errorDescription: string) => {
-            // @ts-ignore
             errorMessage(subWindow, errorCode, errorDescription);
         }
     );
     subWindow.webContents.on('will-navigate', (event: any, url: string) => {
-        // @ts-ignore
         handleExternalLink(subWindow, url);
     });
     subWindow.on('unresponsive', () => {
@@ -532,7 +528,6 @@ function createWindow() {
     mainWindow.webContents.on(
         'did-fail-load',
         (event: any, errorCode: number, errorDescription: string) => {
-            // @ts-ignore
             errorMessage(mainWindow, errorCode, errorDescription);
         }
     );
@@ -571,6 +566,6 @@ app.on('ready', () => {
     createWindow();
 });
 
-rpc.login({ clientId: clientId }).catch((error: any) => {
+rpc.login({ clientId }).catch((error: any) => {
     console.error(error);
 });
