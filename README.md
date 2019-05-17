@@ -3,8 +3,7 @@
 [![Build Status](https://travis-ci.org/repl-it-discord/repl.it-electron.svg?branch=master)](https://travis-ci.org/repl-it-discord/repl-it-electron)
 
 ## Summary
-
-[repl.it](https://repl.it) is an online coding platform that provides an IDE. `repl-it-electron` is an unofficial native desktop application that interfaces wth repl.it. It intends to improve developer experience through simplicity. As an electron app you can use it on Mac OS, Windows 7,8 and 10.
+[repl.it](https://repl.it) is an online coding platform that provides an IDE all in your browser. `repl-it-electron` is an unofficial native desktop application that interfaces wth repl.it. It intends to improve developer experience through simplicity. As an electron app you can use it on Mac OS, Windows 7,8 and 10.
 
 ## Features
 * Discord Rich Presence (using DiscordRPC)
