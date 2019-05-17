@@ -1,6 +1,6 @@
 # Contributing
 
-👋 Hey! Thank's for thinking about contributing. Make sure you read the following before contributing.
+👋 Hey! Thank's for thinking about contributing. Make sure you read the following below before contributing.
 
 ## Branch Naming
 Use tokens to categorize branches. Add blurb about branch, separated by token with forward slash. See [this](https://stackoverflow.com/a/6065944) for more information.
