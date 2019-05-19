@@ -3,12 +3,12 @@
 [![Build Status](https://travis-ci.org/repl-it-discord/repl-it-electron.svg?branch=dev)](https://travis-ci.org/repl-it-discord/repl-it-electron)
 
 ## Summary
-[repl.it](https://repl.it) is an online coding platform that provides a browser-based IDE. `repl-it-electron` is an unofficial native desktop application that interfaces wth repl.it. It intends to improve developer experience through simplicity. As an electron app you can use it on Mac OS, Windows 7,8 and 10.
+[Repl.it](https://repl.it) is an online coding platform that provides a browser-based IDE. `repl-it-electron` is an unofficial native desktop application that interfaces with Repl.it. It intends to improve developer experience through simplicity. As an Electron app you can use it on Mac OS, Windows 7, 8 and 10.
 
 ## Features
 * Discord Rich Presence (using DiscordRPC)
 * Work with two windows simultaneously
-* Change themes (other than *Light* and *Dark*)
+* Change themes (other than *light* and *dark*)
 
 ## Contributing
 
@@ -36,7 +36,7 @@ Starts electron main process. Watches files in `dist/dev` with `nodemon` and res
 
 ### `npm run dev:main:webpack`
 
-Starts Webpack ts compilation and js transpilation that outputs to `dist/dev`. Restarts webpack bundling when changes in `src` are found.
+Starts Webpack TypeScript compilation and JavaScript transpilation that outputs to `dist/dev`. Restarts webpack bundling when changes in `src` are found.
 
 ### `npm run lint:fix`
 
@@ -48,4 +48,4 @@ Package the app before release.
 
 ## Acknowledgements
 
-[@mat1](https://repl.it/@mat1) for Discord Rich Presence Integration
+[@mat1](https://repl.it/@mat1) for Discord Rich Presence Integration and custom dark theme
