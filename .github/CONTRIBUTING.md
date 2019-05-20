@@ -1,9 +1,39 @@
 # Contributing
 
-👋 Hey! Thank's for thinking about contributing. Make sure you read the following below before contributing.
+👋 Hey! Thanks for thinking about contributing! Make sure you read the following three sections before contributing.
+
+## Pull Requests
+
+Before you make a PR
+
+1. *Create an Issue of what you plan to add*
+2. *Do **not** commit to `dev` or `master` branch*
+
+Of course, if you're change is relatively small, this may not be required.
+
+PRs will be reviewed by [Leon](https://github.com/leon332157) and [Edwin](https://github.com/EanKeen).
+
+## Commit Naming
+
+* Keep commits short and meaningful
+* Use the imperative, present tense ('change' rather than 'changed' or 'changes')
+* Do not capitalize the first letter
+* Do not add a period
+
+Here are some high-quality examples. Note that you don't need to match the formatting, just the guidelines stated above :ok_hand:
+
+```md
+feat(ts): convert util/addTheme.js to ts
+fix:(renderer): inject css styles
+```
+
+### Some handy keywords
+
+`(feat|fix|polish|docs|style|refactor|perf|test|workflow|ci|chore|types)`
 
 ## Branch Naming
-Use tokens to categorize branches. Add blurb about branch, separated by token with forward slash. See [this](https://stackoverflow.com/a/6065944) for more information.
+
+Be sure to create a new branch when contributing. *Do **not** commit to the `dev` or `master` branch*. Use tokens to categorize branches. Add blurb about branch, separated by token with forward slash. See [this](https://stackoverflow.com/a/6065944) for more information.
 
 ### Tokens
 
@@ -22,17 +52,3 @@ misc/org-assets # organize assets directory
 wip/offline-editing
 feat/util-tests
 ```
-
-## Pull Requests
-
-Before, you make a PR
-
-1. *Create an Issue of what you plan to add*
-
-While making commits for the PR
-
-1. Write tests, if possible
-2. Write detailed commit messages.
-3. We'll offer feedback and iterate until merge has complete
-
-PRs will be reviewed by [Leon](https://github.com/leon332157) and [Edwin](https://github.com/EanKeen).
