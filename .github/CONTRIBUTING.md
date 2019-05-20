@@ -24,7 +24,7 @@ Here are some high-quality examples. Note that you don't need to match the forma
 
 ```md
 feat(ts): convert util/addTheme.js to ts
-fix:(renderer): inject css styles
+fix(renderer): inject css styles
 ```
 
 ### Some handy keywords
