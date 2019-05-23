@@ -4,6 +4,8 @@
 
 # os
 .DS_Store
+.Trashes/
+Thumbs.db
 
 # pkg
 home*
