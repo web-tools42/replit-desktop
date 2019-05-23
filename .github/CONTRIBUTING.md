@@ -52,3 +52,7 @@ misc/org-assets # organize assets directory
 wip/offline-editing
 feat/util-tests
 ```
+
+## Troubleshooting
+
+After `npm start`, you may receive errors. This is because `npm starts` runs nodemon and webpack concurrently, instead of in sequence. Consequently, nodemon may launch Electron before webpack bundles an output to `dist/dev/main.bundle.js`. Acknowledge the errors until webpack finishes bundling.

@@ -4,13 +4,21 @@
 
 ## Summary
 
-[Repl.it](https://repl.it) is an online coding platform that provides a browser-based IDE. `repl-it-electron` is an unofficial native desktop application that interfaces with repl.it. It intends to improve developer experience through simplicity. As an Electron app you can use it on Mac OS, Windows 7, 8 and 10.
+[Repl.it](https://repl.it) is an online coding platform that provides a browser-based IDE. `repl-it-electron` is an unofficial native desktop application that interfaces with repl.it. It intends to improve developer experience and efficiency.
 
 ## Features
 
 * Discord Rich Presence (using DiscordRPC)
 * Work with two windows simultaneously
-* Change themes (other than *light* and *dark*)
+* Change themes (besides *light* and *dark*)
+
+## Requirements
+
+* From macOS 10.10 (Yosemite)
+* From Windows 7
+* From Ubuntu 12.04, Fedora 21, or Debian 8
+
+Supported operating systems taken from the Electron [docs](https://electronjs.org/docs/tutorial/support)
 
 ## Contributing
 
