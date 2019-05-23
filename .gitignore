@@ -1,17 +1,29 @@
-.DS_Store
-node_modules
-repl.it-*
+# ide
 .idea
 .vscode
-*dist
-venv*
-.env
+
+# os
+.DS_Store
+
+# pkg
 home*
-coverage
 *.dmg
 updater-log*
 update-window*
-.bashrc
 dev*
-package-lock*
-pnpm-lock*
+
+# ci
+coverage
+
+# npm
+node_modules
+package-lock.json
+pnpm-lock.yaml
+
+# py
+venv*
+
+# misc
+.env
+repl.it-*
+*dist
