@@ -23,10 +23,16 @@ module.exports = {
     optimization: {
         minimize: false
     },
+
     module: {
         rules: [
             {
                 test: /\.(js|ts)$/,
+                exclude: [
+                    /node_modules/,
+                    /electron-basic-updater/,
+                    /electron-preferences/
+                ],
                 use: [
                     'babel-loader',
                     {
@@ -37,8 +43,7 @@ module.exports = {
                             quiet: false
                         }
                     }
-                ],
-                exclude: /(node_modules|electron-basic-updater|electron-preferences)/
+                ]
             }
         ]
     }

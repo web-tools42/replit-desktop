@@ -25,10 +25,12 @@ Supported operating systems taken from the Electron [docs](https://electronjs.or
 ```bash
 git clone --recurse-submodules https://github.com/repl-it-discord/repl-it-electron
 cd repl-it-electron
-npm install -g --production windows-build-tools # windows
-npm install
-npm start
+pnpm install -g --production windows-build-tools # windows
+pnpm install
+pnpm start
 ```
+
+Install pnpm [here](https://pnpm.js.org/docs/en/installation.html)
 
 See [CONTRIBUTING.md](./.github/CONTRIBUTING.md) before contributing
 
@@ -36,23 +38,23 @@ See feature implementation details on the [roadmap](https://github.com/repl-it-d
 
 ## Scripts
 
-### `npm run dev:main`
+### `pnpm run dev:main`
 
-Runs `npm run dev:main:electron` and `npm run dev:main:webpack` concurrently.
+Runs `pnpm run dev:main:electron` and `pnpm run dev:main:webpack` concurrently.
 
-### `npm run dev:main:electron`
+### `pnpm run dev:main:electron`
 
 Starts electron main process. Watches files in `dist/dev` with `nodemon` and restarts Electron when changes are found.
 
-### `npm run dev:main:webpack`
+### `pnpm run dev:main:webpack`
 
 Starts webpack process to perform TypeScript compilation and JavaScript transpilation etc. that outputs to `dist/dev`. Restarts webpack bundling when changes in `src` are found.
 
-### `npm run lint:fix`
+### `pnpm run lint:fix`
 
 Automatically fixes all linting issues with eslint. Lints TypeScript as well as JavaScript. Also formats code according to Prettier style guides.
 
-### `npm run package`
+### `pnpm run package`
 
 Package the app before release.
 
