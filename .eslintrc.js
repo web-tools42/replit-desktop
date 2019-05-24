@@ -7,9 +7,12 @@ module.exports = {
     },
     extends: ['prettier', 'plugin:prettier/recommended'],
     parser: '@typescript-eslint/parser',
-    plugins: ['@typescript-eslint'],
+    plugins: ['eslint-plugin-import', '@typescript-eslint'],
     parserOptions: {
         ecmaVersion: 2018
+    },
+    ecmaFeatures: {
+        modules: true
     },
     rules: {
         'prettier/prettier': 'error'
