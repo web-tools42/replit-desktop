@@ -47,8 +47,6 @@
         "eslint-plugin-prettier": "^3.0.1",
         "eslint-watch": "^5.1.2",
         "eventemitter2": "^5.0.1",
-        "express": "^4.16.4",
-        "mobile-detect": "^1.4.3",
         "nodemon": "^1.19.0",
         "prettier": "^1.17.0",
         "restler": "^3.4.0",
