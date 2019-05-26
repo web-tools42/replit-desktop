@@ -9,16 +9,14 @@ Thumbs.db
 
 # dist
 dist
+pre-dist
 
 # npm
 node_modules
 
 # py
-.venv
 venv/
 
 # misc
 .env
 
-# coverage
-coverage
