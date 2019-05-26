@@ -1,11 +1,15 @@
-import { app, Menu, dialog } from 'electron'; 
+import { app, Menu, dialog } from 'electron';
 import path from 'path';
+// @ts-ignore
 import DiscordRPC from 'discord-rpc';
+// @ts-ignore
 import ElectronPrompt from 'electron-prompt';
+// @ts-ignore
 import ElectronContext from 'electron-context-menu';
 import axios from 'axios';
 
 /* Local libs */
+// @ts-ignore
 import ElectronPreferences from '../lib/electron-preferences';
 import { ElectronWindow } from '../class';
 
