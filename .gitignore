@@ -20,4 +20,5 @@ venv/
 # misc
 .env
 coverage/
+*.log
 
