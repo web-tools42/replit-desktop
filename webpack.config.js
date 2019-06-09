@@ -38,8 +38,9 @@ module.exports = {
                     {
                         loader: 'eslint-loader',
                         options: {
+                            debug:true,
                             fix: false, // Automatically fixes source files
-                            cache: true,
+                            cache: false,
                             quiet: false
                         }
                     }
