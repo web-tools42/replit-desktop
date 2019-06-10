@@ -6,7 +6,7 @@
     "scripts": {
         "start": "npm run dev:main",
         "dev:main": "concurrently \"npm:dev:main:webpack\" \"npm:dev:main:electron\"",
-        "dev:main:electron": "nodemon -w dist/dev -e js,ts,json,html,css --exec electron dist/dev/main.bundle.js",
+        "dev:main:electron": "nodemon -w dist/dev -e js,ts,json,html,css --exec electron dist/dev",
         "dev:main:webpack": "webpack --config webpack.dev.js",
         "lint:fix": "eslint \"src/**/*.{js,ts,json}\" --fix",
         "build": "webpack --config webpack.prod.js",

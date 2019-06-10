@@ -10,7 +10,9 @@ module.exports = merge.smart(common, {
     output: {
         publicPath: './',
         path: path.join(__dirname, 'dist', 'dev'),
-        filename: '[name].bundle.js'
+        // Naming it 'index.js' so we can `electron 'dist/dev'` (main js file gets discovered)
+        // TODO: Fix
+        filename: 'index.js'
     },
     optimization: {
         minimize: false
