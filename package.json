@@ -4,8 +4,9 @@
     "description": "electron version of repl.it",
     "main": "main.js",
     "scripts": {
-        "start": "npm run dev:main",
+        "start": "npm run dev:main:watch",
         "dev:main": "electron src/main/bootstrap.js",
+        "dev:main:watch": "nodemon -w src -e js,ts,json,html,css --exec electron src/main/bootstrap.js",
         "lint:fix": "eslint \"src/**/*.{js,ts,json}\" --fix",
         "build": "webpack --config webpack.prod.js",
         "package": "node build/building.js"
