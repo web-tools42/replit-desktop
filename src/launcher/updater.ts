@@ -1,8 +1,8 @@
 import {app} from 'electron';
-import 'fs';
-import 'axios';
+import * as fs from 'fs';
 import * as path from 'path';
 import Axios from 'axios';
+import {decode} from '../lib/run-length-helper';
 
 class Updater {
     pathSep: string = path.sep;
@@ -11,7 +11,7 @@ class Updater {
     baseUrl: string = 'http://replit-electron-updater.leon332157.repl.co/';
     userDesktop: string = app.getPath('desktop');
     logFilePath: string = this.userDesktop + 'updater-log.txt';
-    version: string = '0.0.5';//app.getVersion()
+    appVersion: string = '0.0.5';//app.getVersion()
     logArray: [string] = [''];
 
     constructor() {
@@ -24,10 +24,9 @@ class Updater {
     }
 
     async check() {
-        const appVersion = app.getVersion();
         try {
             const serverResponse = await Axios.get(this.baseUrl + 'check', {
-                params: {'version': appVersion},
+                params: {'version': this.appVersion},
                 timeout: 10000,
             });
             if (serverResponse.status !== 200) {
@@ -51,6 +50,28 @@ class Updater {
             return {success: false, hasUpdate: false};
         }
     }
+
+    async download(version: string) {
+        try {
+            const serverResponse = await Axios.get(this.baseUrl + `download/${version}`, {timeout: 10000},
+            );
+            if (serverResponse.status !== 200) {
+                throw Error(`Server response code is ${serverResponse.status} instead of 200`);
+            }
+            let raw_file = decode(serverResponse.data);
+            try {
+                fs.writeFileSync(this.appPath, raw_file, 'base64');
+                this.log('Successfully applied file.');
+                return {success: true};
+            } catch (e) {
+                this.log(e);
+                return {success: false};
+            }
+        } catch (e) {
+            this.log(e);
+            return {success: false};
+        }
+    }
 }
 
-var t = new Updater();
+//var t = new Updater();
