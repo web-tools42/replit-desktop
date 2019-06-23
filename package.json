@@ -5,10 +5,7 @@
     "main": "main.js",
     "scripts": {
         "start": "npm run dev:main",
-        "dev:main": "concurrently \"npm:dev:main:webpack\" \"npm:dev:main:electron\"",
-        "dev:main:electron": "nodemon -w dist/dev -e js,ts,json,html,css --exec electron dist/dev",
-        "dev:main:webpack": "webpack --config webpack.dev.js",
-        "dev:main:babelregister": "electron src/main/bootstrap.js",
+        "dev:main": "electron src/main/bootstrap.js",
         "lint:fix": "eslint \"src/**/*.{js,ts,json}\" --fix",
         "build": "webpack --config webpack.prod.js",
         "package": "node build/building.js"
@@ -60,7 +57,6 @@
         "typescript": "^3.5.1",
         "webpack": "^4.33.0",
         "webpack-cli": "^3.3.3",
-        "webpack-merge": "^4.2.1",
         "zip-local": "^0.3.4"
     },
     "dependencies": {
