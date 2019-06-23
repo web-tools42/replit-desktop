@@ -29,16 +29,8 @@ module.exports = {
                     /electron-preferences/
                 ],
                 use: [
-                    'babel-loader',
-                    {
-                        loader: 'eslint-loader',
-                        options: {
-                            fix: false, // Automatically fixes source files
-                            cache: true,
-                            quiet: false
-                        }
-                    }
-                ]
+                    'babel-loader'
+                ] 
             }
         ]
     }
