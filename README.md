@@ -40,15 +40,11 @@ See feature implementation details on the [roadmap](https://github.com/repl-it-d
 
 ### `npm run dev:main`
 
-Runs `npm run dev:main:electron` and `npm run dev:main:webpack` concurrently.
+Runs `electron` process. Uses `@babel/register` to compile our TypeScript on the fly
 
-### `npm run dev:main:electron`
+### `npm run dev:main:watch`
 
-Starts electron main process. Watches files in `dist/dev` with `nodemon` and restarts Electron when changes are found.
-
-### `npm run dev:main:webpack`
-
-Starts webpack process to perform TypeScript compilation and JavaScript transpilation etc. that outputs to `dist/dev`. Restarts webpack bundling when changes in `src` are found.
+Watches `src/` with nodeman and relaunches electron process on change of a `js,ts,json,html,css` file.
 
 ### `npm run lint:fix`
 
