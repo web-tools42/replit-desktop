@@ -12,10 +12,7 @@ module.exports = {
         modules: true
     },
     parserOptions: {
-        "sourceType": "module",
-        "ecmaFeatures": {
-            "modules": true
-        }
+        "sourceType": "module"
     },
     rules: {
         'prettier/prettier': 'error'
