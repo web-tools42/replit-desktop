@@ -28,9 +28,7 @@ module.exports = {
                     /electron-basic-updater/,
                     /electron-preferences/
                 ],
-                use: [
-                    'babel-loader'
-                ] 
+                use: ['babel-loader']
             }
         ]
     }

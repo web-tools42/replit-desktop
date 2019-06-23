@@ -14,7 +14,7 @@ if ('TRAVIS' in process.env && 'CI' in process.env) {
     linuxIconPath = '';
     sourceDir = path.resolve('.');
     debug = false;
-    process.env['DEBUG'] = ''
+    process.env['DEBUG'] = '';
 }
 
 function shouldIgnore(filePath) {
@@ -27,9 +27,9 @@ function shouldIgnore(filePath) {
         filePath.includes('coverage')
     ) {
         if (debug) {
-            console.log(`Ignored ${filePath}`)
+            console.log(`Ignored ${filePath}`);
         }
-        return true
+        return true;
     }
     if (/node_modules/.test(filePath)) {
         if (
@@ -38,9 +38,9 @@ function shouldIgnore(filePath) {
             )
         ) {
             if (debug) {
-                console.log(`Ignored ${filePath}`)
+                console.log(`Ignored ${filePath}`);
             }
-            return true
+            return true;
         }
         if (
             /^(\..*|.*\.(sln|pdb|exp|lib|map|md|sh|gypi|gyp|h|cpp|xml|yml|html)|vcxproj.*|LICENSE|README|CONTRIBUTORS|vagrant|Dockerfile|Makefile)$/i.test(
@@ -48,9 +48,9 @@ function shouldIgnore(filePath) {
             )
         ) {
             if (debug) {
-                console.log(`Ignored ${filePath}`)
+                console.log(`Ignored ${filePath}`);
             }
-            return true
+            return true;
         }
     }
 }
@@ -61,13 +61,13 @@ packager({
     platform: 'win32',
     arch: 'ia32',
     icon: windowsIconPath,
-    ignore: shouldIgnore,
+    ignore: shouldIgnore
 }).then(
     appPath => {
-        console.log(`Win32 ${appPath}`)
+        console.log(`Win32 ${appPath}`);
     },
     error => {
-        console.error(error)
+        console.error(error);
     }
 );
 
@@ -77,13 +77,13 @@ packager({
     platform: 'win32',
     arch: 'x64',
     icon: windowsIconPath,
-    ignore: shouldIgnore,
+    ignore: shouldIgnore
 }).then(
     appPath => {
-        console.log(`Win64 ${appPath}`)
+        console.log(`Win64 ${appPath}`);
     },
     error => {
-        console.error(error)
+        console.error(error);
     }
 );
 
@@ -92,13 +92,13 @@ packager({
     asar: true,
     platform: 'darwin',
     icon: macIconPath,
-    ignore: shouldIgnore,
+    ignore: shouldIgnore
 }).then(
     appPath => {
-        console.log(`Mac ${appPath}`)
+        console.log(`Mac ${appPath}`);
     },
     error => {
-        console.error(error)
+        console.error(error);
     }
 );
 /*
@@ -121,12 +121,12 @@ packager({
     platform: 'linux',
     arch: 'x64',
     icon: linuxIconPath,
-    ignore: shouldIgnore,
+    ignore: shouldIgnore
 }).then(
     appPath => {
-        console.log(`Linux64 ${appPath}`)
+        console.log(`Linux64 ${appPath}`);
     },
     error => {
-        console.error(error)
+        console.error(error);
     }
 );
