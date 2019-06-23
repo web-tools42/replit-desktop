@@ -8,14 +8,8 @@ module.exports = {
     extends: ['prettier', 'plugin:prettier/recommended'],
     parser: '@typescript-eslint/parser',
     plugins: ['eslint-plugin-import', '@typescript-eslint'],
-    ecmaFeatures: {
-        modules: true
-    },
     parserOptions: {
-        "sourceType": "module",
-        "ecmaFeatures": {
-            "modules": true
-        }
+        "sourceType": "module"
     },
     rules: {
         'prettier/prettier': 'error'
