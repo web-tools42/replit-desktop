@@ -38,21 +38,33 @@ See feature implementation details on the [roadmap](https://github.com/repl-it-d
 
 ## Scripts
 
-### `npm run dev:main`
+### `start`
 
-Runs `electron` process. Uses `@babel/register` to compile our TypeScript on the fly
+Runs `dev:main:watch`
 
-### `npm run dev:main:watch`
+### `dev:main`
 
-Watches `src/` with nodeman and relaunches electron process on change of a `js,ts,json,html,css` file.
+Starts electron main process in development mode. Uses `@babel/register` to compile our TypeScript on the fly
 
-### `npm run lint:fix`
+### `dev:main:watch`
 
-Automatically fixes all linting issues with eslint. Lints TypeScript as well as JavaScript. Also formats code according to Prettier style guides.
+Watches `src/` with nodeman and starts electron main process on change of a `js,ts,json,html,css` file.
 
-### `npm run package`
+### `lint`
 
-Package the app before release.
+Identifies all linting issues with eslint. Lints TypeScript as well as JavaScript. Also formats code according to Prettier style guides. Use `npm run lint --fix` to correct all correctable errors.
+
+### `build`
+
+Uses webpack to create a JavaScript build of the app for production.
+
+### `build:run`
+
+Runs the production build of the website.
+
+### `package`
+
+Packge the app for release.
 
 ## Acknowledgements
 
