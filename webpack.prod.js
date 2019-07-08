@@ -6,7 +6,7 @@ module.exports = {
     target: 'electron-main',
     devtool: 'source-map',
     context: path.resolve(__dirname),
-    entry: ['@babel/polyfill', './src/main/main.ts'],
+    entry: ['./src/main/main.ts'],
     output: {
         publicPath: './',
         path: path.join(__dirname, 'dist'),

@@ -1,20 +1,9 @@
 {
   "presets": [
-    [
-      "@babel/env",
-      {
-        "useBuiltIns": "entry",
-        "corejs": "3.0.1"
-      }
-    ],
+    "@babel/env",
     "@babel/typescript"
   ],
   "plugins": [
-    "@babel/transform-regenerator",
-    "@babel/transform-async-to-generator",
-    "@babel/proposal-class-properties",
-    "@babel/proposal-object-rest-spread",
-    "@babel/transform-modules-commonjs",
-    "@babel/plugin-transform-runtime"
+    "@babel/proposal-class-properties"
   ]
 }
