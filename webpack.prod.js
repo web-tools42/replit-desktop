@@ -1,5 +1,5 @@
 let path = require('path');
-let CleanWebpackPlugin = require('clean-webpack-plugin');
+let { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
     mode: 'production',
