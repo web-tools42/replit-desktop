@@ -47,7 +47,7 @@
         "register-scheme": "^0.0.2",
         "restler": "^3.4.0",
         "tslint": "^5.18.0",
-        "typescript": "^3.5.2",
+        "typescript": "^3.5.3",
         "webpack": "^4.35.3",
         "webpack-cli": "^3.3.5",
         "zip-local": "^0.3.4"
