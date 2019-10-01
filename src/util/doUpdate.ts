@@ -1,9 +1,8 @@
-import { app, dialog } from 'electron';
+import { app, dialog, MessageBoxReturnValue } from 'electron';
 //@ts-ignore
 import path from 'path';
 //@ts-ignore
 import EBU from '../lib/electron-basic-updater';
-import MessageBoxReturnValue = Electron.MessageBoxReturnValue;
 
 function doUpdate(Update: boolean, Manual: boolean) {
     if (!Update) {

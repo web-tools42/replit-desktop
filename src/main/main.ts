@@ -1,4 +1,4 @@
-import { app, dialog, Menu } from 'electron';
+import { app, dialog, Menu, MessageBoxReturnValue } from 'electron';
 // @ts-ignore
 import path from 'path';
 // @ts-ignore
@@ -10,8 +10,8 @@ import ElectronContext from 'electron-context-menu';
 import axios from 'axios';
 /* Local libs */
 // @ts-ignore
-import ElectronPreferences from './lib/electron-preferences';
-import { ElectronWindow } from './class';
+import ElectronPreferences from '../lib/electron-preferences';
+import { ElectronWindow } from '../class';
 /* Require files */
 import {
     addTheme,
@@ -23,10 +23,10 @@ import {
     handleExternalLink,
     selectInput,
     talkBoard
-} from './util';
+} from '../util';
 
-import { appMenuSetup } from './main/menu';
-import MessageBoxReturnValue = Electron.MessageBoxReturnValue;
+import { appMenuSetup } from '../main/menu';
+// const MessageBoxReturnValue = Electron.MessageBoxReturnValue;
 
 /* Declare Constants */
 let mainWindow: ElectronWindow;

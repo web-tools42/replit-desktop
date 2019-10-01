@@ -1,6 +1,5 @@
-import { dialog } from 'electron';
+import { dialog, MessageBoxReturnValue } from 'electron';
 import { ElectronWindow } from '../class';
-import MessageBoxReturnValue = Electron.MessageBoxReturnValue;
 
 function errorMessage(
     windowObject: ElectronWindow,
