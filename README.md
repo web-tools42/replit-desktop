@@ -62,9 +62,9 @@ Uses webpack to create a JavaScript build of the app for production.
 
 Runs the production build of the website.
 
-### `package`
+### `build:ts`
 
-Packge the app for release.
+Use the typescript compiler to produce a ts-out directory of a js copy of src.
 
 ## Acknowledgements
 
