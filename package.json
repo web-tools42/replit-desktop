@@ -7,12 +7,13 @@
         "start": "npm run dev:main:watch",
         "dev:main": "electron src/main/bootstrap.js",
         "dev:main:watch": "nodemon -w src -e js,ts,json,html,css --exec electron src/main/bootstrap.js",
-        "lint": "eslint \"**/*.{js,ts}\"",
         "build": "webpack --config webpack.prod.js",
         "build:run": "electron dist/main.bundle.js",
-        "build:ts": "tsc -b tsconfig.json && npm run build:ts:static && npm run ts:start",
-        "build:ts:static": "copyfiles package.json ts-out && copyfiles src/lib/electron-preferences/* ts-out/lib/electron-preferences/ -V -u 3 && copyfiles src/lib/electron-preferences/**/* ts-out/lib/electron-preferences/ -V -u 3",
-        "ts:start": "electron ./ts-out"
+        "lint": "eslint \"**/*.{js,ts}\"",
+        "start2": "npm run build2 && npm run build2:copy && npm run build2:run",
+        "build2": "tsc -b tsconfig.json",
+        "build2:copy": "gulp --require esm",
+        "build2:run": "electron ./ts-out/main/main.js"
     },
     "keywords": [
         "electron",
@@ -33,7 +34,6 @@
         "acorn": "^7.1.0",
         "babel-loader": "^8.0.6",
         "clean-webpack-plugin": "^3.0.0",
-        "copyfiles": "^2.1.1",
         "discord-rpc": "^3.1.0",
         "electron": "^6.0.10",
         "electron-context-menu": "^0.15.0",
@@ -44,6 +44,7 @@
         "eslint-plugin-import": "^2.18.2",
         "eslint-plugin-prettier": "^3.1.1",
         "eslint-watch": "^6.0.1",
+        "esm": "^3.2.25",
         "eventemitter2": "^5.0.1",
         "gulp": "^4.0.2",
         "nodemon": "^1.19.2",
