@@ -10,7 +10,8 @@
         "lint": "eslint \"**/*.{js,ts}\"",
         "build": "webpack --config webpack.prod.js",
         "build:run": "electron dist/main.bundle.js",
-        "build:ts": "tsc -b tsconfig.json && copyfiles package.json ts-out && copyfiles src/lib/electron-preferences/* ts-out/lib/electron-preferences/ -V -u 3 && copyfiles src/lib/electron-preferences/**/* ts-out/lib/electron-preferences/ -V -u 3"
+        "build:ts": "tsc -b tsconfig.json && npm run build:ts:static",
+        "build:ts:static": "copyfiles package.json ts-out && copyfiles src/lib/electron-preferences/* ts-out/lib/electron-preferences/ -V -u 3 && copyfiles src/lib/electron-preferences/**/* ts-out/lib/electron-preferences/ -V -u 3"
     },
     "keywords": [
         "electron",
@@ -42,10 +43,12 @@
         "eslint-plugin-prettier": "^3.1.1",
         "eslint-watch": "^6.0.1",
         "eventemitter2": "^5.0.1",
+        "gulp": "^4.0.2",
         "nodemon": "^1.19.2",
         "prettier": "^1.18.2",
         "register-scheme": "^0.0.2",
         "restler": "^3.4.0",
+        "ts-node": "^8.4.1",
         "tslint": "^5.20.0",
         "typescript": "^3.6.3",
         "webpack": "^4.41.0",

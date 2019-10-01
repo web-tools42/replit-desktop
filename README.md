@@ -66,6 +66,10 @@ Runs the production build of the website.
 
 Use the typescript compiler to produce a ts-out directory of a js copy of src.
 
+### `build:ts:static`
+
+Copying the static non-ts files into the ts-out folder.
+
 ## Acknowledgements
 
 [@mat1](https://repl.it/@mat1) for Discord Rich Presence Integration and custom dark theme
