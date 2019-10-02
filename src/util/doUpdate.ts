@@ -1,9 +1,10 @@
+/*
 import { app, dialog, MessageBoxReturnValue } from 'electron';
 //@ts-ignore
 import path from 'path';
 //@ts-ignore
-import EBU from '../lib/electron-basic-updater';
-
+//import EBU from '../lib/electron-basic-updater';
+let EBU: Object = {};
 function doUpdate(Update: boolean, Manual: boolean) {
     if (!Update) {
         return;
@@ -60,5 +61,6 @@ function doUpdate(Update: boolean, Manual: boolean) {
         }
     });
 }
-
+*/
+const doUpdate = {};
 export { doUpdate };
