@@ -209,7 +209,7 @@ async function appSetup() {
                 startCustomSession,
                 sendSubToMain,
                 selectInput,
-                doUpdate
+                //doUpdate
             )
         )
     );

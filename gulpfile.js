@@ -1,6 +1,6 @@
-import { dest, series, src } from 'gulp';
-import shell from 'gulp-shell';
-
+const { dest, series, src } = require('gulp');
+const ts = require('gulp-typescript')
+const tsProject  = ts.createProject('tsconfig.json')
 async function copyFiles() {
     src('package.json').pipe(dest('ts-out'));
 
@@ -10,14 +10,13 @@ async function copyFiles() {
 }
 
 async function build() {
-    await shell.task('node_modules/.bin/tsc -b tsconfig.json', {
-        verbose: true
-    });
+    const tsResult = src('src/**/*.ts').pipe(tsProject())
+    return tsResult.js.pipe(dest('ts-out/'));
 }
 
 function mainTask() {
     series(build, copyFiles);
 }
 
-export { copyFiles as default };
+exports.default = series(build,copyFiles);
 //exports.default = series(copyFiles, build);
