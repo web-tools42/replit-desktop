@@ -10,8 +10,8 @@ import ElectronContext from 'electron-context-menu';
 import axios from 'axios';
 /* Local libs */
 // @ts-ignore
-import ElectronPreferences from '../lib/electron-preferences';
-import { ElectronWindow } from '../class';
+import ElectronPreferences from './lib/electron-preferences';
+import { ElectronWindow } from './class';
 /* Require files */
 import {
     addTheme,
@@ -23,9 +23,9 @@ import {
     handleExternalLink,
     selectInput,
     talkBoard
-} from '../util';
+} from './util';
 
-import { appMenuSetup } from '../main/menu';
+import { appMenuSetup } from './main/menu';
 // const MessageBoxReturnValue = Electron.MessageBoxReturnValue;
 
 /* Declare Constants */
@@ -256,7 +256,7 @@ async function appSetup() {
         }
     });
 
-    doUpdate(Preferences.value('update-settings')['auto-update'], false);
+    //doUpdate(Preferences.value('update-settings')['auto-update'], false);
     if (mainWindow) {
         if (Preferences.value('editor-settings')['editor'] === 'ace') {
             mainWindow.webContents.setUserAgent(
