@@ -3,3 +3,4 @@ electron-preferences/
 node_modules/
 dist/
 ts-out/
+gulpfile.js

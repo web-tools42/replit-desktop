@@ -10,9 +10,9 @@
         "build": "webpack --config webpack.prod.js",
         "build:run": "electron dist/main.bundle.js",
         "lint": "eslint \"**/*.{js,ts}\"",
-        "start2": "npm run build2 && npm run build2:copy && npm run build2:run",
-        "build2": "tsc -b tsconfig.json",
-        "build2:copy": "gulp --require esm",
+        "start2": "npm run build2 && npm run build2:run",
+        "build2:tsc": "tsc -b tsconfig.json",
+        "build2": "gulp --log-level3",
         "build2:run": "electron ./ts-out/"
     },
     "keywords": [
@@ -35,7 +35,6 @@
         "acorn": "^7.1.0",
         "babel-loader": "^8.0.6",
         "clean-webpack-plugin": "^3.0.0",
-        "discord-rpc": "^3.1.0",
         "electron": "^6.0.10",
         "electron-context-menu": "^0.15.0",
         "electron-packager": "^14.0.6",
@@ -45,7 +44,6 @@
         "eslint-plugin-import": "^2.18.2",
         "eslint-plugin-prettier": "^3.1.1",
         "eslint-watch": "^6.0.1",
-        "esm": "^3.2.25",
         "eventemitter2": "^5.0.1",
         "gulp": "^4.0.2",
         "gulp-typescript": "^5.0.1",
@@ -56,8 +54,6 @@
         "ts-node": "^8.4.1",
         "tslint": "^5.20.0",
         "typescript": "^3.6.3",
-        "webpack": "^4.41.0",
-        "webpack-cli": "^3.3.9",
         "yarn": "^1.19.0",
         "zip-local": "^0.3.4"
     },
@@ -66,6 +62,7 @@
         "axios": "^0.19.0",
         "fs-extra": "^8.1.0",
         "lodash": "^4.17.15",
+        "discord-rpc": "^3.1.0",
         "node-fetch": "^2.6.0"
     },
     "repository": "https://github.com/repl-it-discord/repl.it-electron",
