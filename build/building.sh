@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+
+set -eu
+
 cd ~/desktop/repl.it/pre-dist
 
 node ../utils/building.js
