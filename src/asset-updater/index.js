@@ -8,21 +8,21 @@ let fetchIcon = (lang, fileEnding) => {
             method: 'GET'
         }
     )
-        .then(response => {
+        .then((response) => {
             console.log(response.url, response.status, fileEnding);
             return response;
         })
-        .catch(e => console.log(e));
+        .catch((e) => console.log(e));
 };
 
-let downloadIcons = icon => {};
+let downloadIcons = (icon) => {};
 
-let fetchIcons = languages => {
+let fetchIcons = (languages) => {
     // Fetch an svg icon from the website. It one does nto exist fetch a png, then a jpg if unsucessfile
     console.log('test');
-    languages.forEach(lang => {
+    languages.forEach((lang) => {
         fetchIcon(lang, 'svg')
-            .then(async res => {
+            .then(async (res) => {
                 console.log(res.statusCode);
                 if (res.statusCode !== 200) {
                     let a = await fetchIcon(lang, 'png');
@@ -30,7 +30,7 @@ let fetchIcons = languages => {
                 }
                 return res;
             })
-            .then(async res => {
+            .then(async (res) => {
                 if (res.statusCode !== 200) {
                     let a = await fetchIcon(lang, 'jpg');
                     return a;
@@ -49,14 +49,14 @@ let obtainListOfLanguages = () => {
         fetch('https://repl.it/languages', {
             method: 'GET'
         })
-            .then(res => res.text())
-            .then(response => {
+            .then((res) => res.text())
+            .then((response) => {
                 let languages = response.match(/href="\/languages(.*?)">/gi);
                 languages = languages.filter(
-                    lang => !lang.includes(`href="/languages"`)
+                    (lang) => !lang.includes(`href="/languages"`)
                 );
                 languages = languages
-                    .map(lang => {
+                    .map((lang) => {
                         if (lang.includes(`class="`)) {
                             lang = lang.slice(0, -24);
                         } else {
@@ -64,13 +64,13 @@ let obtainListOfLanguages = () => {
                         }
                         return lang;
                     })
-                    .map(lang => lang.slice(17));
+                    .map((lang) => lang.slice(17));
 
                 // console.log(languages)
                 fetchIcons(languages);
                 resolve();
             })
-            .catch(e => {
+            .catch((e) => {
                 console.log(e);
                 reject();
             });

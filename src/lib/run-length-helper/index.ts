@@ -1,5 +1,5 @@
 function encode(string: string): string {
-    return string.replace(/([\w\s])\1*/g, match => {
+    return string.replace(/([\w\s])\1*/g, (match) => {
         return match.length > 1 ? match.length + match[0] : match[0];
     });
 }

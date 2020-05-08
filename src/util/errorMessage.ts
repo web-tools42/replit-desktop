@@ -18,7 +18,7 @@ function errorMessage(
             buttons: ['Try again please', 'Quit'],
             defaultId: 0
         })
-        .then(function(resp: MessageBoxReturnValue) {
+        .then(function (resp: MessageBoxReturnValue) {
             // if clicked "Try again please"
             const index = resp.response;
             if (index === 0) {

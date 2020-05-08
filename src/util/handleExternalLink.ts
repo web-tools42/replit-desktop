@@ -23,7 +23,7 @@ function handleExternalLink(windowObj: ElectronWindow, url: string) {
                 buttons: ['No', 'Yes'],
                 defaultId: 1
             })
-            .then(function(resp: MessageBoxReturnValue) {
+            .then(function (resp: MessageBoxReturnValue) {
                 var index = resp.response;
                 if (index === 1) {
                     shell.openExternal(url);

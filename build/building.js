@@ -62,11 +62,13 @@ packager({
     arch: 'ia32',
     icon: windowsIconPath,
     ignore: shouldIgnore
-}).then(appPath => {
-    console.log(`Win32 ${appPath}`);
-}).catch(e => {
-    console.error(error);
-});
+})
+    .then((appPath) => {
+        console.log(`Win32 ${appPath}`);
+    })
+    .catch((e) => {
+        console.error(error);
+    });
 
 packager({
     dir: sourceDir,
@@ -75,11 +77,13 @@ packager({
     arch: 'x64',
     icon: windowsIconPath,
     ignore: shouldIgnore
-}).then(appPath => {
-    console.log(`Win64 ${appPath}`);
-}).catch(e => {
-    console.error(error);
-});
+})
+    .then((appPath) => {
+        console.log(`Win64 ${appPath}`);
+    })
+    .catch((e) => {
+        console.error(error);
+    });
 
 packager({
     dir: sourceDir,
@@ -87,11 +91,13 @@ packager({
     platform: 'darwin',
     icon: macIconPath,
     ignore: shouldIgnore
-}).then(appPath => {
-    console.log(`Mac ${appPath}`);
-}).catch(e => {
-    console.error(e);
-});
+})
+    .then((appPath) => {
+        console.log(`Mac ${appPath}`);
+    })
+    .catch((e) => {
+        console.error(e);
+    });
 /*
 packager({
     dir: sourceDir,
@@ -113,8 +119,10 @@ packager({
     arch: 'x64',
     icon: linuxIconPath,
     ignore: shouldIgnore
-}).then(appPath => {
-    console.log(`Linux64 ${appPath}`);
-}).catch(e => {
-    console.error(e);
-});
+})
+    .then((appPath) => {
+        console.log(`Linux64 ${appPath}`);
+    })
+    .catch((e) => {
+        console.error(e);
+    });
