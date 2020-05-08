@@ -27,9 +27,8 @@ Supported operating systems taken from the Electron [docs](https://electronjs.or
 ```bash
 git clone --recurse-submodules https://github.com/repl-it-discord/repl-it-electron
 cd repl-it-electron
-npm install -g --production windows-build-tools # windows
-npm install
-npm start
+yarn install
+yarn start
 ```
 
 See [CONTRIBUTING.md](./.github/CONTRIBUTING.md) before contributing
@@ -40,15 +39,7 @@ See feature implementation details on the [roadmap](https://github.com/repl-it-d
 
 ### `start`
 
-Runs `dev:main:watch`
-
-### `dev:main`
-
-Starts electron main process in development mode. Uses `@babel/register` to compile our TypeScript on the fly
-
-### `dev:main:watch`
-
-Watches `src/` with nodeman and starts electron main process on change of a `js,ts,json,html,css` file.
+Runs `npm run build` and `npm run build:run`, used for running electron with compiled ts files.
 
 ### `lint`
 
@@ -56,23 +47,15 @@ Identifies all linting issues with eslint. Lints TypeScript as well as JavaScrip
 
 ### `build`
 
-Uses webpack to create a JavaScript build of the app for production.
+Uses gulp to create a JavaScript build of the app.
 
 ### `build:run`
 
 Runs the production build of the website.
 
-### `build:ts`
+### `build:tsc`
 
-Use the typescript compiler to produce a ts-out directory of a js copy of src. Also running `build:ts:static` and `ts:start`
-
-### `build:ts:static`
-
-Copying the static non-ts files into the ts-out folder.
-
-### `ts:start`
-
-Start the electron process in ts-out.
+Use the typescript compiler to produce a ts-out directory of a js copy of src.
 
 ## Acknowledgements
 
