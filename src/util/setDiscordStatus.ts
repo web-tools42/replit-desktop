@@ -4,13 +4,14 @@ async function talkBoard(spliturl: Array<string>, windowObj: ElectronWindow) {
     let viewing;
     console.log(spliturl);
     if (spliturl[3] !== undefined) {
-        await windowObj.webContents.executeJavaScript(
-            "document.getElementsByClassName('board-post-detail-title')[0].textContent",
-            false,
-            function(result: string) {
+        windowObj.webContents
+            .executeJavaScript(
+                "document.getElementsByClassName('board-post-detail-title')[0].textContent",
+                false
+            )
+            .then(function (result: string) {
                 viewing = `Viewing ${result}`;
-            }
-        ); // gets the repl talk post name
+            }); // gets the repl talk post name
     } else if (spliturl[2] !== undefined) {
         viewing = `Viewing ${spliturl[2]}`;
     } else {
@@ -43,20 +44,22 @@ async function talkBoard(spliturl: Array<string>, windowObj: ElectronWindow) {
 async function editing(windowObj: ElectronWindow) {
     let fileName = 'Error';
     let replLanguage = 'Error';
-    await windowObj.webContents.executeJavaScript(
-        "document.querySelector('.file-header-name div').textContent",
-        false,
-        (result: string) => {
+    windowObj.webContents
+        .executeJavaScript(
+            "document.querySelector('.file-header-name div').textContent",
+            false
+        )
+        .then((result: string) => {
             fileName = result;
-        }
-    );
-    await windowObj.webContents.executeJavaScript(
-        "document.querySelector('.workspace-header-description-container img')['title']",
-        false,
-        (result: string) => {
+        });
+    windowObj.webContents
+        .executeJavaScript(
+            "document.querySelector('.workspace-header-description-container img')['title']",
+            false
+        )
+        .then((result: string) => {
             replLanguage = result;
-        }
-    );
+        });
 
     let lang = fileName.split('.').slice(-1)[0]; // gets the file extension
     if (replLanguage === 'Nodejs') {

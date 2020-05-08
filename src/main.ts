@@ -45,11 +45,12 @@ async function appSetup() {
     let res;
     try {
         // @ts-ignore
-        res = await axios.get('https://www.darktheme.tk/themes.json');
+        res = await axios.get('https://darktheme.matdoes.dev/api/themes');
     } catch (e) {
         console.error(e);
         return;
     }
+    console.log(res.data);
     let theme_instert = [];
     let raw_themes = res.data;
     for (let key in raw_themes) {
@@ -70,7 +71,7 @@ async function appSetup() {
             // @ts-ignore
             let resp = await axios.get(
                 // @ts-ignore
-                `https://www.darktheme.tk/theme.css?${themes[theme]}`
+                ``
             );
             // @ts-ignore
             Themes[theme] = resp.data.toString();
@@ -118,7 +119,7 @@ async function appSetup() {
                                     type: 'dropdown',
                                     options: theme_instert,
                                     help: 'Select a theme'
-                                } /*{    
+                                } /*{
                         'label':
                          'Custom CSS import',
                         'key': 'css_string',
@@ -208,7 +209,7 @@ async function appSetup() {
                 Preferences,
                 startCustomSession,
                 sendSubToMain,
-                selectInput,
+                selectInput
                 //doUpdate
             )
         )
@@ -288,7 +289,7 @@ appSetup().then(
     () => {
         console.log('App setup success.');
     },
-    reason => {
+    (reason) => {
         console.error(reason);
     }
 );
@@ -331,7 +332,7 @@ function startCustomSession() {
                             buttons: ['Yes', 'No'],
                             defaultId: 0
                         })
-                        .then(function(resp: MessageBoxReturnValue) {
+                        .then(function (resp: MessageBoxReturnValue) {
                             const index = resp.response;
                             if (index === 0) {
                                 subWindow.loadURL(r);
@@ -459,7 +460,7 @@ function sendSubToMain() {
                 buttons: ['Yes', 'No'],
                 defaultId: 0
             })
-            .then(function(resp: MessageBoxReturnValue) {
+            .then(function (resp: MessageBoxReturnValue) {
                 const index = resp.response;
                 if (index === 0) {
                     mainWindow.loadURL(subUrl);
@@ -523,7 +524,7 @@ function createWindow() {
         webPreferences: { nodeIntegration: false },
         icon: path.resolve(__dirname, 'utils/logo.png')
     });
-    defaultUserAgent = mainWindow.webContents.getUserAgent();
+    defaultUserAgent = mainWindow.webContents.userAgent;
     mainWindow.InternalId = 1;
     mainWindow.webContents.on(
         'did-fail-load',
@@ -554,12 +555,12 @@ ElectronContext({
 rpc.on('ready', () => {
     // activity can only be set every 15 seconds
     setInterval(() => {
-        setPlayingDiscord().catch(reason => {
+        setPlayingDiscord().catch((reason) => {
             console.log('Failed to update Discord status. ' + reason);
         });
     }, 15e3);
 });
-app.on('window-all-closed', function() {
+app.on('window-all-closed', function () {
     app.quit();
 });
 app.on('ready', () => {
