@@ -8,6 +8,7 @@ async function copyFiles() {
     src('src/lib/electron-preferences/**/*').pipe(
         dest('ts-out/lib/electron-preferences')
     );
+    src('src/**/*.html').pipe(dest('ts-out'));
 }
 
 async function build() {
