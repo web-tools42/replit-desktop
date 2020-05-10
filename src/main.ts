@@ -5,7 +5,7 @@ let launcher: Launcher;
 
 function initalize() {
     launcher = new Launcher();
-    launcher.initalize();
+    launcher.init();
     launcher.window.once('ready-to-show', function () {
         launcher.window.show();
     });

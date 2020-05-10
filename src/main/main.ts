@@ -11,7 +11,7 @@ import axios from 'axios';
 /* Local libs */
 // @ts-ignore
 import ElectronPreferences from './lib/electron-preferences';
-import { ElectronWindow } from './class';
+import { ElectronWindow } from '../class';
 /* Require files */
 import {
     addTheme,
@@ -23,9 +23,9 @@ import {
     handleExternalLink,
     selectInput,
     talkBoard
-} from './util';
+} from '../util';
 
-import { appMenuSetup } from './main/menu';
+import { appMenuSetup } from './menu';
 // const MessageBoxReturnValue = Electron.MessageBoxReturnValue;
 
 /* Declare Constants */
