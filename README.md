@@ -27,9 +27,12 @@ Supported operating systems taken from the Electron [docs](https://electronjs.or
 ```bash
 git clone --recurse-submodules https://github.com/repl-it-discord/repl-it-electron
 cd repl-it-electron
-yarn install
-yarn start
+npx pnpm add -g pnpm
+pnpm install
+pnpm start
 ```
+
+Although node.js version 14 can be used, version 12 LTS is recommended as Electron still uses it.
 
 See [CONTRIBUTING.md](./.github/CONTRIBUTING.md) before contributing
 
