@@ -4,7 +4,7 @@
     "description": "electron version of repl.it",
     "main": "main.js",
     "scripts": {
-        "lint": "eslint \"**/*.{js,ts}\"",
+        "lint": "eslint \"**/*.{js,ts}\" --fix",
         "start": "npm run build && npm run build:run",
         "build:tsc": "tsc -b tsconfig.json",
         "build": "gulp --log-level3",
