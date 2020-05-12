@@ -11,7 +11,7 @@ import axios from 'axios';
 /* Local libs */
 // @ts-ignore
 import ElectronPreferences from './lib/electron-preferences';
-import { ElectronWindow } from '../class';
+import { ElectronWindow } from '../common';
 /* Require files */
 import {
     addTheme,

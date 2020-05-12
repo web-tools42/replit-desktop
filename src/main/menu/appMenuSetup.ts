@@ -1,5 +1,5 @@
 import { app, shell, clipboard } from 'electron';
-import { ElectronWindow } from '../../class';
+import { ElectronWindow } from '../../common';
 
 function appMenuSetup(
     startSubWindow: Function,

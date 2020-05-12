@@ -1,5 +1,5 @@
 import { dialog, shell, MessageBoxReturnValue } from 'electron';
-import { ElectronWindow } from '../class';
+import { ElectronWindow } from '../common';
 
 function handleExternalLink(windowObj: ElectronWindow, url: string) {
     console.log(`External URL: ${url}`);

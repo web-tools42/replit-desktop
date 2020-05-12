@@ -1,9 +1,8 @@
 import { app, ipcMain } from 'electron';
-import { ElectronWindow } from '../class';
+import { ElectronWindow, Version, checkUpdateResult } from '../common';
 import * as fs from 'fs';
 import * as path from 'path';
 import axios, { AxiosResponse } from 'axios';
-import { decode } from '../lib/run-length-helper';
 import * as os from 'os';
 
 /*class Updater_old {
@@ -93,12 +92,6 @@ import * as os from 'os';
     }
 }*/
 
-interface Version {
-    major: number;
-    minor: number;
-    patch: number;
-}
-
 class Updater {
     pathSep: string = path.sep;
     appPath: string = app.getAppPath() + this.pathSep;
@@ -133,12 +126,13 @@ class Updater {
         }
     }
 
-    async checkUpdate() {
+    async checkUpdate(): Promise<checkUpdateResult> {
         try {
             const res: AxiosResponse = await axios.get(
                 'https://api.github.com/repos/repl-it-discord/repl-it-electron/releases/latest'
             );
             const tagNames = res.data['tag_name'].split('.');
+            const changeLog = res.data['body'];
             const version: Version = {
                 major: parseInt(tagNames[0]),
                 minor: parseInt(tagNames[1]),
@@ -149,16 +143,21 @@ class Updater {
                 version.minor > this.appVersion.minor ||
                 version.major > this.appVersion.major
             ) {
-                // console.log('Update Detected.');
-                return true;
+                return {
+                    hasUpdate: true,
+                    changeLog: changeLog,
+                    version: res.data['tag_name']
+                };
             } else {
-                return false;
+                return { hasUpdate: false };
             }
         } catch (e) {
             console.error(e);
-            return false;
+            return { hasUpdate: false, changeLog: 'error' };
         }
     }
+
+    async doUpdate() {}
 }
 
 class Launcher {

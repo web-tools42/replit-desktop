@@ -1,6 +1,6 @@
 import { Launcher, Updater } from './launcher/launcher';
 import { app, dialog } from 'electron';
-import { types } from 'util';
+import { checkUpdateResult } from './common';
 
 let launcher: Launcher;
 let updater: Updater;
@@ -16,18 +16,26 @@ function initLauncher() {
 
 function initUpdater() {
     updater = new Updater();
-    updater.checkUpdate().then((hasUpdate) => {
-        if (hasUpdate) {
+    let choice: number;
+    updater.checkUpdate().then((res: checkUpdateResult) => {
+        if (res['hasUpdate']) {
             launcher.updateStatus('Update detected');
-            const choice = dialog.showMessageBoxSync({
+            choice = dialog.showMessageBoxSync({
                 type: 'info',
-                message: 'A new update is available. Do you want to update?',
+                message: `A new update ${res['version']} is available. Do you want to update?`,
                 title: 'Update',
                 buttons: ['No', 'Yes'],
-                defaultId: 1
-                //detail:changelog
+                defaultId: 1,
+                detail: res['changeLog']
             });
-            //TODO: Add changelog.
+            console.log(choice);
+            if (!choice) {
+                //doUpdate();
+            }
+        } else {
+            if (res['changeLog'] == 'error') {
+                launcher.updateStatus('Check update failed, skipping.');
+            }
         }
     });
 }

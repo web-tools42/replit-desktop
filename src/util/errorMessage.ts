@@ -1,5 +1,5 @@
 import { dialog, MessageBoxReturnValue } from 'electron';
-import { ElectronWindow } from '../class';
+import { ElectronWindow } from '../common';
 
 function errorMessage(
     windowObject: ElectronWindow,

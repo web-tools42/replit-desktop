@@ -1,4 +1,4 @@
-import { ElectronWindow } from '../class';
+import { ElectronWindow } from '../common';
 
 async function talkBoard(spliturl: Array<string>, windowObj: ElectronWindow) {
     let viewing;

@@ -1,4 +1,4 @@
-import { ElectronWindow } from '../class';
+import { ElectronWindow } from '../common';
 
 function getUrl(windowObj: ElectronWindow) {
     try {
