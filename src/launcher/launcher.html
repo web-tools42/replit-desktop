@@ -78,9 +78,10 @@
     const { ipcRenderer } = require('electron');
     const status = document.getElementById('status');
 
-    ipcRenderer.on('status-update',function (event, s){
-        status.innerHTML = s
-    })
+    ipcRenderer.on('status-update', function (event, s) {
+        console.log('statud updated');
+        status.innerHTML = s;
+    });
 </script>
 </body>
 </html>

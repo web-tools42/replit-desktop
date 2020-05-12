@@ -109,7 +109,6 @@ class Updater {
     appVersion: Version; //app.getVersion()
     logArray: [string] = [''];
     downloadString: string = '';
-    hasUpdate: boolean = false;
 
     constructor() {
         /*this.appVersion = {
@@ -119,7 +118,6 @@ class Updater {
         };*/
         this.appVersion = { major: 0, minor: 0, patch: 5 };
         this.downloadString = this.detectOS();
-        this.checkUpdate();
     }
 
     detectOS() {
@@ -151,16 +149,14 @@ class Updater {
                 version.minor > this.appVersion.minor ||
                 version.major > this.appVersion.major
             ) {
-                console.log('Update Detected.');
-                this.hasUpdate = true;
+                // console.log('Update Detected.');
+                return true;
             } else {
-                this.hasUpdate = false;
+                return false;
             }
-            return;
         } catch (e) {
             console.error(e);
-            this.hasUpdate = false;
-            return;
+            return false;
         }
     }
 }
@@ -180,13 +176,13 @@ class Launcher {
     }
 
     init() {
-        this.window.loadFile('launcher/launcher.html');
+        this.window.loadFile('launcher/launcher.html').then();
     }
 
     updateStatus(status: string) {
-        //ipcMain.emit();
+        this.window.webContents.send('status-update', status);
+        //console.log('Status updated');
     }
 }
 
-new Updater();
-export { Launcher };
+export { Launcher, Updater };
