@@ -1,4 +1,4 @@
-import { app, shell, clipboard } from 'electron';
+import { app, shell, clipboard, MenuItem } from 'electron';
 import { ElectronWindow } from '../../common';
 
 function appMenuSetup(
@@ -9,7 +9,7 @@ function appMenuSetup(
     selectInput: Function,
     doUpdate: Function
 ): object {
-    const template = [
+    /*const template = [
         {
             label: 'File',
             submenu: [
@@ -241,10 +241,8 @@ function appMenuSetup(
             ]
         });
         // Edit menu.
-        // @ts-ignore
         template[1].submenu.splice(-1);
         template[2].submenu.push(
-            // @ts-ignore
             {
                 type: 'separator'
             },
@@ -261,7 +259,6 @@ function appMenuSetup(
             }
         );
         // Window menu.
-        // @ts-ignore
         template[4].submenu = [
             {
                 label: 'Close',
@@ -287,12 +284,12 @@ function appMenuSetup(
         ];
     }
     if (process.platform !== 'darwin') {
-        // @ts-ignore
         template[template.length - 1].submenu.push({
             role: 'about'
         });
     }
-    return template;
+    return template;*/
+    return {};
 }
 
 export { appMenuSetup };
