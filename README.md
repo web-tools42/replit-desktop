@@ -56,9 +56,11 @@ Uses gulp to create a JavaScript build of the app.
 
 Runs the production build of the website.
 
-### `build:tsc`
+### `build:dist`
+Builds a production JS version of the app.
 
-Use the typescript compiler to produce a ts-out directory of a js copy of src.
+### `dist`
+Builds the app for release. 
 
 ## Acknowledgements
 
