@@ -15,15 +15,13 @@ module.exports = {
     },
     win: {
         target: {
-            target: 'nsis',
-            arch: ['ia32', 'x64']
+            target: 'nsis'
         },
         icon: 'src/assets/replit-logo/ico/logo.ico'
     },
     linux: {
         target: {
-            target: 'AppImage',
-            arch: ['x64']
+            target: 'tar.gz'
         },
         icon: 'src/assets/replit-logo/logo.png'
     }
