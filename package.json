@@ -27,7 +27,7 @@
         "@types/node-fetch": "^2.5.7",
         "@typescript-eslint/eslint-plugin": "^2.33.0",
         "@typescript-eslint/parser": "^2.33.0",
-        "electron": "^8.2.5",
+        "electron": "^8.3.0",
         "electron-builder": "^22.6.0",
         "electron-context-menu": "^1.1.0",
         "electron-prompt": "^1.5.1",
