@@ -1,9 +1,18 @@
-import { app, ipcMain } from 'electron';
-import { ElectronWindow, Version, checkUpdateResult } from '../common';
+import { app, ipcMain, ClientRequest } from 'electron';
+import {
+    ElectronWindow,
+    Version,
+    checkUpdateResult,
+    UpdateAssetsUrls,
+    githubReleaseResponse,
+    decodeReleaseResponse,
+    formatBytes
+} from '../common';
 import * as fs from 'fs';
 import * as path from 'path';
-import axios, { AxiosResponse } from 'axios';
 import * as os from 'os';
+import { EventEmitter2 } from 'eventemitter2';
+import fetch from 'node-fetch';
 
 /*class Updater_old {
     pathSep: string = path.sep;
@@ -92,52 +101,67 @@ import * as os from 'os';
     }
 }*/
 
-class Updater {
+class Updater extends EventEmitter2 {
     pathSep: string = path.sep;
     appPath: string = app.getAppPath() + this.pathSep;
     upperAppPath: string = path.dirname(this.appPath) + this.pathSep;
-    apiUrl: string = 'https://api.github.com';
     userDesktop: string = app.getPath('desktop');
     logFilePath: string = this.userDesktop + 'updater-log.txt';
     appVersion: Version; //app.getVersion()
     logArray: [string] = [''];
-    downloadString: string = '';
+    OS: string = '';
+    downloadPath: string = app.getPath('temp');
+    downloadUrls: UpdateAssetsUrls = {
+        windowsUrl: '',
+        macOSUrl: '',
+        linuxUrl: ''
+    };
 
     constructor() {
+        super();
         /*this.appVersion = {
             major: parseInt(app.getVersion().split('.')[0]),
             minor: parseInt(app.getVersion().split('.')[1]),
-            patch: parseInt(app.getVersion().split('.')[2])
+            patch: parseInt(app.getVersion().split('.')[2]),
+            versionString: app.getVersion()
         };*/
-        this.appVersion = { major: 0, minor: 0, patch: 5 };
-        this.downloadString = this.detectOS();
-    }
-
-    detectOS() {
-        switch (os.platform()) {
-            case 'win32':
-                return 'repl.it-win32-' + os.arch() + '.zip';
-            case 'darwin':
-                return 'repl.it.dmg';
-            //case 'linux':
-            //    return 'repl.it-linux-' + os.arch() + '.zip';
-            default:
-                return 'Error';
-        }
+        this.appVersion = {
+            major: 0,
+            minor: 0,
+            patch: 5,
+            versionString: '0.0.5'
+        };
     }
 
     async checkUpdate(): Promise<checkUpdateResult> {
         try {
-            const res: AxiosResponse = await axios.get(
-                'https://api.github.com/repos/repl-it-discord/repl-it-electron/releases/latest'
+            const res: githubReleaseResponse = decodeReleaseResponse(
+                await (
+                    await fetch(
+                        'https://api.github.com/repos/repl-it-discord/repl-it-electron/releases/latest'
+                    )
+                ).json()
             );
-            const tagNames = res.data['tag_name'].split('.');
-            const changeLog = res.data['body'];
+
+            const tagNames = res.tag_name.split('.');
+            const changeLog = res.body;
             const version: Version = {
                 major: parseInt(tagNames[0]),
                 minor: parseInt(tagNames[1]),
                 patch: parseInt(tagNames[2])
             };
+            for (let x = 0; x < res.assets.length; x++) {
+                const asset = res.assets[x];
+                if (asset.name.includes('exe') || asset.name.includes('win')) {
+                    this.downloadUrls.windowsUrl = asset.browser_download_url;
+                } else if (asset.name.includes('dmg')) {
+                    this.downloadUrls.macOSUrl = asset.browser_download_url;
+                } else if (asset.name.includes('tar.gz')) {
+                    this.downloadUrls.linuxUrl = asset.browser_download_url;
+                } else {
+                }
+            }
+
             if (
                 version.patch > this.appVersion.patch ||
                 version.minor > this.appVersion.minor ||
@@ -146,7 +170,7 @@ class Updater {
                 return {
                     hasUpdate: true,
                     changeLog: changeLog,
-                    version: res.data['tag_name']
+                    version: res.tag_name
                 };
             } else {
                 return { hasUpdate: false };
@@ -157,7 +181,69 @@ class Updater {
         }
     }
 
-    async doUpdate() {}
+    /*async downloadFile() {
+        const { data, headers } = await this.session({
+            url: 'http://ipv4.download.thinkbroadband.com/200MB.zip',
+            method: 'GET',
+            responseType: 'stream'
+        });
+
+        const contentLength = headers['content-length'];
+
+        console.log(contentLength);
+
+        data.on('data', (chunk) => {
+            console.log(chunk);
+        });
+
+        data.pipe(fs.createWriteStream('./200MB.zip'));
+    }*/
+
+    async downloadUpdateWin(): Promise<object> {
+        try {
+            //console.log(this.downloadUrls);
+            const req = await fetch(
+                this.downloadUrls.windowsUrl
+                //'http://ipv4.download.thinkbroadband.com/200MB.zip',
+            );
+            console.log(req.headers);
+            console.log(this.downloadUrls);
+
+            const contentLength: number = parseInt(
+                //@ts-ignore
+                req.headers.get('content-length')[0]
+            );
+            let downloaded: number = 0;
+            console.log('a');
+            req.body.on('data', (chunk: Buffer) => {
+                // @ts-ignore
+                downloaded += chunk.length;
+                const percentage = Math.floor(
+                    (downloaded / contentLength) * 100
+                );
+                console.log(formatBytes(downloaded));
+                console.log(formatBytes(contentLength));
+                this.emit('update-progress', [
+                    formatBytes(downloaded),
+                    formatBytes(downloaded)
+                ]);
+            });
+
+            return { success: true };
+            //data.pipe(fs.createWriteStream('./200MB.zip'))
+            //TODO: Download newer version exe installer and prompt install.
+        } catch (e) {
+            return { success: false };
+        }
+    }
+
+    async downloadUpdateMac() {
+        //TODO: Download newer version dmg? and open it.
+    }
+
+    async downloadUpdateLinux() {
+        //TODO: Download newer version tar.gz? and auto-install it.
+    }
 }
 
 class Launcher {

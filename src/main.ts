@@ -1,6 +1,7 @@
 import { Launcher, Updater } from './launcher/launcher';
 import { app, dialog } from 'electron';
 import { checkUpdateResult } from './common';
+import os from 'os';
 
 let launcher: Launcher;
 let updater: Updater;
@@ -29,8 +30,24 @@ function initUpdater() {
                 detail: res['changeLog']
             });
             console.log(choice);
-            if (!choice) {
-                //doUpdate();
+            if (choice) {
+                launcher.updateStatus('Downloading Update');
+                updater.on('update-progress', (e) => {
+                    launcher.updateStatus(`Downloaded: ${e[0]}`);
+                });
+                switch (os.platform()) {
+                    case 'win32':
+                        updater.downloadUpdateWin();
+                        break;
+                    case 'darwin':
+                        updater.downloadUpdateMac();
+                        break;
+                    case 'linux':
+                        updater.downloadUpdateLinux();
+                        break;
+                    default:
+                        return 'Error';
+                }
             }
         } else {
             if (res['changeLog'] == 'error') {
