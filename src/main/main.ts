@@ -7,7 +7,6 @@ import DiscordRPC from 'discord-rpc';
 import ElectronPrompt from 'electron-prompt';
 // @ts-ignore
 import ElectronContext from 'electron-context-menu';
-import axios from 'axios';
 /* Local libs */
 // @ts-ignore
 import ElectronPreferences from './lib/electron-preferences';

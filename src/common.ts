@@ -1,9 +1,5 @@
 import { BrowserWindow, net } from 'electron';
-import Axios, { AxiosResponse, AxiosAdapter } from 'axios';
 import { Endpoints } from '@octokit/types';
-
-//@ts-ignore
-Axios.defaults.transport = net;
 
 class ElectronWindow extends BrowserWindow {
     public InternalId = -1;
@@ -51,7 +47,6 @@ export {
     Version,
     checkUpdateResult,
     ElectronWindow,
-    Axios,
     UpdateAssetsUrls,
     githubReleaseResponse,
     decodeReleaseResponse,
