@@ -1,14 +1,17 @@
 dependencies:
   discord-rpc: 3.1.1
+  electron-settings: 3.2.0
   eventemitter2: 6.4.0
   node-fetch: 2.6.0
 devDependencies:
   '@octokit/types': 3.0.0
+  '@types/electron-settings': 3.1.1
   '@types/gulp': 4.0.6
   '@types/node': 12.12.39
   '@types/node-fetch': 2.5.7
   '@typescript-eslint/eslint-plugin': 2.33.0_3ac210dae6de5ddc23c7c35018f15506
   '@typescript-eslint/parser': 2.33.0_eslint@7.0.0+typescript@3.9.2
+  dotenv: 8.2.0
   electron: 8.3.0
   electron-builder: 22.6.0
   electron-context-menu: 1.1.0
@@ -102,6 +105,12 @@ packages:
     dev: true
     resolution:
       integrity: sha512-Q1y515GcOdTHgagaVFhHnIFQ38ygs/kmxdNpvpou+raI9UO3YZcHDngBSYKQklcKlvA7iuQlmIKbzvmxcOE9CQ==
+  /@types/electron-settings/3.1.1:
+    dependencies:
+      '@types/node': 12.12.39
+    dev: true
+    resolution:
+      integrity: sha512-wDVj8YFBuqLXgVQqZ1Yk+Qm27LjjldssnrwzDv9JanOokw24tcuJ76X1Uo5Xg9VVRIAF6HgmiAQQ+CZrRmJgYw==
   /@types/eslint-visitor-keys/1.0.0:
     dev: true
     resolution:
@@ -939,7 +948,6 @@ packages:
     resolution:
       integrity: sha1-s3gt/4u1R04Yuba/D9/ngvh3doA=
   /clone/2.1.2:
-    dev: true
     engines:
       node: '>=0.8'
     resolution:
@@ -1397,6 +1405,13 @@ packages:
     dev: true
     resolution:
       integrity: sha512-+v05SBf9qR7Os5au+fifloNHy5QxHQkUGudBj68YaTb43Pn37UkwRxSc49Lf13s4wW32ohM45g8BOVInPJEdnA==
+  /electron-settings/3.2.0:
+    dependencies:
+      clone: 2.1.2
+      jsonfile: 4.0.0
+    dev: false
+    resolution:
+      integrity: sha512-7U+vDKd5Gch4Z9K6FjGq80eB3Anwz2GuPc2h/6hOiuvZrS1w+UNPcAA0oAU8G1s9sWAVEadCsr4ZJR6J4iTdzA==
   /electron/8.3.0:
     dependencies:
       '@electron/get': 1.12.2
@@ -2255,7 +2270,6 @@ packages:
     resolution:
       integrity: sha512-R7eWptXuGYxwijs0eV+v3o6+XH1IqVK8dJOEecQfTmkncw9AV4dcw/Dhxi8MdlqPthxxpZyizMzyg8RTmEsG+Q==
   /graceful-fs/4.2.4:
-    dev: true
     resolution:
       integrity: sha512-WjKPNJF79dtJAVniUlGGWHYGz2jWxT6VhN/4m1NdkbZ2nOsEF+cI1Edgql5zCRhs/VsQYRvrXctxktVXZUkixw==
   /gulp-cli/2.2.0:
@@ -2882,7 +2896,6 @@ packages:
     resolution:
       integrity: sha512-KXPvOm8K9IJKFM0bmdn8QXh7udDh1g/giieX0NLCaMnb4hEiVFqnop2ImTXCc5e0/oHz3LTqmHGtExn5hfMkOA==
   /jsonfile/4.0.0:
-    dev: true
     optionalDependencies:
       graceful-fs: 4.2.4
     resolution:
@@ -5155,16 +5168,19 @@ packages:
       integrity: sha1-4pMZByV6lGR56lvQ0OIK3+srWgc=
 specifiers:
   '@octokit/types': ^3.0.0
+  '@types/electron-settings': ^3.1.1
   '@types/gulp': ^4.0.6
   '@types/node': ^12.12.39
   '@types/node-fetch': ^2.5.7
   '@typescript-eslint/eslint-plugin': ^2.33.0
   '@typescript-eslint/parser': ^2.33.0
   discord-rpc: ^3.1.1
+  dotenv: ^8.2.0
   electron: ^8.3.0
   electron-builder: ^22.6.0
   electron-context-menu: ^1.1.0
   electron-prompt: ^1.5.1
+  electron-settings: ^3.2.0
   eslint: ^7.0.0
   eslint-config-prettier: ^6.11.0
   eslint-plugin-import: ^2.20.2
