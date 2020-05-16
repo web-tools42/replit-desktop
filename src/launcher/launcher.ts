@@ -11,8 +11,7 @@ import {
 } from '../common';
 import * as fs from 'fs';
 import * as path from 'path';
-import * as os from 'os';
-import { EventEmitter2 } from 'eventemitter2';
+import { platform } from 'os';
 import fetch from 'node-fetch';
 import * as childProcess from 'child_process';
 
@@ -119,7 +118,9 @@ class Updater {
         macOSUrl: '',
         linuxUrl: ''
     };
+    downloadUrl: string;
     launcher: Launcher;
+    afterDownload: Function;
 
     constructor(launcher: Launcher) {
         /*this.appVersion = {
@@ -136,7 +137,24 @@ class Updater {
         };
         this.launcher = launcher;
     }
-
+    detectOS() {
+        switch (platform()) {
+            case 'win32':
+                //childProcess.exec('cmd -c ' + this.downloadPath);
+                this.downloadUrl = this.downloadUrls.windowsUrl;
+                this.afterDownload = this.afterDownloadWindows;
+                break;
+            case 'darwin':
+                this.downloadUrl = this.downloadUrls.macOSUrl;
+                this.afterDownload = this.afterDownloadMac;
+                break;
+            case 'linux':
+                this.downloadUrl = this.downloadUrls.linuxUrl;
+                break;
+            default:
+                break;
+        }
+    }
     async checkUpdate(): Promise<checkUpdateResult> {
         try {
             const res: githubReleaseResponse = decodeReleaseResponse(
@@ -188,16 +206,13 @@ class Updater {
     async downloadUpdate(): Promise<object> {
         try {
             //console.log(this.downloadUrls);
-            const req = await fetch(
-                this.downloadUrls.windowsUrl
-                //'http://ipv4.download.thinkbroadband.com/200MB.zip',
-            );
+            const req = await fetch(this.downloadUrl);
             console.log(this.downloadUrls);
 
             const contentLength: number = parseInt(
                 req.headers.get('content-length')
             );
-            const filename = this.downloadUrls.windowsUrl.split('/').pop();
+            const filename = this.downloadUrl.split('/').pop();
             let downloaded: number = 0;
             const downloadFile: string = this.downloadPath + filename;
             console.log(downloadFile);
@@ -224,25 +239,19 @@ class Updater {
             req.body.on('end', () => {
                 this.launcher.updateStatus({ text: 'Download Finished' });
             });
-            switch (os.platform()) {
-                case 'win32':
-                    //childProcess.exec('cmd -c ' + this.downloadPath);
-                    break;
-                case 'darwin':
-                    break;
-                case 'linux':
-                    break;
-                default:
-                    break;
-            }
+
             return { success: true };
-            //TODO: Download newer version exe installer and prompt install.
         } catch (e) {
             return { success: false };
         }
-        //TODO: Download newer version dmg? and open it.
-        //TODO: Download newer version tar.gz? and auto-install it.
     }
+    afterDownloadWindows(): void {
+        //TODO: Windows, 'cmd -c installer and quit'
+    }
+    afterDownloadMac(): void {
+        //TODO: Mac, open dmg and quit
+    }
+    //TODO: Linux, extract tar.gz and restart app.
 }
 
 class Launcher {
