@@ -1,3 +1,4 @@
+/*
 import { app, dialog, Menu, MessageBoxReturnValue } from 'electron';
 // @ts-ignore
 import path from 'path';
@@ -7,27 +8,15 @@ import DiscordRPC from 'discord-rpc';
 import ElectronPrompt from 'electron-prompt';
 // @ts-ignore
 import ElectronContext from 'electron-context-menu';
-/* Local libs */
+/!* Local libs *!/
 // @ts-ignore
 import ElectronPreferences from './lib/electron-preferences';
 import { ElectronWindow } from '../common';
-/* Require files */
-import {
-    addTheme,
-    capitalize,
-    doUpdate,
-    editing,
-    errorMessage,
-    getUrl,
-    handleExternalLink,
-    selectInput,
-    talkBoard
-} from '../util';
 
 import { appMenuSetup } from './menu';
 // const MessageBoxReturnValue = Electron.MessageBoxReturnValue;
 
-/* Declare Constants */
+/!* Declare Constants *!/
 let mainWindow: ElectronWindow;
 let subWindow: ElectronWindow;
 const clientId = '498635999274991626';
@@ -37,7 +26,7 @@ const rpc = new DiscordRPC.Client({
 });
 let defaultUserAgent: string;
 
-/* App's Setup */
+/!* App's Setup *!/
 async function appSetup() {
     let Themes: object = {};
     let themes: object = {};
@@ -81,7 +70,7 @@ async function appSetup() {
         }
     }
 
-    /* Preferences */
+    /!* Preferences *!/
     const Preferences = new ElectronPreferences({
         dataStore: path.resolve(app.getPath('userData'), 'Preferences.json'),
         defaults: {
@@ -118,7 +107,7 @@ async function appSetup() {
                                     type: 'dropdown',
                                     options: theme_instert,
                                     help: 'Select a theme'
-                                } /*{
+                                } /!*{
                         'label':
                          'Custom CSS import',
                         'key': 'css_string',
@@ -140,7 +129,7 @@ async function appSetup() {
                                 'value': false
                             }
                         ]
-                    }*/
+                    }*!/
                             ]
                         }
                     ]
@@ -293,7 +282,7 @@ appSetup().then(
     }
 );
 
-/* Custom Session Handler */
+/!* Custom Session Handler *!/
 function startCustomSession() {
     ElectronPrompt({
         title: 'Join Multiplayer',
@@ -569,3 +558,4 @@ app.on('ready', () => {
 rpc.login({ clientId }).catch((error: any) => {
     console.error(error);
 });
+*/

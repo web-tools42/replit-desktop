@@ -1,7 +1,17 @@
 import { Launcher, Updater } from './launcher/launcher';
 import { app, dialog } from 'electron';
-import { checkUpdateResult } from './common';
-import os from 'os';
+
+import { checkUpdateResult, formatBytes, launcherStatus } from './common';
+import { sep } from 'path';
+
+app.setPath(
+    'appData',
+    app.getPath('home') + sep + '.repl.it' + sep + 'appData' + sep
+);
+app.setPath(
+    'userData',
+    app.getPath('home') + sep + '.repl.it' + sep + 'userData' + sep
+);
 
 let launcher: Launcher;
 let updater: Updater;
@@ -16,11 +26,12 @@ function initLauncher() {
 }
 
 function initUpdater() {
-    updater = new Updater();
+    updater = new Updater(launcher);
     let choice: number;
+    launcher.updateStatus({ text: 'Checking Update' });
     updater.checkUpdate().then((res: checkUpdateResult) => {
         if (res['hasUpdate']) {
-            launcher.updateStatus('Update detected');
+            launcher.updateStatus({ text: 'Update detected' });
             choice = dialog.showMessageBoxSync({
                 type: 'info',
                 message: `A new update ${res['version']} is available. Do you want to update?`,
@@ -31,27 +42,14 @@ function initUpdater() {
             });
             console.log(choice);
             if (choice) {
-                launcher.updateStatus('Downloading Update');
-                updater.on('update-progress', (e) => {
-                    launcher.updateStatus(`Downloaded: ${e[0]}`);
-                });
-                switch (os.platform()) {
-                    case 'win32':
-                        updater.downloadUpdateWin();
-                        break;
-                    case 'darwin':
-                        updater.downloadUpdateMac();
-                        break;
-                    case 'linux':
-                        updater.downloadUpdateLinux();
-                        break;
-                    default:
-                        return 'Error';
-                }
+                launcher.updateStatus({ text: 'Downloading Update' });
+                updater.downloadUpdate().then();
             }
         } else {
             if (res['changeLog'] == 'error') {
-                launcher.updateStatus('Check update failed, skipping.');
+                launcher.updateStatus({
+                    text: 'Check update failed, skipping.'
+                });
             }
         }
     });

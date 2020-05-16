@@ -6,13 +6,15 @@ import {
     UpdateAssetsUrls,
     githubReleaseResponse,
     decodeReleaseResponse,
-    formatBytes
+    formatBytes,
+    launcherStatus
 } from '../common';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as os from 'os';
 import { EventEmitter2 } from 'eventemitter2';
 import fetch from 'node-fetch';
+import * as childProcess from 'child_process';
 
 /*class Updater_old {
     pathSep: string = path.sep;
@@ -101,7 +103,7 @@ import fetch from 'node-fetch';
     }
 }*/
 
-class Updater extends EventEmitter2 {
+class Updater {
     pathSep: string = path.sep;
     appPath: string = app.getAppPath() + this.pathSep;
     upperAppPath: string = path.dirname(this.appPath) + this.pathSep;
@@ -110,15 +112,16 @@ class Updater extends EventEmitter2 {
     appVersion: Version; //app.getVersion()
     logArray: [string] = [''];
     OS: string = '';
-    downloadPath: string = app.getPath('temp');
+    downloadPath: string =
+        app.getPath('appData') + 'updaterDownload' + this.pathSep;
     downloadUrls: UpdateAssetsUrls = {
         windowsUrl: '',
         macOSUrl: '',
         linuxUrl: ''
     };
+    launcher: Launcher;
 
-    constructor() {
-        super();
+    constructor(launcher: Launcher) {
         /*this.appVersion = {
             major: parseInt(app.getVersion().split('.')[0]),
             minor: parseInt(app.getVersion().split('.')[1]),
@@ -131,6 +134,7 @@ class Updater extends EventEmitter2 {
             patch: 5,
             versionString: '0.0.5'
         };
+        this.launcher = launcher;
     }
 
     async checkUpdate(): Promise<checkUpdateResult> {
@@ -181,67 +185,62 @@ class Updater extends EventEmitter2 {
         }
     }
 
-    /*async downloadFile() {
-        const { data, headers } = await this.session({
-            url: 'http://ipv4.download.thinkbroadband.com/200MB.zip',
-            method: 'GET',
-            responseType: 'stream'
-        });
-
-        const contentLength = headers['content-length'];
-
-        console.log(contentLength);
-
-        data.on('data', (chunk) => {
-            console.log(chunk);
-        });
-
-        data.pipe(fs.createWriteStream('./200MB.zip'));
-    }*/
-
-    async downloadUpdateWin(): Promise<object> {
+    async downloadUpdate(): Promise<object> {
         try {
             //console.log(this.downloadUrls);
             const req = await fetch(
                 this.downloadUrls.windowsUrl
                 //'http://ipv4.download.thinkbroadband.com/200MB.zip',
             );
-            console.log(req.headers);
             console.log(this.downloadUrls);
 
             const contentLength: number = parseInt(
-                //@ts-ignore
-                req.headers.get('content-length')[0]
+                req.headers.get('content-length')
             );
+            const filename = this.downloadUrls.windowsUrl.split('/').pop();
             let downloaded: number = 0;
-            console.log('a');
-            req.body.on('data', (chunk: Buffer) => {
-                // @ts-ignore
-                downloaded += chunk.length;
-                const percentage = Math.floor(
-                    (downloaded / contentLength) * 100
-                );
-                console.log(formatBytes(downloaded));
-                console.log(formatBytes(contentLength));
-                this.emit('update-progress', [
-                    formatBytes(downloaded),
-                    formatBytes(downloaded)
-                ]);
+            const downloadFile: string = this.downloadPath + filename;
+            console.log(downloadFile);
+            try {
+                fs.mkdirSync(this.downloadPath, { recursive: true });
+            } catch (e) {
+                console.log(e);
+                return { success: false };
+            }
+            req.body
+                .on('data', (chunk: Buffer) => {
+                    downloaded += chunk.length;
+                    const percentage = Math.floor(
+                        (downloaded / contentLength) * 100
+                    );
+                    this.launcher.updateStatus({
+                        text: `${formatBytes(downloaded)}/${formatBytes(
+                            contentLength
+                        )}`,
+                        percentage: percentage.toString() + '%'
+                    });
+                })
+                .pipe(fs.createWriteStream(downloadFile));
+            req.body.on('end', () => {
+                this.launcher.updateStatus({ text: 'Download Finished' });
             });
-
+            switch (os.platform()) {
+                case 'win32':
+                    //childProcess.exec('cmd -c ' + this.downloadPath);
+                    break;
+                case 'darwin':
+                    break;
+                case 'linux':
+                    break;
+                default:
+                    break;
+            }
             return { success: true };
-            //data.pipe(fs.createWriteStream('./200MB.zip'))
             //TODO: Download newer version exe installer and prompt install.
         } catch (e) {
             return { success: false };
         }
-    }
-
-    async downloadUpdateMac() {
         //TODO: Download newer version dmg? and open it.
-    }
-
-    async downloadUpdateLinux() {
         //TODO: Download newer version tar.gz? and auto-install it.
     }
 }
@@ -256,7 +255,7 @@ class Launcher {
             height: 300,
             width: 250,
             frame: false,
-            webPreferences: { nodeIntegration: true }
+            webPreferences: { nodeIntegration: true, devTools: true }
         });
     }
 
@@ -264,9 +263,8 @@ class Launcher {
         this.window.loadFile('launcher/launcher.html').then();
     }
 
-    updateStatus(status: string) {
+    updateStatus(status: launcherStatus) {
         this.window.webContents.send('status-update', status);
-        //console.log('Status updated');
     }
 }
 
