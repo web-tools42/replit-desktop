@@ -1,5 +1,6 @@
 import { app, BrowserWindow } from 'electron';
 import { Endpoints } from '@octokit/types';
+import nativeTheme = Electron.nativeTheme;
 
 class ElectronWindow extends BrowserWindow {
     public InternalId = -1;
@@ -16,6 +17,12 @@ interface checkUpdateResult {
     hasUpdate: boolean;
     changeLog?: string;
     version?: string;
+}
+
+interface downloadUpdateResult {
+    success: boolean;
+    downloadFilePath?: string;
+    error?: string;
 }
 
 interface UpdateAssetsUrls {
@@ -83,5 +90,6 @@ export {
     githubReleaseResponse,
     decodeReleaseResponse,
     formatBytes,
-    launcherStatus
+    launcherStatus,
+    downloadUpdateResult
 };

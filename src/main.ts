@@ -1,8 +1,14 @@
 import { Launcher, Updater } from './launcher/launcher';
 import { app, dialog } from 'electron';
 
-import { checkUpdateResult, formatBytes, launcherStatus } from './common';
+import {
+    checkUpdateResult,
+    downloadUpdateResult,
+    formatBytes,
+    launcherStatus
+} from './common';
 import { sep } from 'path';
+import os from 'os';
 
 app.setPath(
     'appData',
@@ -43,7 +49,31 @@ function initUpdater() {
             console.log(choice);
             if (choice) {
                 launcher.updateStatus({ text: 'Downloading Update' });
-                updater.downloadUpdate().then();
+                switch (os.platform()) {
+                    case 'win32':
+                        updater
+                            .downloadUpdate(updater.downloadUrls.windowsUrl)
+                            .then((e: downloadUpdateResult) => {
+                                updater.afterDownloadWin(e.downloadFilePath);
+                            });
+                        break;
+                    case 'darwin':
+                        updater
+                            .downloadUpdate(updater.downloadUrls.macOSUrl)
+                            .then((e: downloadUpdateResult) => {
+                                updater.afterDownloadMac(e.downloadFilePath);
+                            });
+                        break;
+                    case 'linux':
+                        updater
+                            .downloadUpdate(updater.downloadUrls.linuxUrl)
+                            .then((e: downloadUpdateResult) => {
+                                updater.afterDownloadLinux(e.downloadFilePath);
+                            });
+                        break;
+                    default:
+                        break;
+                }
             }
         } else {
             if (res['changeLog'] == 'error') {

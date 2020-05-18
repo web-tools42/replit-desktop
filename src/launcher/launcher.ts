@@ -7,13 +7,16 @@ import {
     githubReleaseResponse,
     decodeReleaseResponse,
     formatBytes,
-    launcherStatus
+    launcherStatus,
+    downloadUpdateResult
 } from '../common';
 import * as fs from 'fs';
 import * as path from 'path';
-import { platform } from 'os';
+import * as os from 'os';
+import { EventEmitter2 } from 'eventemitter2';
 import fetch from 'node-fetch';
 import * as childProcess from 'child_process';
+import { platform } from 'os';
 
 /*class Updater_old {
     pathSep: string = path.sep;
@@ -118,9 +121,7 @@ class Updater {
         macOSUrl: '',
         linuxUrl: ''
     };
-    downloadUrl: string;
     launcher: Launcher;
-    afterDownload: Function;
 
     constructor(launcher: Launcher) {
         /*this.appVersion = {
@@ -137,24 +138,7 @@ class Updater {
         };
         this.launcher = launcher;
     }
-    detectOS() {
-        switch (platform()) {
-            case 'win32':
-                //childProcess.exec('cmd -c ' + this.downloadPath);
-                this.downloadUrl = this.downloadUrls.windowsUrl;
-                this.afterDownload = this.afterDownloadWindows;
-                break;
-            case 'darwin':
-                this.downloadUrl = this.downloadUrls.macOSUrl;
-                this.afterDownload = this.afterDownloadMac;
-                break;
-            case 'linux':
-                this.downloadUrl = this.downloadUrls.linuxUrl;
-                break;
-            default:
-                break;
-        }
-    }
+
     async checkUpdate(): Promise<checkUpdateResult> {
         try {
             const res: githubReleaseResponse = decodeReleaseResponse(
@@ -203,25 +187,17 @@ class Updater {
         }
     }
 
-    async downloadUpdate(): Promise<object> {
+    async downloadUpdate(url: string): Promise<downloadUpdateResult> {
         try {
-            //console.log(this.downloadUrls);
-            const req = await fetch(this.downloadUrl);
-            console.log(this.downloadUrls);
+            const req = await fetch(url);
 
             const contentLength: number = parseInt(
                 req.headers.get('content-length')
             );
-            const filename = this.downloadUrl.split('/').pop();
-            let downloaded: number = 0;
+            const filename = url.split('/').pop();
             const downloadFile: string = this.downloadPath + filename;
-            console.log(downloadFile);
-            try {
-                fs.mkdirSync(this.downloadPath, { recursive: true });
-            } catch (e) {
-                console.log(e);
-                return { success: false };
-            }
+            let downloaded: number = 0;
+            fs.mkdirSync(this.downloadPath, { recursive: true });
             req.body
                 .on('data', (chunk: Buffer) => {
                     downloaded += chunk.length;
@@ -239,19 +215,24 @@ class Updater {
             req.body.on('end', () => {
                 this.launcher.updateStatus({ text: 'Download Finished' });
             });
-
-            return { success: true };
+            return { success: true, downloadFilePath: downloadFile };
         } catch (e) {
-            return { success: false };
+            return { success: false, error: e };
         }
     }
-    afterDownloadWindows(): void {
-        //TODO: Windows, 'cmd -c installer and quit'
+
+    afterDownloadWin(path: string) {
+        console.log('afterDownloadWin' + path);
+        //TODO: open exe installer and exit app
     }
-    afterDownloadMac(): void {
-        //TODO: Mac, open dmg and quit
+
+    afterDownloadMac(path: string) {
+        //TODO: open dmg and open it.
     }
-    //TODO: Linux, extract tar.gz and restart app.
+
+    afterDownloadLinux(path: string) {
+        //TODO:tar.gz and auto-install tar.gz.
+    }
 }
 
 class Launcher {
