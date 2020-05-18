@@ -197,7 +197,9 @@ class Updater {
             const filename = url.split('/').pop();
             const downloadFile: string = this.downloadPath + filename;
             let downloaded: number = 0;
-            fs.mkdirSync(this.downloadPath, { recursive: true });
+            if (!fs.existsSync(this.downloadPath)) {
+                fs.mkdirSync(this.downloadPath, { recursive: true });
+            }
             req.body
                 .on('data', (chunk: Buffer) => {
                     downloaded += chunk.length;
