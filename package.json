@@ -22,6 +22,7 @@
     "author": "leon332157&repl-it-discord",
     "devDependencies": {
         "@octokit/types": "^3.0.0",
+        "@types/discord-rpc": "^3.0.4",
         "@types/electron-settings": "^3.1.1",
         "@types/gulp": "^4.0.6",
         "@types/node": "^12.12.39",
