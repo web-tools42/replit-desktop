@@ -1,54 +1,51 @@
-/*
-import { app, dialog, Menu, MessageBoxReturnValue } from 'electron';
-// @ts-ignore
-import path from 'path';
-// @ts-ignore
-import DiscordRPC from 'discord-rpc';
-// @ts-ignore
-import ElectronPrompt from 'electron-prompt';
-// @ts-ignore
-import ElectronContext from 'electron-context-menu';
-/!* Local libs *!/
-// @ts-ignore
-import ElectronPreferences from './lib/electron-preferences';
-import { ElectronWindow } from '../common';
+/* Require Packages */
+const { app, BrowserWindow, Menu, dialog, session } = require('electron');
+const path = require('path');
+const DiscordRPC = require('discord-rpc');
 
-import { appMenuSetup } from './menu';
-// const MessageBoxReturnValue = Electron.MessageBoxReturnValue;
+const {
+    addTheme,
+    capitalize,
+    doUpdate,
+    errorMessage,
+    getUrl,
+    handleExternalLink,
+    selectInput,
+    setDiscordStatus
+} = require(path.resolve(__dirname, 'lib', 'functions'));
+const { appMenuSetup } = require(path.resolve(__dirname, 'lib', 'constants'));
 
-/!* Declare Constants *!/
-let mainWindow: ElectronWindow;
-let subWindow: ElectronWindow;
+/* Declare Constants */
+
+let mainWindow;
+let subWindow = undefined;
 const clientId = '498635999274991626';
 let startTimestamp = new Date();
 const rpc = new DiscordRPC.Client({
     transport: 'ipc'
 });
-let defaultUserAgent: string;
+let defaultUserAgent;
 
-/!* App's Setup *!/
+/* App SetUp's */
+
 async function appSetup() {
-    let Themes: object = {};
-    let themes: object = {};
-    let res;
+    let Themes = {};
+    let themes = {};
     try {
-        // @ts-ignore
-        res = await axios.get('https://darktheme.matdoes.dev/api/themes');
+        //var res = await requests.get('https://darktheme.matdoes.dev/themes.json');
+        var res = { data: {} };
     } catch (e) {
         console.error(e);
         return;
     }
-    console.log(res.data);
     let theme_instert = [];
     let raw_themes = res.data;
     for (let key in raw_themes) {
         if (raw_themes.hasOwnProperty(key)) {
-            // @ts-ignore
             themes[capitalize(key)] = raw_themes[key];
         }
     }
 
-    // @ts-ignore
     Themes['Default White'] = '';
     theme_instert.push({
         label: 'Default White',
@@ -56,12 +53,9 @@ async function appSetup() {
     });
     for (let theme in themes) {
         if (themes.hasOwnProperty(theme)) {
-            // @ts-ignore
-            let resp = await axios.get(
-                // @ts-ignore
-                ``
+            let resp = await requests.get(
+                `https://darktheme.matdoes.dev/theme.css?${themes[theme]}`
             );
-            // @ts-ignore
             Themes[theme] = resp.data.toString();
             theme_instert.push({
                 label: theme.toString(),
@@ -69,8 +63,7 @@ async function appSetup() {
             });
         }
     }
-
-    /!* Preferences *!/
+    /* Preferences */
     const Preferences = new ElectronPreferences({
         dataStore: path.resolve(app.getPath('userData'), 'Preferences.json'),
         defaults: {
@@ -86,7 +79,7 @@ async function appSetup() {
                 editor: 'monaco'
             }
         },
-        onLoad: (data: any) => {
+        onLoad: (data) => {
             return data;
         },
         webPreferences: {
@@ -107,9 +100,8 @@ async function appSetup() {
                                     type: 'dropdown',
                                     options: theme_instert,
                                     help: 'Select a theme'
-                                } /!*{
-                        'label':
-                         'Custom CSS import',
+                                } /*{
+                        'label': 'Custom CSS import',
                         'key': 'css_string',
                         'type': 'Text',
                         'options': [{label: 'Yes', value: true}],
@@ -129,7 +121,7 @@ async function appSetup() {
                                 'value': false
                             }
                         ]
-                    }*!/
+                    }*/
                             ]
                         }
                     ]
@@ -191,19 +183,18 @@ async function appSetup() {
     });
     Menu.setApplicationMenu(
         Menu.buildFromTemplate(
-            // @ts-ignore
             appMenuSetup(
                 startSubWindow,
                 Preferences,
                 startCustomSession,
                 sendSubToMain,
-                selectInput
-                //doUpdate
+                selectInput,
+                doUpdate
             )
         )
     );
 
-    Preferences.on('save', () => {
+    Preferences.on('save', (preferences) => {
         console.log(
             `Preferences were saved. at ${path.resolve(
                 app.getPath('userData'),
@@ -214,7 +205,6 @@ async function appSetup() {
         if (mainWindow) {
             addTheme(
                 mainWindow,
-                // @ts-ignore
                 Themes[Preferences.value('app-theme')['theme']]
             );
             if (Preferences.value('editor-settings')['editor'] === 'ace') {
@@ -230,7 +220,6 @@ async function appSetup() {
         if (subWindow) {
             addTheme(
                 subWindow,
-                // @ts-ignore
                 Themes[Preferences.value('app-theme')['theme']]
             );
             if (Preferences.value('editor-settings')['editor'] === 'ace') {
@@ -245,7 +234,7 @@ async function appSetup() {
         }
     });
 
-    //doUpdate(Preferences.value('update-settings')['auto-update'], false);
+    doUpdate(Preferences.value('update-settings')['auto-update'], false);
     if (mainWindow) {
         if (Preferences.value('editor-settings')['editor'] === 'ace') {
             mainWindow.webContents.setUserAgent(
@@ -255,18 +244,15 @@ async function appSetup() {
         mainWindow.webContents.on('did-start-navigation', () => {
             addTheme(
                 mainWindow,
-                // @ts-ignore
                 Themes[Preferences.value('app-theme')['theme']]
             );
         });
     }
     if (subWindow) {
-        // @ts-ignore
         addTheme(subWindow, Themes[Preferences.value('app-theme')['theme']]);
         subWindow.webContents.on('did-start-navigation', () => {
             addTheme(
                 subWindow,
-                // @ts-ignore
                 Themes[Preferences.value('app-theme')['theme']]
             );
         });
@@ -276,13 +262,14 @@ async function appSetup() {
 appSetup().then(
     () => {
         console.log('App setup success.');
+        // ARNO
     },
     (reason) => {
         console.error(reason);
     }
 );
 
-/!* Custom Session Handler *!/
+/* Custom Session Handler */
 function startCustomSession() {
     ElectronPrompt({
         title: 'Join Multiplayer',
@@ -293,15 +280,16 @@ function startCustomSession() {
         },
         customStylesheet: path.resolve(__dirname, 'promptDark.css')
     })
-        .then((r: any) => {
+        .then((r) => {
             if (r === undefined || r === null) {
                 return;
             }
             if (
                 r.toString().replace(' ', '') === '' ||
                 !r.toString().startsWith('https://repl.it/') ||
-                !r.toString().includes('repl.co') ||
-                !r.toString().includes('repl.run')
+                !r
+                    .toString()
+                    .includes('repl.co' || !r.toString().includes('repl.run'))
             ) {
                 dialog.showMessageBox({
                     title: '',
@@ -312,23 +300,23 @@ function startCustomSession() {
                 });
             } else {
                 if (!subWindow.isVisible()) {
-                    dialog
-                        .showMessageBox({
+                    dialog.showMessageBox(
+                        {
                             title: '',
                             message: `Do you want to load ${r} in window 2?`,
                             type: 'info',
                             buttons: ['Yes', 'No'],
                             defaultId: 0
-                        })
-                        .then(function (resp: MessageBoxReturnValue) {
-                            const index = resp.response;
+                        },
+                        (index) => {
                             if (index === 0) {
                                 subWindow.loadURL(r);
                             } else {
                             }
-                        });
+                        }
+                    );
                 } else {
-                    startSubWindow();
+                    startSubWindow(r);
                 }
             }
         })
@@ -349,8 +337,8 @@ async function setPlayingDiscord() {
             instance: false
         }).then();
     } else if (spliturl[0] === 'talk') {
-        talkBoard(spliturl, mainWindow).then(
-            (res: any) => {
+        setDiscordStatus.talkBoard(spliturl, mainWindow).then(
+            (res) => {
                 rpc.setActivity({
                     state: `${res.viewing}`,
                     details: `In Repl Talk ${res.talkBoard}`,
@@ -360,17 +348,17 @@ async function setPlayingDiscord() {
                     smallImageKey: 'talk',
                     smallImageText: 'Repl Talk',
                     instance: false
-                }).catch((reason: string) => {
+                }).catch((reason) => {
                     console.error(`error@talk board ${reason}`);
                 });
             },
-            (reason: string) => {
+            (reason) => {
                 console.error(`Set Talk board Failed ${reason}`);
             }
         );
     } else if (spliturl[0][0] === '@' && spliturl[1] !== undefined) {
-        editing(mainWindow).then(
-            (res: any) => {
+        setDiscordStatus.editing(mainWindow).then(
+            (res) => {
                 rpc.setActivity({
                     details: `Editing: ${res.fileName}`,
                     state: `${url} `,
@@ -380,11 +368,11 @@ async function setPlayingDiscord() {
                     largeImageKey: res.lang,
                     largeImageText: res.lang,
                     instance: false
-                }).catch((reason: string) => {
+                }).catch((reason) => {
                     console.error(`error@editing ${reason}`);
                 });
             },
-            (reason: string) => {
+            (reason) => {
                 console.error(`Set editing failed ${reason}`);
             }
         );
@@ -398,7 +386,7 @@ async function setPlayingDiscord() {
             smallImageKey: 'logo',
             smallImageText: 'Repl.it',
             instance: false
-        }).catch((reason: string) => {
+        }).catch((reason) => {
             console.error(`error@talk ${reason}`);
         });
     } else if (spliturl[0][0] === '@') {
@@ -409,7 +397,7 @@ async function setPlayingDiscord() {
             largeImageKey: 'logo',
             largeImageText: 'Repl.it',
             instance: false
-        }).catch((reason: string) => {
+        }).catch((reason) => {
             console.debug(`error@profile ${reason}`);
         });
     } else if (spliturl[0] === 'account') {
@@ -420,7 +408,7 @@ async function setPlayingDiscord() {
             largeImageKey: 'logo',
             largeImageText: 'Repl.it',
             instance: false
-        }).catch((reason: string) => {
+        }).catch((reason) => {
             console.debug(`error@acount ${reason}`);
         });
     } else {
@@ -431,7 +419,7 @@ async function setPlayingDiscord() {
             largeImageKey: 'logo',
             largeImageText: 'Repl.it',
             instance: false
-        }).catch((reason: string) => {
+        }).catch((reason) => {
             console.error(`error@main ${reason}`);
         });
     }
@@ -439,25 +427,24 @@ async function setPlayingDiscord() {
 
 function sendSubToMain() {
     if (subWindow) {
-        let subUrl = subWindow.webContents.getURL();
-        dialog
-            .showMessageBox({
+        let subUrl = subWindow.getURL();
+        dialog.showMessageBox(
+            {
                 title: '',
                 message: `Do you want to load ${subUrl} in window 1?`,
                 type: 'info',
                 buttons: ['Yes', 'No'],
                 defaultId: 0
-            })
-            .then(function (resp: MessageBoxReturnValue) {
-                const index = resp.response;
+            },
+            (index) => {
                 if (index === 0) {
                     mainWindow.loadURL(subUrl);
                 } else {
                 }
-            });
+            }
+        );
     }
 }
-
 function startSubWindow() {
     if (subWindow.isVisible()) {
         return;
@@ -469,9 +456,8 @@ function startSubWindow() {
     subWindow.loadURL(url);
     subWindow.show();
 }
-
 function createSubWindow() {
-    subWindow = new ElectronWindow({
+    subWindow = new BrowserWindow({
         width: mainWindow.getSize()[0] - 10,
         height: mainWindow.getSize()[1] - 10,
         minWidth: 600,
@@ -479,31 +465,58 @@ function createSubWindow() {
         title: 'Repl.it',
         icon: path.resolve(__dirname, 'utils/logo.png'),
         parent: mainWindow,
-        webPreferences: { nodeIntegration: false },
+        webPreferences: { nodeIntegration: false, devTools: true },
         show: false
     });
     subWindow.setBackgroundColor('#393c42');
     subWindow.InternalId = 2;
     subWindow.webContents.on(
         'did-fail-load',
-        (event: any, errorCode: number, errorDescription: string) => {
+        (event, errorCode, errorDescription) => {
             errorMessage(subWindow, errorCode, errorDescription);
         }
     );
-    subWindow.webContents.on('will-navigate', (event: any, url: string) => {
+    subWindow.webContents.on('will-navigate', (event, url) => {
         handleExternalLink(subWindow, url);
     });
     subWindow.on('unresponsive', () => {
         subWindow.reload();
     });
-    subWindow.on('close', (event: any) => {
+    subWindow.on('close', (event) => {
         event.preventDefault();
         subWindow.hide();
     });
 }
 
+function createSpecialWindow(url, w, h, x, y) {
+    subWindow = new BrowserWindow({
+        width: w,
+        height: h,
+        x,
+        y,
+        title: 'Repl.it',
+        icon: path.resolve(__dirname, 'utils/logo.png'),
+        webPreferences: { nodeIntegration: false, devTools: true },
+        parent: null
+    });
+    subWindow.setBackgroundColor('#393c42');
+    subWindow.webContents.on(
+        'did-fail-load',
+        (event, errorCode, errorDescription) => {
+            errorMessage(subWindow, errorCode, errorDescription);
+        }
+    );
+    subWindow.webContents.on('will-navigate', (event, url) => {
+        handleExternalLink(subWindow, url);
+    });
+    subWindow.on('unresponsive', () => {
+        subWindow.reload();
+    });
+    subWindow.loadURL(url);
+}
+
 function createWindow() {
-    mainWindow = new ElectronWindow({
+    mainWindow = new BrowserWindow({
         width: 1280,
         height: 800,
         minWidth: 600,
@@ -512,19 +525,18 @@ function createWindow() {
         webPreferences: { nodeIntegration: false },
         icon: path.resolve(__dirname, 'utils/logo.png')
     });
-    defaultUserAgent = mainWindow.webContents.userAgent;
+    defaultUserAgent = mainWindow.webContents.getUserAgent();
     mainWindow.InternalId = 1;
     mainWindow.webContents.on(
         'did-fail-load',
-        (event: any, errorCode: number, errorDescription: string) => {
+        (event, errorCode, errorDescription) => {
             errorMessage(mainWindow, errorCode, errorDescription);
         }
     );
     mainWindow.on('close', () => {
         process.exit(0);
     });
-    mainWindow.webContents.on('will-navigate', (event: any, url: string) => {
-        // @ts-ignore
+    mainWindow.webContents.on('will-navigate', (event, url) => {
         handleExternalLink(mainWindow, url);
     });
     mainWindow.on('unresponsive', () => {
@@ -532,6 +544,18 @@ function createWindow() {
     });
     mainWindow.loadURL('https://repl.it/repls');
     createSubWindow();
+    createSpecialWindow(
+        'https://replit-talk-ask-new-question-fetcher.eankeen.repl.co/',
+        500,
+        1000,
+        10,
+        100
+    );
+    createSpecialWindow(
+        'https://repl-mail.mreconomical.repl.co/mail',
+        1200,
+        800
+    );
 }
 
 ElectronContext({
@@ -555,7 +579,6 @@ app.on('ready', () => {
     createWindow();
 });
 
-rpc.login({ clientId }).catch((error: any) => {
+rpc.login({ clientId: clientId }).catch((error) => {
     console.error(error);
 });
-*/

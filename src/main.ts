@@ -9,6 +9,7 @@ import {
 } from './common';
 import { sep } from 'path';
 import os from 'os';
+import { mainApp } from './app';
 
 app.setPath(
     'appData',
@@ -21,17 +22,23 @@ app.setPath(
 
 let launcher: Launcher;
 let updater: Updater;
+let main: mainApp;
 
 function initLauncher() {
     launcher = new Launcher();
     launcher.init();
     launcher.window.webContents.once('did-finish-load', () => {
         launcher.window.show();
-        initUpdater();
+        initUpdater().then(() => {
+            initApp();
+        });
     });
 }
-
-function initUpdater() {
+function initApp() {
+    launcher.window.close();
+    main = new mainApp();
+}
+async function initUpdater() {
     updater = new Updater(launcher);
     let choice: number;
     launcher.updateStatus({ text: 'Checking Update' });
