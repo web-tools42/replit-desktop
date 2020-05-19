@@ -13,7 +13,6 @@ import {
 import * as fs from 'fs';
 import * as path from 'path';
 import * as os from 'os';
-import { EventEmitter2 } from 'eventemitter2';
 import fetch from 'node-fetch';
 import * as childProcess from 'child_process';
 import { platform } from 'os';
