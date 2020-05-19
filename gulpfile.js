@@ -67,7 +67,7 @@ async function buildApp() {
         );
     } else {
         child_process.execSync(
-            'electron-builder -c electron-builder.conf.js -wl',
+            'electron-builder -c electron-builder.conf.js -w',
             { stdio: 'inherit' }
         );
     }
