@@ -94,9 +94,13 @@ class mainApp {
         this.rpc.on('ready', () => {
             // activity can only be set every 15 seconds
             setInterval(() => {
-                this.setPlayingDiscord().catch((e: string) => {
-                    console.log('Failed to update Discord status. ' + e);
-                });
+                this.setPlayingDiscord()
+                    .then(() => {
+                        console.log('Status Updated');
+                    })
+                    .catch((e: string) => {
+                        console.log('Failed to update Discord status. ' + e);
+                    });
             }, 15e3);
         });
     }
@@ -219,7 +223,6 @@ class mainApp {
 
     async setTalkBoard(spliturl: Array<string>, windowObj: ElectronWindow) {
         let viewing: string = 'Viewing ';
-        console.log(spliturl);
         if (spliturl[3] !== undefined) {
             viewing += await windowObj.webContents.executeJavaScript(
                 "document.getElementsByClassName('board-post-detail-title')[0].textContent"
@@ -261,10 +264,8 @@ class mainApp {
             "document.querySelector('.workspace-header-description-container" +
                 " img')['src']"
         );
-
-        const lang: string = fileName.split('.').slice(-1)[0];
         // gets the file extension
-        const imageName: string = logoUrl.split('/')[-1].split('.')[0];
+        const imageName: string = logoUrl.split('/').pop().split('.')[0];
         return { fileName: fileName, logoName: imageName };
     }
 }
