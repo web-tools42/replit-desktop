@@ -15,10 +15,14 @@ module.exports = {
         overwriteAction: 'upgrade'
     },
     win: {
-        target: {
-            target: 'nsis'
-        },
+        target: 'nsis',
         icon: 'src/assets/replit-logo/ico/logo.ico'
+    },
+    nsis: {
+        oneClick: false,
+        differentialPackage: false,
+        //perMachine: true,
+        createDesktopShortcut: 'always'
     },
     linux: {
         target: {
