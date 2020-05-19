@@ -61,20 +61,16 @@ async function buildProd() {
 async function buildApp() {
     let subprocess;
     if (platform() === 'darwin') {
-        subprocess = child_process.exec(
-            'electron-builder -c electron-builder.conf.js -wml'
+        child_process.execSync(
+            'electron-builder -c electron-builder.conf.js -wml',
+            { stdio: 'inherit' }
         );
     } else {
-        subprocess = child_process.exec(
-            'electron-builder -c electron-builder.conf.js -wl'
+        child_process.execSync(
+            'electron-builder -c electron-builder.conf.js -wl',
+            { stdio: 'inherit' }
         );
     }
-    subprocess.stdout.on('data', (data) => {
-        process.stdout.write(data);
-    });
-    subprocess.stderr.on('data', (data) => {
-        process.stderr.write(data);
-    });
 }
 
 async function copyFilesDev() {
