@@ -4,7 +4,7 @@ import { app, dialog } from 'electron';
 import { checkUpdateResult, downloadUpdateResult } from './common';
 import { sep } from 'path';
 import os from 'os';
-import { mainApp } from './app';
+import { mainApp } from './app/app';
 
 app.setPath(
     'appData',
@@ -31,7 +31,7 @@ function initLauncher() {
 
 function initApp() {
     main = new mainApp();
-    main.mainWindow.loadURL('https://repl.it/repls');
+    main.mainWindow.loadURL('https://repl.it/~');
     main.mainWindow.webContents.once('did-finish-load', () => {
         main.mainWindow.show();
         launcher.window.close();
