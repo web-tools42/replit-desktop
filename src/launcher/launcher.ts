@@ -12,7 +12,6 @@ import {
 } from '../common';
 import * as fs from 'fs';
 import * as path from 'path';
-import * as os from 'os';
 import fetch from 'node-fetch';
 import * as childProcess from 'child_process';
 import { platform } from 'os';
@@ -153,14 +152,16 @@ class Launcher {
     window: ElectronWindow;
 
     constructor() {
-        this.window = new ElectronWindow({
-            show: false,
-            resizable: false,
-            height: 300,
-            width: 250,
-            frame: false,
-            webPreferences: { nodeIntegration: true }
-        });
+        this.window = new ElectronWindow(
+            {
+                show: false,
+                resizable: false,
+                height: 300,
+                width: 250,
+                frame: false
+            },
+            true
+        );
     }
 
     init() {

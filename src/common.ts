@@ -11,14 +11,18 @@ import BrowserWindowConstructorOptions = Electron.BrowserWindowConstructorOption
 class ElectronWindow extends BrowserWindow {
     public InternalId = -1;
 
-    constructor(options: BrowserWindowConstructorOptions) {
+    constructor(
+        options: BrowserWindowConstructorOptions,
+        nodeIntegration: boolean = false
+    ) {
         super({
             ...options,
             webPreferences: {
                 devTools: true,
                 enableRemoteModule: false,
                 webSecurity: true,
-                allowRunningInsecureContent: false
+                allowRunningInsecureContent: false,
+                nodeIntegration: nodeIntegration
             }
         });
     }
