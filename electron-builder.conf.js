@@ -7,7 +7,7 @@ module.exports = {
     },
     mac: {
         target: 'pkg',
-        icon: 'src/assets/replit-logo/icns/icon.icns'
+        icon: 'src/assets/replit-logo/icns/lcon_set.icns'
     },
     pkg: {
         isVersionChecked: false,
