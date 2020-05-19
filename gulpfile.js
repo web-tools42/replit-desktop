@@ -3,6 +3,9 @@ const terser = require('gulp-terser-js');
 const jeditor = require('gulp-json-editor');
 const ts = require('gulp-typescript');
 const tsProject = ts.createProject('tsconfig.json');
+const fs = require('fs');
+const child_process = require('child_process');
+const { platform } = require('os');
 
 async function copyFilesProd() {
     src('package.json')
@@ -55,6 +58,25 @@ async function buildProd() {
         .pipe(dest('dist'));
 }
 
+async function buildApp() {
+    let subprocess;
+    if (platform() === 'darwin') {
+        subprocess = child_process.exec(
+            'electron-builder -c electron-builder.conf.js -wml'
+        );
+    } else {
+        subprocess = child_process.exec(
+            'electron-builder -c electron-builder.conf.js -wl'
+        );
+    }
+    subprocess.stdout.on('data', (data) => {
+        process.stdout.write(data);
+    });
+    subprocess.stderr.on('data', (data) => {
+        process.stderr.write(data);
+    });
+}
+
 async function copyFilesDev() {
     src('package.json').pipe(dest('ts-out'));
 
@@ -69,3 +91,4 @@ async function buildDev() {
 
 module.exports.buildDev = series(buildDev, copyFilesDev);
 module.exports.buildProd = series(buildProd, copyFilesProd);
+module.exports.buildApp = series(buildApp);

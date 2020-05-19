@@ -1,9 +1,5 @@
-const electronVersion = JSON.parse(
-    require('fs').readFileSync('package.json')
-).devDependencies.electron.replace('^', '');
 module.exports = {
     appId: 'repl-it-electron.repl-it-discord',
-    electronVersion: electronVersion,
     directories: {
         output: 'build/',
         app: 'dist/',

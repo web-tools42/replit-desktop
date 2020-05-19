@@ -9,10 +9,10 @@
         "build:dev": "gulp buildDev",
         "build:run": "electron ./ts-out/",
         "build:dist": "gulp buildProd",
-        "build:app": "electron-builder -c electron-builder.conf.js -wml",
+        "build:app": "gulp buildApp",
         "build:app:test": "electron-builder -c electron-builder.conf.js --dir",
-        "dist": "npm run build:dist && npm run build:app",
-        "postinstall": "electron-builder install-app-deps"
+        "dist": "npm run build:dist && npm run build:app"
+
     },
     "keywords": [
         "electron",
