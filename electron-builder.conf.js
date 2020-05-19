@@ -14,7 +14,7 @@ module.exports = {
             target: 'pkg',
             isVersionCheck: false,
             hasStrictIdentifier: false,
-            overwriteAction: upgrade
+            overwriteAction: 'upgrade'
         },
         icon: 'src/assets/replit-logo/icns/icon.icns'
     },
