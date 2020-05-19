@@ -65,11 +65,16 @@ class mainApp {
 
     constructor() {
         this.mainWindow = new ElectronWindow({
-            show: false,
-            //resizable: false,
-            height: 600,
-            width: 800
+            height: 720,
+            width: 1280,
+            webPreferences: {
+                devTools: true,
+                enableRemoteModule: false,
+                webSecurity: false,
+                allowRunningInsecureContent: true
+            }
         });
+        this.mainWindow.hide();
         this.mainWindow.setBackgroundColor('#393c42');
         this.rpc = new Client({
             transport: 'ipc'

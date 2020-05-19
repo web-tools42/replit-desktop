@@ -1,12 +1,7 @@
 import { Launcher, Updater } from './launcher/launcher';
 import { app, dialog } from 'electron';
 
-import {
-    checkUpdateResult,
-    downloadUpdateResult,
-    formatBytes,
-    launcherStatus
-} from './common';
+import { checkUpdateResult, downloadUpdateResult } from './common';
 import { sep } from 'path';
 import os from 'os';
 import { mainApp } from './app';
@@ -19,6 +14,7 @@ app.setPath(
     'userData',
     app.getPath('home') + sep + '.repl.it' + sep + 'userData' + sep
 );
+app.allowRendererProcessReuse = true;
 
 let launcher: Launcher;
 let updater: Updater;
@@ -34,10 +30,9 @@ function initLauncher() {
 }
 
 function initApp() {
-    //launcher.window.hide();
     main = new mainApp();
-    main.mainWindow.loadURL('https://repl.it/login');
-    main.mainWindow.once('ready-to-show', () => {
+    main.mainWindow.loadURL('https://repl.it/repls');
+    main.mainWindow.webContents.once('did-finish-load', () => {
         main.mainWindow.show();
         launcher.window.close();
     });

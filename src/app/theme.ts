@@ -673,6 +673,10 @@ class themeHandler {
     windowArray: Array<ElectronWindow>;
 
     constructor() {}
+    addWindow(window: ElectronWindow) {
+        this.windowArray.push(window)
+        window.on('')
+    }
     async addTheme(windowObj: ElectronWindow, CSSString: string) {
         for (let i = 1; i <= 3; i++) {
             try {
