@@ -160,7 +160,7 @@ class Launcher {
             height: 300,
             width: 250,
             frame: false,
-            webPreferences: { nodeIntegration: true, devTools: true }
+            webPreferences: { nodeIntegration: true }
         });
     }
 

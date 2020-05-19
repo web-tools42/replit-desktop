@@ -6,9 +6,22 @@ import {
     MessageBoxReturnValue
 } from 'electron';
 import { Endpoints } from '@octokit/types';
+import BrowserWindowConstructorOptions = Electron.BrowserWindowConstructorOptions;
 
 class ElectronWindow extends BrowserWindow {
     public InternalId = -1;
+
+    constructor(options: BrowserWindowConstructorOptions) {
+        super({
+            ...options,
+            webPreferences: {
+                devTools: true,
+                enableRemoteModule: false,
+                webSecurity: true,
+                allowRunningInsecureContent: false
+            }
+        });
+    }
 }
 
 interface Version {

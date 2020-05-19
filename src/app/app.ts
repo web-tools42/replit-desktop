@@ -66,13 +66,7 @@ class mainApp {
     constructor() {
         this.mainWindow = new ElectronWindow({
             height: 720,
-            width: 1280,
-            webPreferences: {
-                devTools: true,
-                enableRemoteModule: false,
-                webSecurity: false,
-                allowRunningInsecureContent: true
-            }
+            width: 1280
         });
         this.mainWindow.hide();
         this.mainWindow.setBackgroundColor('#393c42');
