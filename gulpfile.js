@@ -22,6 +22,7 @@ async function copyFilesProd() {
         .pipe(dest('dist'));
 
     src('src/**/*.html').pipe(dest('dist'));
+    src('src/**/*.css').pipe(dest('dist'));
 }
 
 async function buildProd() {
@@ -35,7 +36,20 @@ async function buildProd() {
                 compress: {}
             })
         )
-        .on('error', function (error) {
+        .on('error', (e) => {
+            this.emit('end');
+        })
+        .pipe(dest('dist'));
+    src('src/**/*.js')
+        .pipe(
+            terser({
+                mangle: {
+                    toplevel: true
+                },
+                compress: {}
+            })
+        )
+        .on('error', (e) => {
             this.emit('end');
         })
         .pipe(dest('dist'));
@@ -45,6 +59,8 @@ async function copyFilesDev() {
     src('package.json').pipe(dest('ts-out'));
 
     src('src/**/*.html').pipe(dest('ts-out'));
+    src('src/**/*.css').pipe(dest('ts-out'));
+    src('src/**/*.js').pipe(dest('ts-out'));
 }
 
 async function buildDev() {

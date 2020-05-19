@@ -10,7 +10,12 @@ module.exports = {
         buildResources: __dirname
     },
     mac: {
-        target: 'dmg',
+        target: {
+            target: 'pkg',
+            isVersionCheck: false,
+            hasStrictIdentifier: false,
+            overwriteAction: upgrade
+        },
         icon: 'src/assets/replit-logo/icns/icon.icns'
     },
     win: {
