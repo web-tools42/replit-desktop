@@ -10,13 +10,13 @@ module.exports = {
         buildResources: __dirname
     },
     mac: {
-        target: {
-            target: 'pkg',
-            isVersionCheck: false,
-            hasStrictIdentifier: false,
-            overwriteAction: 'upgrade'
-        },
+        target: 'pkg',
         icon: 'src/assets/replit-logo/icns/icon.icns'
+    },
+    pkg: {
+        isVersionChecked: false,
+        hasStrictIdentifier: false,
+        overwriteAction: 'upgrade'
     },
     win: {
         target: {
