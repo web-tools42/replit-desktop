@@ -29,15 +29,20 @@ function initLauncher() {
     launcher.init();
     launcher.window.webContents.once('did-finish-load', () => {
         launcher.window.show();
-        initUpdater().then(() => {
-            initApp();
-        });
+        initUpdater().then(() => {});
     });
 }
+
 function initApp() {
-    launcher.window.close();
+    //launcher.window.hide();
     main = new mainApp();
+    main.mainWindow.loadURL('https://repl.it/login');
+    main.mainWindow.once('ready-to-show', () => {
+        main.mainWindow.show();
+        launcher.window.close();
+    });
 }
+
 async function initUpdater() {
     updater = new Updater(launcher);
     let choice: number;
@@ -53,7 +58,6 @@ async function initUpdater() {
                 defaultId: 1,
                 detail: res['changeLog']
             });
-            console.log(choice);
             if (choice) {
                 launcher.updateStatus({ text: 'Downloading Update' });
                 switch (os.platform()) {
@@ -89,9 +93,14 @@ async function initUpdater() {
                 });
             }
         }
+        launcher.updateStatus({ text: 'Launching app' });
+        initApp();
     });
 }
 
-app.once('ready', function () {
+app.on('window-all-closed', () => {
+    app.quit();
+});
+app.once('ready', () => {
     initLauncher();
 });

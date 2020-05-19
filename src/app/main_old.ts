@@ -4,8 +4,6 @@ import DiscordRPC from 'discord-rpc';
 import ElectronContext from 'electron-context-menu';
 import {
     ElectronWindow,
-    editing,
-    talkBoard,
     getUrl,
     errorMessage,
     handleExternalLink
@@ -75,108 +73,6 @@ let defaultUserAgent: string;
         })
         .catch(console.error);
 }*/
-
-async function setPlayingDiscord() {
-    let url = getUrl(mainWindow);
-    let spliturl = url.split('/');
-
-    if (spliturl[0] === 'repls') {
-        rpc.setActivity({
-            details: `Browsing Repls`,
-            state: `repl.it/${url}`,
-            startTimestamp,
-            largeImageKey: 'logo',
-            largeImageText: 'Repl.it',
-            instance: false
-        }).then();
-    } else if (spliturl[0] === 'talk') {
-        talkBoard(spliturl, mainWindow).then(
-            (res: any) => {
-                rpc.setActivity({
-                    state: `${res.viewing}`,
-                    details: `In Repl Talk ${res.talkBoard}`,
-                    startTimestamp,
-                    largeImageKey: 'logo',
-                    largeImageText: 'Repl.it',
-                    smallImageKey: 'talk',
-                    smallImageText: 'Repl Talk',
-                    instance: false
-                }).catch((reason: string) => {
-                    console.error(`error@talk board ${reason}`);
-                });
-            },
-            (reason: string) => {
-                console.error(`Set Talk board Failed ${reason}`);
-            }
-        );
-    } else if (spliturl[0][0] === '@' && spliturl[1] !== undefined) {
-        editing(mainWindow).then(
-            (res: any) => {
-                rpc.setActivity({
-                    details: `Editing: ${res.fileName}`,
-                    state: `${url} `,
-                    startTimestamp,
-                    smallImageKey: 'logo',
-                    smallImageText: 'Repl.it',
-                    largeImageKey: res.lang,
-                    largeImageText: res.lang,
-                    instance: false
-                }).catch((reason: string) => {
-                    console.error(`error@editing ${reason}`);
-                });
-            },
-            (reason: string) => {
-                console.error(`Set editing failed ${reason}`);
-            }
-        );
-    } else if (spliturl[0] === 'talk') {
-        rpc.setActivity({
-            details: `In Repl Talk`,
-            state: `repl.it/${url}`,
-            startTimestamp,
-            largeImageKey: 'talk',
-            largeImageText: 'Repl Talk',
-            smallImageKey: 'logo',
-            smallImageText: 'Repl.it',
-            instance: false
-        }).catch((reason: string) => {
-            console.error(`error@talk ${reason}`);
-        });
-    } else if (spliturl[0][0] === '@') {
-        rpc.setActivity({
-            details: `Looking at ${spliturl[0]}'s profile`,
-            state: `repl.it/${url}`,
-            startTimestamp,
-            largeImageKey: 'logo',
-            largeImageText: 'Repl.it',
-            instance: false
-        }).catch((reason: string) => {
-            console.debug(`error@profile ${reason}`);
-        });
-    } else if (spliturl[0] === 'account') {
-        rpc.setActivity({
-            details: `Changing account settings`,
-            state: `repl.it/${url}`,
-            startTimestamp,
-            largeImageKey: 'logo',
-            largeImageText: 'Repl.it',
-            instance: false
-        }).catch((reason: string) => {
-            console.debug(`error@acount ${reason}`);
-        });
-    } else {
-        rpc.setActivity({
-            details: `On Repl.it`,
-            state: `repl.it/${url}`,
-            startTimestamp,
-            largeImageKey: 'logo',
-            largeImageText: 'Repl.it',
-            instance: false
-        }).catch((reason: string) => {
-            console.error(`error@main ${reason}`);
-        });
-    }
-}
 
 function sendSubToMain() {
     if (subWindow) {
@@ -279,15 +175,6 @@ ElectronContext({
     showCopyImageAddress: true,
     showSaveImageAs: true,
     showInspectElement: true
-});
-
-rpc.on('ready', () => {
-    // activity can only be set every 15 seconds
-    setInterval(() => {
-        setPlayingDiscord().catch((reason) => {
-            console.log('Failed to update Discord status. ' + reason);
-        });
-    }, 15e3);
 });
 
 rpc.login({ clientId }).catch((error: any) => {
