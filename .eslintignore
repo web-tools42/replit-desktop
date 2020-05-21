@@ -2,3 +2,4 @@ node_modules/
 ts-out/
 dist/
 build/
+tsconfig.json

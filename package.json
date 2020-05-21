@@ -1,56 +1,54 @@
 {
-    "name": "repl.it",
-    "version": "1.1.0",
-    "description": "electron version of repl.it",
-    "main": "main.js",
-    "scripts": {
-        "lint": "eslint \"**/*.{js,ts}\" --fix",
-        "start": "npm run build:dev && npm run build:run",
-        "build:dev": "gulp buildDev",
-        "build:run": "electron ./ts-out/",
-        "build:dist": "gulp buildProd",
-        "build:app": "gulp buildApp",
-        "build:app:test": "electron-builder -c electron-builder.conf.js --dir",
-        "dist": "npm run build:dist && npm run build:app"
-
-    },
-    "keywords": [
-        "electron",
-        "repl.it",
-        "discord-rpc"
-    ],
-    "author": "leon332157&repl-it-discord",
-    "devDependencies": {
-        "@octokit/types": "^3.0.0",
-        "@types/discord-rpc": "^3.0.4",
-        "@types/electron-settings": "^3.1.1",
-        "@types/gulp": "^4.0.6",
-        "@types/node": "^12.12.39",
-        "@types/node-fetch": "^2.5.7",
-        "@typescript-eslint/eslint-plugin": "^2.33.0",
-        "@typescript-eslint/parser": "^2.33.0",
-        "dotenv": "^8.2.0",
-        "electron": "^8.3.0",
-        "electron-builder": "^22.6.0",
-        "electron-context-menu": "^1.1.0",
-        "electron-prompt": "^1.5.1",
-        "eslint": "^7.0.0",
-        "eslint-config-prettier": "^6.11.0",
-        "eslint-plugin-import": "^2.20.2",
-        "eslint-plugin-prettier": "^3.1.3",
-        "gulp": "^4.0.2",
-        "gulp-json-editor": "^2.5.4",
-        "gulp-terser-js": "^5.2.2",
-        "gulp-typescript": "^6.0.0-alpha.1",
-        "prettier": "^2.0.5",
-        "typescript": "^3.9.2",
-        "zip-local": "^0.3.4"
-    },
-    "dependencies": {
-        "discord-rpc": "^3.1.1",
-        "electron-settings": "^3.2.0",
-        "node-fetch": "^2.6.0"
-    },
-    "repository": "https://github.com/repl-it-discord/repl.it-electron",
-    "license": "Apache-2.0"
+  "name": "repl.it",
+  "version": "1.1.0",
+  "description": "electron version of repl.it",
+  "keywords": [
+    "electron",
+    "repl.it",
+    "discord-rpc"
+  ],
+  "repository": "https://github.com/repl-it-discord/repl.it-electron",
+  "license": "Apache-2.0",
+  "author": "leon332157&repl-it-discord",
+  "main": "main.js",
+  "scripts": {
+    "build:app": "gulp buildApp",
+    "build:app:test": "electron-builder -c electron-builder.conf.js --dir",
+    "build:dev": "gulp buildDev",
+    "build:dist": "gulp buildProd",
+    "build:run": "electron ./ts-out/",
+    "dist": "npm run build:dist && npm run build:app",
+    "lint": "eslint \"**/*.{js,ts,json}\" --fix",
+    "start": "npm run build:dev && npm run build:run"
+  },
+  "dependencies": {
+    "discord-rpc": "^3.1.1",
+    "electron-settings": "^3.2.0",
+    "node-fetch": "^2.6.0"
+  },
+  "devDependencies": {
+    "@octokit/types": "^3.0.0",
+    "@types/discord-rpc": "^3.0.4",
+    "@types/electron-settings": "^3.1.1",
+    "@types/gulp": "^4.0.6",
+    "@types/node": "^12.12.39",
+    "@types/node-fetch": "^2.5.7",
+    "@typescript-eslint/eslint-plugin": "^2.34.0",
+    "@typescript-eslint/parser": "^2.34.0",
+    "dotenv": "^8.2.0",
+    "electron": "^9.0.0",
+    "electron-builder": "^22.6.1",
+    "electron-context-menu": "^1.1.0",
+    "electron-prompt": "^1.5.1",
+    "eslint": "^7.0.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-prettier": "^3.1.3",
+    "gulp": "^4.0.2",
+    "gulp-json-editor": "^2.5.4",
+    "gulp-terser-js": "^5.2.2",
+    "gulp-typescript": "^6.0.0-alpha.1",
+    "prettier": "^2.0.5",
+    "typescript": "^3.9.3",
+    "zip-local": "^0.3.4"
+  }
 }
