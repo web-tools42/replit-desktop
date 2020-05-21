@@ -1,11 +1,8 @@
 import { Launcher, Updater } from './launcher/launcher';
-import { app, dialog, session } from 'electron';
-
-import { checkUpdateResult, downloadUpdateResult } from './common';
+import { app, dialog } from 'electron';
 import { sep } from 'path';
-import os from 'os';
+import { platform } from 'os';
 import { App } from './app/app';
-import Cookie = Electron.Cookie;
 
 app.setPath(
     'appData',
@@ -22,17 +19,18 @@ let mainApp: App;
 function initLauncher() {
     launcher = new Launcher();
     launcher.init();
-    launcher.window.once('ready-to-show', () => {
+    launcher.window.webContents.once('did-finish-load', () => {
         launcher.window.show();
         initUpdater().then(() => {});
     });
 }
 
-function initApp() {
+async function initApp() {
     mainApp = new App();
-    mainApp.clearCookies(true).then();
+    await mainApp.clearCookies(true);
+    mainApp.themeHandler.addWindow(mainApp.mainWindow);
     mainApp.mainWindow.loadURL('https://repl.it/~').then();
-    mainApp.mainWindow.once('ready-to-show', () => {
+    mainApp.mainWindow.webContents.once('did-finish-load', () => {
         mainApp.mainWindow.show();
         launcher.window.close();
     });
@@ -40,57 +38,57 @@ function initApp() {
 
 async function initUpdater() {
     updater = new Updater(launcher);
-    let choice: number;
     launcher.updateStatus({ text: 'Checking Update' });
-    updater.checkUpdate().then((res: checkUpdateResult) => {
-        if (res['hasUpdate']) {
-            launcher.updateStatus({ text: 'Update detected' });
-            choice = dialog.showMessageBoxSync({
-                type: 'info',
-                message: `A new update ${res['version']} is available. Do you want to update?`,
-                title: 'Update',
-                buttons: ['No', 'Yes'],
-                defaultId: 1,
-                detail: res['changeLog']
-            });
-            if (choice) {
-                launcher.updateStatus({ text: 'Downloading Update' });
-                switch (os.platform()) {
-                    case 'win32':
-                        updater
-                            .downloadUpdate(updater.downloadUrls.windowsUrl)
-                            .then((e: downloadUpdateResult) => {
-                                updater.afterDownloadWin(e.downloadFilePath);
-                            });
-                        break;
-                    case 'darwin':
-                        updater
-                            .downloadUpdate(updater.downloadUrls.macOSUrl)
-                            .then((e: downloadUpdateResult) => {
-                                updater.afterDownloadMac(e.downloadFilePath);
-                            });
-                        break;
-                    case 'linux':
-                        updater
-                            .downloadUpdate(updater.downloadUrls.linuxUrl)
-                            .then((e: downloadUpdateResult) => {
-                                updater.afterDownloadLinux(e.downloadFilePath);
-                            });
-                        break;
-                    default:
-                        break;
-                }
-            }
-        } else {
-            if (res['changeLog'] == 'error') {
-                launcher.updateStatus({
-                    text: 'Check update failed, skipping.'
-                });
-            }
-        }
+    const res = await updater.checkUpdate();
+    if (res['changeLog'] == 'error') {
+        launcher.updateStatus({
+            text: 'Check update failed, skipping.'
+        });
+        updater.cleanUp(true);
+    }
+    updater.once('download-error', (e) => {
+        console.error(e);
+        updater.cleanUp();
+    });
+    updater.once('all-done', () => {
         launcher.updateStatus({ text: 'Launching app' });
         initApp();
     });
+    if (res['hasUpdate']) {
+        await launcher.updateStatus({ text: 'Update detected' });
+        const choice = dialog.showMessageBoxSync({
+            type: 'info',
+            message: `A new update ${res['version']} is available. Do you want to update?`,
+            title: 'Update',
+            buttons: ['No', 'Yes'],
+            defaultId: 1,
+            detail: res['changeLog']
+        });
+        if (choice) {
+            launcher.updateStatus({ text: 'Downloading Update' });
+            switch (platform()) {
+                case 'win32':
+                    updater.once('download-finished', updater.afterDownloadWin);
+                    await updater.downloadUpdate(
+                        updater.downloadUrls.windowsUrl
+                    );
+                    break;
+                case 'darwin':
+                    updater.once('download-finished', updater.afterDownloadMac);
+                    await updater.downloadUpdate(updater.downloadUrls.macOSUrl);
+                    break;
+                case 'linux':
+                    updater.once(
+                        'download-finished',
+                        updater.afterDownloadLinux
+                    );
+                    await updater.downloadUpdate(updater.downloadUrls.linuxUrl);
+                    break;
+            }
+        } else {
+            updater.cleanUp(true);
+        }
+    }
 }
 
 app.on('window-all-closed', () => {

@@ -5,8 +5,6 @@ import {
     checkUpdateResult,
     UpdateAssetsUrls,
     githubReleaseResponse,
-    decodeReleaseResponse,
-    formatBytes,
     launcherStatus,
     downloadUpdateResult
 } from '../common';
@@ -14,9 +12,9 @@ import * as fs from 'fs';
 import * as path from 'path';
 import fetch from 'node-fetch';
 import * as childProcess from 'child_process';
-import { platform } from 'os';
+import { EventEmitter } from 'events';
 
-class Updater {
+class Updater extends EventEmitter {
     pathSep: string = path.sep;
     appPath: string = app.getAppPath() + this.pathSep;
     upperAppPath: string = path.dirname(this.appPath) + this.pathSep;
@@ -24,9 +22,9 @@ class Updater {
     logFilePath: string = this.userDesktop + 'updater-log.txt';
     appVersion: Version; //app.getVersion()
     logArray: [string] = [''];
-    OS: string = '';
     downloadPath: string =
         app.getPath('appData') + 'updaterDownload' + this.pathSep;
+    downloadFile: string;
     downloadUrls: UpdateAssetsUrls = {
         windowsUrl: '',
         macOSUrl: '',
@@ -35,6 +33,7 @@ class Updater {
     launcher: Launcher;
 
     constructor(launcher: Launcher) {
+        super();
         /*this.appVersion = {
             major: parseInt(app.getVersion().split('.')[0]),
             minor: parseInt(app.getVersion().split('.')[1]),
@@ -50,9 +49,34 @@ class Updater {
         this.launcher = launcher;
     }
 
+    decodeReleaseResponse(resp: object): githubReleaseResponse {
+        return <githubReleaseResponse>Object.assign({}, resp);
+    }
+
+    formatBytes(bytes: number, decimals: number = 1) {
+        if (bytes === 0) return '0 Bytes';
+
+        const k = 1024;
+        const dm = decimals < 0 ? 0 : decimals;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+
+        return (
+            parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i]
+        );
+    }
+
+    cleanUp(skip?: boolean) {
+        //TODO: clean up download files.
+        //if (skip) {
+        this.emit('all-done', {});
+        //}
+    }
+
     async checkUpdate(): Promise<checkUpdateResult> {
         try {
-            const res: githubReleaseResponse = decodeReleaseResponse(
+            const res: githubReleaseResponse = this.decodeReleaseResponse(
                 await (
                     await fetch(
                         'https://api.github.com/repos/repl-it-discord/repl-it-electron/releases/latest'
@@ -98,7 +122,7 @@ class Updater {
         }
     }
 
-    async downloadUpdate(url: string): Promise<downloadUpdateResult> {
+    async downloadUpdate(url: string): Promise<void> {
         try {
             const req = await fetch(url);
 
@@ -106,7 +130,7 @@ class Updater {
                 req.headers.get('content-length')
             );
             const filename = url.split('/').pop();
-            const downloadFile: string = this.downloadPath + filename;
+            this.downloadFile = this.downloadPath + filename;
             let downloaded: number = 0;
             if (!fs.existsSync(this.downloadPath)) {
                 fs.mkdirSync(this.downloadPath, { recursive: true });
@@ -118,33 +142,35 @@ class Updater {
                         (downloaded / contentLength) * 100
                     );
                     this.launcher.updateStatus({
-                        text: `${formatBytes(downloaded)}/${formatBytes(
-                            contentLength
-                        )}`,
+                        text: `${this.formatBytes(
+                            downloaded
+                        )}/${this.formatBytes(contentLength)}`,
                         percentage: percentage.toString() + '%'
                     });
                 })
-                .pipe(fs.createWriteStream(downloadFile));
+                .pipe(fs.createWriteStream(this.downloadFile));
             req.body.on('end', () => {
                 this.launcher.updateStatus({ text: 'Download Finished' });
+                this.emit('download-finished');
             });
-            return { success: true, downloadFilePath: downloadFile };
         } catch (e) {
-            return { success: false, error: e };
+            this.emit('download-error', e);
         }
     }
 
-    afterDownloadWin(path: string) {
-        console.log('afterDownloadWin' + path);
+    afterDownloadWin() {
         //TODO: open exe installer and exit app
+        this.cleanUp();
     }
 
-    afterDownloadMac(path: string) {
+    afterDownloadMac() {
         //TODO: open dmg and open it.
+        this.cleanUp();
     }
 
-    afterDownloadLinux(path: string) {
+    afterDownloadLinux() {
         //TODO:tar.gz and auto-install tar.gz.
+        this.cleanUp();
     }
 }
 
