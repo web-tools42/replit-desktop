@@ -1,4 +1,4 @@
-import { ElectronWindow } from '../common';
+import { ElectronWindow } from '../../common';
 
 const defaultBlue: string = `:root {
 --text-color: #c0c0c0;
@@ -669,26 +669,33 @@ background-color: rgba(180,230,180, 0.2)!important;
 background-color: initial!important;
 }`;
 
-class themeHandler {
+class ThemeHandler {
     windowArray: Array<ElectronWindow>;
 
-    constructor() {}
+    constructor() {
+        this.windowArray = [];
+    }
+
     addWindow(window: ElectronWindow) {
         this.windowArray.push(window);
-        //window.on('')
+        window.on('ready-to-show', () => {
+            this.addTheme(window, defaultBlue).then();
+        });
     }
+
     async addTheme(windowObj: ElectronWindow, CSSString: string) {
         for (let i = 1; i <= 3; i++) {
             try {
-                windowObj.webContents.insertCSS(CSSString);
+                await windowObj.webContents.insertCSS(CSSString);
 
-                console.debug(
-                    `Theme Added for window ${windowObj.InternalId} attempt ${i}`
-                );
+                console.debug(`Theme Added for window attempt ${i}`);
+                break;
             } catch (e) {
                 console.error(`Error adding theme on window ${e} attempt ${i}`);
             }
         }
-        windowObj.setBackgroundColor('#FFF');
+        //windowObj.setBackgroundColor('#FFF');
     }
 }
+
+export { ThemeHandler };
