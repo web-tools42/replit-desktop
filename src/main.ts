@@ -1,10 +1,11 @@
 import { Launcher, Updater } from './launcher/launcher';
-import { app, dialog } from 'electron';
+import { app, dialog, session } from 'electron';
 
 import { checkUpdateResult, downloadUpdateResult } from './common';
 import { sep } from 'path';
 import os from 'os';
-import { mainApp } from './app/app';
+import { App } from './app/app';
+import Cookie = Electron.Cookie;
 
 app.setPath(
     'appData',
@@ -14,26 +15,25 @@ app.setPath(
     'userData',
     app.getPath('home') + sep + '.repl.it' + sep + 'userData' + sep
 );
-app.allowRendererProcessReuse = true;
-
 let launcher: Launcher;
 let updater: Updater;
-let main: mainApp;
+let mainApp: App;
 
 function initLauncher() {
     launcher = new Launcher();
     launcher.init();
-    launcher.window.webContents.once('did-finish-load', () => {
+    launcher.window.once('ready-to-show', () => {
         launcher.window.show();
         initUpdater().then(() => {});
     });
 }
 
 function initApp() {
-    main = new mainApp();
-    main.mainWindow.loadURL('https://repl.it/~');
-    main.mainWindow.webContents.once('did-finish-load', () => {
-        main.mainWindow.show();
+    mainApp = new App();
+    mainApp.clearCookies(true).then();
+    mainApp.mainWindow.loadURL('https://repl.it/~').then();
+    mainApp.mainWindow.once('ready-to-show', () => {
+        mainApp.mainWindow.show();
         launcher.window.close();
     });
 }

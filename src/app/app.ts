@@ -1,5 +1,8 @@
 import { ElectronWindow, getUrl } from '../common';
+import { session } from 'electron';
 import { Client } from 'discord-rpc';
+import Cookie = Electron.Cookie;
+import Cookies = Electron.Cookies;
 
 const clientId = '498635999274991626';
 let startTimestamp = new Date();
@@ -59,7 +62,7 @@ const logosDiscordDict: { [key: string]: string } = {
     web_project: 'web_project'
 };
 
-class mainApp {
+class App {
     mainWindow: ElectronWindow;
     rpc: Client;
 
@@ -97,6 +100,34 @@ class mainApp {
                     });
             }, 15e3);
         });
+    }
+
+    async clearCookies(oauthOnly: boolean) {
+        //TODO: Make this function available to appMenu
+        const allCookies: Array<Cookie> = await session.defaultSession.cookies.get(
+            {}
+        );
+        const cookiesToRemove: Array<Cookie> = [];
+        for (let x = 0; x < allCookies.length; x++) {
+            const cookie: Cookie = allCookies[x];
+            if (oauthOnly) {
+                if (!cookie.domain.includes('repl.it')) {
+                    cookiesToRemove.push(cookie);
+                }
+            } else {
+                cookiesToRemove.push(cookie);
+            }
+        }
+        for (let x = 0; x < cookiesToRemove.length; x++) {
+            const cookie: Cookie = cookiesToRemove[x];
+            await session.defaultSession.cookies.remove(
+                `https://${cookie.domain.charAt(0) === '.' ? 'www' : ''}${
+                    cookie.domain
+                }${cookie.path}`,
+                cookie.name
+            );
+            await session.defaultSession.flushStorageData();
+        }
     }
 
     async setPlayingDiscord() {
@@ -264,4 +295,4 @@ class mainApp {
     }
 }
 
-export { mainApp };
+export { App };
