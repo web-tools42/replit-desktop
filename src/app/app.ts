@@ -1,8 +1,8 @@
 import { ElectronWindow, getUrl } from '../common';
-import { session, Cookie } from 'electron';
+import { session, Cookie, BrowserWindowConstructorOptions } from 'electron';
 import { ThemeHandler } from './themeHandler/themeHandler';
 import { DiscordHandler } from './discordHandler/discordHandler';
-
+import NewWindowEvent = Electron.NewWindowEvent;
 class App {
     public mainWindow: ElectronWindow;
     public themeHandler: ThemeHandler;
@@ -11,13 +11,32 @@ class App {
     constructor() {
         this.mainWindow = new ElectronWindow({
             height: 720,
-            width: 1280
+            width: 1280,
+            //show: false
         });
+        /*this.mainWindow.webContents.on(
+            'new-window',
+            (
+                e: NewWindowEvent,
+                url: string,
+                frameName: string,
+                disposition: string,
+                options: BrowserWindowConstructorOptions
+            ) => {
+                console.log(disposition)
+                e.preventDefault();
+                const window: ElectronWindow = new ElectronWindow({
+                    // @ts-ignore
+                    webContents: options.webContents, // use existing webContents if provided
+                    show: false
+                });
+                window.show();
+                e.newGuest = window;
+            }
+        );*/
         this.discordHandler = new DiscordHandler(this.mainWindow);
-        this.mainWindow.hide();
         this.mainWindow.setBackgroundColor('#393c42');
         this.themeHandler = new ThemeHandler();
-        //this.discordHandler
     }
 
     async clearCookies(oauthOnly: boolean) {
