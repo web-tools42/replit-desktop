@@ -9,8 +9,6 @@ import { Endpoints } from '@octokit/types';
 import BrowserWindowConstructorOptions = Electron.BrowserWindowConstructorOptions;
 
 class ElectronWindow extends BrowserWindow {
-    public InternalId = -1;
-
     constructor(
         options: BrowserWindowConstructorOptions,
         nodeIntegration: boolean = false
@@ -62,24 +60,19 @@ interface launcherStatus {
 
 type githubReleaseResponse = Endpoints['GET /repos/:owner/:repo/releases/latest']['response']['data'];
 
-function decodeReleaseResponse(resp: object): githubReleaseResponse {
-    // @ts-ignore
-    return Object.assign({}, resp);
-}
-
 function errorMessage(
     windowObject: ElectronWindow,
     errorCode: any,
     errorDescription: any
 ) {
-    let id = windowObject.InternalId;
+    //let id = windowObject.InternalId;
     if (errorCode > -6 || errorCode <= -300) {
         return;
     }
     dialog
         .showMessageBox({
             title: 'Loading Failed',
-            message: `loading Failed on window ${id} reason ${errorDescription} code ${errorCode}, do you want to try again?`,
+            message: `loading Failed on window reason ${errorDescription} code ${errorCode}, do you want to try again?`,
             type: 'error',
             buttons: ['Try again please', 'Quit'],
             defaultId: 0
@@ -158,26 +151,12 @@ function handleExternalLink(windowObj: ElectronWindow, url: string) {
     }
 }
 
-function formatBytes(bytes: number, decimals: number = 1) {
-    if (bytes === 0) return '0 Bytes';
-
-    const k = 1024;
-    const dm = decimals < 0 ? 0 : decimals;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
-
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
-}
-
 export {
     Version,
     checkUpdateResult,
     ElectronWindow,
     UpdateAssetsUrls,
     githubReleaseResponse,
-    decodeReleaseResponse,
-    formatBytes,
     launcherStatus,
     downloadUpdateResult,
     errorMessage,
