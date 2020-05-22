@@ -11,7 +11,7 @@ class App {
     constructor() {
         this.mainWindow = new ElectronWindow({
             height: 720,
-            width: 1280,
+            width: 1280
             //show: false
         });
         /*this.mainWindow.webContents.on(

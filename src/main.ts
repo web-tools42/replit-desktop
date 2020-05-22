@@ -55,7 +55,7 @@ async function initUpdater() {
         initApp();
     });
     if (res['hasUpdate']) {
-        await launcher.updateStatus({ text: 'Update detected' });
+        launcher.updateStatus({ text: 'Update detected' });
         const choice = dialog.showMessageBoxSync({
             type: 'info',
             message: `A new update ${res['version']} is available. Do you want to update?`,

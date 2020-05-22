@@ -20,7 +20,7 @@ class Updater extends EventEmitter {
     upperAppPath: string = path.dirname(this.appPath) + this.pathSep;
     userDesktop: string = app.getPath('desktop');
     logFilePath: string = this.userDesktop + 'updater-log.txt';
-    appVersion: Version; //app.getVersion()
+    appVersion: Version;
     logArray: [string] = [''];
     downloadPath: string =
         app.getPath('appData') + 'updaterDownload' + this.pathSep;

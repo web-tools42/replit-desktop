@@ -248,7 +248,6 @@ class DiscordHandler {
             "document.querySelector('.workspace-header-description-container" +
                 " img')['src']"
         );
-        // gets the file extension
         const imageName: string = logoUrl.split('/').pop().split('.')[0];
         return { fileName: fileName, logoName: imageName };
     }
