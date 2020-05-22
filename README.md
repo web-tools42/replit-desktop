@@ -64,4 +64,4 @@ Builds the app for release.
 
 ## Acknowledgements
 
-[@mat1](https://repl.it/@mat1) for Discord Rich Presence Integration and custom dark theme
+[@mat1](https://matdoes.dev/) for Discord Rich Presence Integration and custom dark theme
