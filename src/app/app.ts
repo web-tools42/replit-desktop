@@ -2,11 +2,13 @@ import { ElectronWindow, getUrl } from '../common';
 import { session, Cookie, BrowserWindowConstructorOptions } from 'electron';
 import { ThemeHandler } from './themeHandler/themeHandler';
 import { DiscordHandler } from './discordHandler/discordHandler';
-import NewWindowEvent = Electron.NewWindowEvent;
+
 class App {
     public mainWindow: ElectronWindow;
     public themeHandler: ThemeHandler;
     public discordHandler: DiscordHandler;
+    private windowArray: Array<ElectronWindow>;
+    private themeString: string;
 
     constructor() {
         this.mainWindow = new ElectronWindow({
@@ -37,6 +39,7 @@ class App {
         this.discordHandler = new DiscordHandler(this.mainWindow);
         this.mainWindow.setBackgroundColor('#393c42');
         this.themeHandler = new ThemeHandler();
+        this.addWindow(this.mainWindow);
     }
 
     async clearCookies(oauthOnly: boolean) {
@@ -63,8 +66,29 @@ class App {
                 }${cookie.path}`,
                 cookie.name
             );
-            await session.defaultSession.flushStorageData();
+            session.defaultSession.flushStorageData();
         }
+    }
+
+    addWindow(window: ElectronWindow) {
+        this.windowArray.push(window);
+        window.on('ready-to-show', () => {
+            this.addTheme(window, '').then();
+        });
+    }
+
+    async addTheme(windowObj: ElectronWindow, CSSString: string) {
+        for (let i = 1; i <= 3; i++) {
+            try {
+                await windowObj.webContents.insertCSS(CSSString);
+
+                console.debug(`Theme Added for window attempt ${i}`);
+                break;
+            } catch (e) {
+                console.error(`Error adding theme on window ${e} attempt ${i}`);
+            }
+        }
+        //windowObj.setBackgroundColor('#FFF');
     }
 }
 

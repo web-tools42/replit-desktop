@@ -28,7 +28,6 @@ function initLauncher() {
 async function initApp() {
     mainApp = new App();
     await mainApp.clearCookies(true);
-    mainApp.themeHandler.addWindow(mainApp.mainWindow);
     mainApp.mainWindow.loadURL('https://repl.it/~').then();
     mainApp.mainWindow.webContents.once('did-finish-load', () => {
         mainApp.mainWindow.show();

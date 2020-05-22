@@ -5,8 +5,7 @@ import {
     checkUpdateResult,
     UpdateAssetsUrls,
     githubReleaseResponse,
-    launcherStatus,
-    downloadUpdateResult
+    launcherStatus
 } from '../common';
 import * as fs from 'fs';
 import * as path from 'path';
@@ -15,22 +14,22 @@ import * as childProcess from 'child_process';
 import { EventEmitter } from 'events';
 
 class Updater extends EventEmitter {
-    pathSep: string = path.sep;
-    appPath: string = app.getAppPath() + this.pathSep;
-    upperAppPath: string = path.dirname(this.appPath) + this.pathSep;
-    userDesktop: string = app.getPath('desktop');
-    logFilePath: string = this.userDesktop + 'updater-log.txt';
-    appVersion: Version;
-    logArray: [string] = [''];
-    downloadPath: string =
+    private pathSep: string = path.sep;
+    private appPath: string = app.getAppPath() + this.pathSep;
+    private upperAppPath: string = path.dirname(this.appPath) + this.pathSep;
+    private userDesktop: string = app.getPath('desktop');
+    private logFilePath: string = this.userDesktop + 'updater-log.txt';
+    private appVersion: Version;
+    private logArray: [string] = [''];
+    private downloadPath: string =
         app.getPath('appData') + 'updaterDownload' + this.pathSep;
-    downloadFile: string;
-    downloadUrls: UpdateAssetsUrls = {
+    private downloadFile: string;
+    public downloadUrls: UpdateAssetsUrls = {
         windowsUrl: '',
         macOSUrl: '',
         linuxUrl: ''
     };
-    launcher: Launcher;
+    private launcher: Launcher;
 
     constructor(launcher: Launcher) {
         super();
