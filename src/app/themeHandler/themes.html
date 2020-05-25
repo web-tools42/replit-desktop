@@ -21,9 +21,6 @@
             text-decoration: none;
         }
 
-        /* #themes {
-            padding-top: 5rem;
-        } */
         .theme {
             width: 90%;
             text-align: center;
@@ -52,7 +49,12 @@
 </head>
 <body>
 <h1>Themes</h1>
-<a href="/custom">Make your own!</a>
+<script>
+    function openCustom() {
+        //TODO: IPC MAIN
+    }
+</script>
+<a onclick="openCustom();">Make your own!</a>
 <div id="themes">
 
     <div class="theme viewed" id="theme-0"><h3><a
@@ -159,6 +161,5 @@
         </iframe>
     </div>
 </div>
-<script>//TODO: Make ipc slection</script>
 </body>
 </html>

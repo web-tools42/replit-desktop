@@ -2,12 +2,8 @@
 <html>
 <head>
     <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
-    <meta content="utf-8" http-equiv="encoding">
-    <link rel="stylesheet" href="../../../custom_files/normalize.css">
-    <script src="../../../custom_files/jquery-3.js"
-            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-            crossorigin="anonymous"></script>
     <style>
+
         body {
             font-family: sans-serif;
             text-align: center;
@@ -36,73 +32,93 @@
             float: right;
             height: 90vh;
         }
+
     </style>
+    <script>
+        /*!
+ * Serialize all form data into a query string
+ * (c) 2018 Chris Ferdinandi, MIT License, https://gomakethings.com
+ * @param  {Node}   form The form to serialize
+ * @return {String}      The serialized form data
+ */
+        function serialize(form) {
+
+            // Setup our serialized data
+            let serialized = [];
+
+            // Loop through each field in the form
+            for (let i = 0; i < form.elements.length; i++) {
+
+                let field = form.elements[i];
+
+                // Don't serialize fields without a name, submits, buttons, file and reset inputs, and disabled fields
+                if (!field.name || field.disabled || field.type === 'file' || field.type === 'reset' || field.type === 'submit' || field.type === 'button') continue;
+
+                // If a multi-select, get all selections
+                if (field.type === 'select-multiple') {
+                    for (let n = 0; n < field.options.length; n++) {
+                        if (!field.options[n].selected) continue;
+                        serialized.push(encodeURIComponent(field.name) + '=' + encodeURIComponent(field.options[n].value));
+                    }
+                }
+
+                // Convert field data to a query string
+                else if ((field.type !== 'checkbox' && field.type !== 'radio') || field.checked) {
+                    serialized.push(encodeURIComponent(field.name) + '=' + encodeURIComponent(field.value));
+                }
+            }
+
+            return serialized.join('&');
+
+        }
+
+    </script>
 </head>
 <body>
+<script>
+    function getCustom() {
+        //TODO: IPC MAIN
+        console.log('a');
+        generatePreview();
+    }
+</script>
 <div id="content">
-    <form id="generate-theme" action="/theme.user.js" style="max-width:40%">
+    <form id="generate-theme" style="max-width:40%"
+          action="javascript:getCustom()">
         Main text:<br>
-        <input type="text" name="text" value="c0c0c0" class="color"
-               style="border: 2px solid rgb(192, 192, 192); --darkreader-inline-border-top:#404040; --darkreader-inline-border-right:#404040; --darkreader-inline-border-bottom:#404040; --darkreader-inline-border-left:#404040;"
-               data-darkreader-inline-border-top=""
-               data-darkreader-inline-border-right=""
-               data-darkreader-inline-border-bottom=""
-               data-darkreader-inline-border-left=""><br>
+        <input type="text" name="text" value="c0c0c0" class="color"><br>
         Link hover:<br>
-        <input type="text" name="text2" value="adadad" class="color"
-               style="border: 2px solid rgb(173, 173, 173); --darkreader-inline-border-top:#434343; --darkreader-inline-border-right:#434343; --darkreader-inline-border-bottom:#434343; --darkreader-inline-border-left:#434343;"
-               data-darkreader-inline-border-top=""
-               data-darkreader-inline-border-right=""
-               data-darkreader-inline-border-bottom=""
-               data-darkreader-inline-border-left=""><br>
+        <input type="text" name="text2" value="adadad" class="color"><br>
         Paragraphs:<br>
-        <input type="text" name="text3" value="a8a8a8" class="color"
-               style="border: 2px solid rgb(168, 168, 168); --darkreader-inline-border-top:#444444; --darkreader-inline-border-right:#444444; --darkreader-inline-border-bottom:#444444; --darkreader-inline-border-left:#444444;"
-               data-darkreader-inline-border-top=""
-               data-darkreader-inline-border-right=""
-               data-darkreader-inline-border-bottom=""
-               data-darkreader-inline-border-left=""><br>
+        <input type="text" name="text3" value="a8a8a8" class="color"><br>
         Background:<br>
-        <input type="text" name="bg" value="111c31" class="color"
-               style="border: 2px solid rgb(17, 28, 49); --darkreader-inline-border-top:#385ba0; --darkreader-inline-border-right:#385ba0; --darkreader-inline-border-bottom:#385ba0; --darkreader-inline-border-left:#385ba0;"
-               data-darkreader-inline-border-top=""
-               data-darkreader-inline-border-right=""
-               data-darkreader-inline-border-bottom=""
-               data-darkreader-inline-border-left=""><br>
+        <input type="text" name="bg" value="111c31" class="color"><br>
         Main:<br>
-        <input type="text" name="main" value="212e44" class="color"
-               style="border: 2px solid rgb(33, 46, 68); --darkreader-inline-border-top:#425c88; --darkreader-inline-border-right:#425c88; --darkreader-inline-border-bottom:#425c88; --darkreader-inline-border-left:#425c88;"
-               data-darkreader-inline-border-top=""
-               data-darkreader-inline-border-right=""
-               data-darkreader-inline-border-bottom=""
-               data-darkreader-inline-border-left=""><br>
+        <input type="text" name="main" value="212e44" class="color"><br>
         Upvote:
-        <input type="text" name="upvote" class="color"><br>
+        <input type="text" name="upvote" value="" class="color"><br>
         Fallback text:
-        <input type="text" name="fallback" class="color"><br>
+        <input type="text" name="fallback" value="" class="color"><br>
         Announcements:
-        <input type="text" name="announcements" value="232528" class="color"
-               style="border: 2px solid rgb(35, 37, 40); --darkreader-inline-border-top:#5a5f67; --darkreader-inline-border-right:#5a5f67; --darkreader-inline-border-bottom:#5a5f67; --darkreader-inline-border-left:#5a5f67;"
-               data-darkreader-inline-border-top=""
-               data-darkreader-inline-border-right=""
-               data-darkreader-inline-border-bottom=""
-               data-darkreader-inline-border-left=""><br>
+        <input type="text" name="announcements" value="232528"
+               class="color"><br>
         Default logo:
         <input type="checkbox" name="graylogo" class="color" value="off"><br>
         <br>
 
-        <input type="submit" value="Install">
-        <button onclick="copyShare()" type="button">Share</button>
-        <button onclick="copyPreview()" type="button">Share preview</button>
+        <button onclick="getCustom()">Install</button>
+        <button onclick="generatePreview()">Get Preview</button>
     </form>
     <div id="iframes">
-        <iframe id="preview" src="../../../custom_files/all.html"
+        <iframe id="preview"
+                src="https://darktheme.matdoes.dev/proxy/talk/all?text=c0c0c0&amp;text2=adadad&amp;text3=a8a8a8&amp;bg=111c31&amp;main=212e44&amp;upvote=&amp;fallback=&amp;announcements=232528"
                 style="height:50%;">error ur browser sucks
         </iframe>
-        <iframe src="../../../custom_files/a.html" style="height:50%">error ur
-            browser sucks
+        <iframe src="https://colorpickernotmine.ieatpython.repl.co/"
+                style="height:50%">error ur browser sucks
         </iframe>
     </div>
+
     <script>
         let colorinputs = document.getElementsByClassName('color');
         for (const input of colorinputs) {
@@ -118,48 +134,12 @@
     </script>
     <script>
         function generatePreview() {
-            let serializedTmp = $('#generate-theme').serialize();
-            // console.log(serialized)
-            let iframeUrl = 'https://darktheme.matdoes.dev/proxy/talk/all?' + serializedTmp;
-            $('#preview').attr('src', iframeUrl);
-        }
-
-        var serialized = 0;
-
-        function waitForChange() {
-            let serializedTmp = $('#generate-theme').serialize();
-            if (serialized != serializedTmp) {
-                serialized = serializedTmp;
-                generatePreview();
-            }
-            setTimeout(waitForChange, 1000);
-        }
-
-        waitForChange();
-    </script>
-    <script>
-        function copyShare() {
-            let textArea = document.createElement('textarea');
-            textArea.value = 'https://darktheme.matdoes.dev/theme.user.js?' + $('#generate-theme').serialize();
-            document.body.appendChild(textArea);
-            textArea.focus();
-            textArea.select();
-            document.execCommand('copy');
-            document.body.removeChild(textArea);
-            alert('Copied to clipboard!');
-        }
-
-        function copyPreview() {
-            let textArea = document.createElement('textarea');
-            textArea.value = 'https://darktheme.matdoes.dev/proxy/talk/all?' + $('#generate-theme').serialize();
-            document.body.appendChild(textArea);
-            textArea.focus();
-            textArea.select();
-            document.execCommand('copy');
-            document.body.removeChild(textArea);
-            alert('Copied to clipboard!');
+            const serializedTmp = serialize(document.getElementById('generate-theme'));
+            console.log(serializedTmp);
+            document.getElementById('preview').src = 'https://darktheme.matdoes.dev/proxy/talk/all?' + serializedTmp;
         }
     </script>
 </div>
+
 </body>
 </html>
