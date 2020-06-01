@@ -1,5 +1,5 @@
 import { Client } from 'discord-rpc';
-import { ElectronWindow, getUrl } from '../../common';
+import { ElectronWindow, getUrl } from '../common';
 
 const startTimestamp = new Date();
 const logosDiscordDict: { [key: string]: string } = {

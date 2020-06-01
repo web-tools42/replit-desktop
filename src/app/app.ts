@@ -1,7 +1,8 @@
 import { ElectronWindow, getUrl } from '../common';
 import { session, Cookie, BrowserWindowConstructorOptions } from 'electron';
 import { ThemeHandler } from './themeHandler/themeHandler';
-import { DiscordHandler } from './discordHandler/discordHandler';
+import { DiscordHandler } from './discordHandler';
+import { SettingHandler } from './settingHandler';
 
 class App {
     public mainWindow: ElectronWindow;
@@ -9,6 +10,7 @@ class App {
     public discordHandler: DiscordHandler;
     private windowArray: Array<ElectronWindow>;
     private themeString: string;
+    private settingsHandler: SettingHandler;
 
     constructor() {
         this.mainWindow = new ElectronWindow({
@@ -36,9 +38,14 @@ class App {
                 e.newGuest = window;
             }
         );*/
+        this.settingsHandler = new SettingHandler();
+        this.windowArray = [];
         this.discordHandler = new DiscordHandler(this.mainWindow);
         this.mainWindow.setBackgroundColor('#393c42');
-        this.themeHandler = new ThemeHandler();
+        this.themeHandler = new ThemeHandler(
+            this.mainWindow,
+            this.settingsHandler
+        );
         this.addWindow(this.mainWindow);
     }
 
@@ -72,17 +79,19 @@ class App {
 
     addWindow(window: ElectronWindow) {
         this.windowArray.push(window);
-        window.on('ready-to-show', () => {
-            this.addTheme(window, '').then();
+        window.webContents.on('did-stop-loading', () => {
+            this.addTheme(window).then();
         });
     }
 
-    async addTheme(windowObj: ElectronWindow, CSSString: string) {
+    async addTheme(windowObj: ElectronWindow) {
         for (let i = 1; i <= 3; i++) {
             try {
-                await windowObj.webContents.insertCSS(CSSString);
+                await windowObj.webContents.insertCSS(
+                    this.themeHandler.getString()
+                );
 
-                console.debug(`Theme Added for window attempt ${i}`);
+                console.log(`Theme Added for window attempt ${i}`);
                 break;
             } catch (e) {
                 console.error(`Error adding theme on window ${e} attempt ${i}`);

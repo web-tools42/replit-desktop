@@ -1,14 +1,16 @@
 dependencies:
   discord-rpc: 3.1.1
-  electron-settings: 3.2.0
+  lodash: 4.17.15
   node-fetch: 2.6.0
+  write-file-atomic: 3.0.3
 devDependencies:
   '@octokit/types': 3.0.0
   '@types/discord-rpc': 3.0.4
-  '@types/electron-settings': 3.1.1
   '@types/gulp': 4.0.6
+  '@types/lodash': 4.14.154
   '@types/node': 12.12.39
   '@types/node-fetch': 2.5.7
+  '@types/write-file-atomic': 3.0.0
   '@typescript-eslint/eslint-plugin': 2.34.0_c2ce56dad406ac5b5afd5779dddf4f93
   '@typescript-eslint/parser': 2.34.0_eslint@7.0.0+typescript@3.9.3
   dotenv: 8.2.0
@@ -139,12 +141,6 @@ packages:
     dev: true
     resolution:
       integrity: sha512-Ee0vt82qcg05OeJrQZ/YN+NQwaBCnAul1rVLYaMLPkwR5f44WC3BpBQNvn5Z3Axu9szaVOHqXEDBI+uAXAiyrg==
-  /@types/electron-settings/3.1.1:
-    dependencies:
-      '@types/node': 12.12.39
-    dev: true
-    resolution:
-      integrity: sha512-wDVj8YFBuqLXgVQqZ1Yk+Qm27LjjldssnrwzDv9JanOokw24tcuJ76X1Uo5Xg9VVRIAF6HgmiAQQ+CZrRmJgYw==
   /@types/eslint-visitor-keys/1.0.0:
     dev: true
     resolution:
@@ -190,6 +186,10 @@ packages:
     dev: true
     resolution:
       integrity: sha512-8+KAKzEvSUdeo+kmqnKrqgeE+LcA0tjYWFY7RPProVYwnqDjukzO+3b6dLD56rYX5TdWejnEOLJYOIeh4CXKuA==
+  /@types/lodash/4.14.154:
+    dev: true
+    resolution:
+      integrity: sha512-VoDZIJmg3P8vPEnTldLvgA+q7RkIbVkbYX4k0cAVFzGAOQwUehVgRHgIr2/wepwivDst/rVRqaiBSjCXRnoWwQ==
   /@types/minimatch/3.0.3:
     dev: true
     resolution:
@@ -235,6 +235,12 @@ packages:
     dev: true
     resolution:
       integrity: sha512-2o6a2ixaVI2EbwBPg1QYLGQoHK56p/8X/sGfKbFC8N6sY9lfjsMf/GprtkQkSya0D4uRiutRZ2BWj7k3JvLsAQ==
+  /@types/write-file-atomic/3.0.0:
+    dependencies:
+      '@types/node': 12.12.42
+    dev: true
+    resolution:
+      integrity: sha512-XrvNv7CBEveBoWkGU4ZxuyeL7iaYVr609VjlNAe+VaS8N9stTvGwp5IZgFP+QDbiRQV/R7MmipPsgAhlf5LZzQ==
   /@types/yargs-parser/15.0.0:
     dev: true
     resolution:
@@ -981,6 +987,7 @@ packages:
     resolution:
       integrity: sha1-s3gt/4u1R04Yuba/D9/ngvh3doA=
   /clone/2.1.2:
+    dev: true
     engines:
       node: '>=0.8'
     resolution:
@@ -1447,13 +1454,6 @@ packages:
     dev: true
     resolution:
       integrity: sha512-/MkS47ospdSfAFW5Jp52OzYou14HhGJpZ51uAc3GJ5rCfACeqpimC/n1ajRLE3hcXxTWfd3t9MCuClq5jrUO5w==
-  /electron-settings/3.2.0:
-    dependencies:
-      clone: 2.1.2
-      jsonfile: 4.0.0
-    dev: false
-    resolution:
-      integrity: sha512-7U+vDKd5Gch4Z9K6FjGq80eB3Anwz2GuPc2h/6hOiuvZrS1w+UNPcAA0oAU8G1s9sWAVEadCsr4ZJR6J4iTdzA==
   /electron/9.0.0:
     dependencies:
       '@electron/get': 1.12.2
@@ -2298,6 +2298,7 @@ packages:
     resolution:
       integrity: sha512-R7eWptXuGYxwijs0eV+v3o6+XH1IqVK8dJOEecQfTmkncw9AV4dcw/Dhxi8MdlqPthxxpZyizMzyg8RTmEsG+Q==
   /graceful-fs/4.2.4:
+    dev: true
     resolution:
       integrity: sha512-WjKPNJF79dtJAVniUlGGWHYGz2jWxT6VhN/4m1NdkbZ2nOsEF+cI1Edgql5zCRhs/VsQYRvrXctxktVXZUkixw==
   /gulp-cli/2.2.0:
@@ -2507,7 +2508,6 @@ packages:
     resolution:
       integrity: sha1-BWmOPUXIjo1+nZLLBYTnfwlvPkM=
   /imurmurhash/0.1.4:
-    dev: true
     engines:
       node: '>=0.8.19'
     resolution:
@@ -2781,7 +2781,6 @@ packages:
     resolution:
       integrity: sha512-Kw/ReK0iqwKeu0MITLFuj0jbPAmEiOsIwyIXvvbfa6QfmN9pkD1M+8pdk7Rl/dTKbH34/XBFMbgD4iMJhLQbGA==
   /is-typedarray/1.0.0:
-    dev: true
     resolution:
       integrity: sha1-5HnICFjfDBsR3dppQPlgEfzaSpo=
   /is-unc-path/1.0.0:
@@ -2910,6 +2909,7 @@ packages:
     resolution:
       integrity: sha512-KXPvOm8K9IJKFM0bmdn8QXh7udDh1g/giieX0NLCaMnb4hEiVFqnop2ImTXCc5e0/oHz3LTqmHGtExn5hfMkOA==
   /jsonfile/4.0.0:
+    dev: true
     optionalDependencies:
       graceful-fs: 4.2.4
     resolution:
@@ -3063,7 +3063,6 @@ packages:
     resolution:
       integrity: sha512-t7hw9pI+WvuwNJXwk5zVHpyhIqzg2qTlklJOf0mVxGSbe3Fp2VieZcduNYjaLDoy6p9uGpQEGWG87WpMKlNq8g==
   /lodash/4.17.15:
-    dev: true
     resolution:
       integrity: sha512-8xOcRHvCjnocdS5cpwXQXVzmmh5e5+saE2QGoeQmbKmRS6J3VQppPOIt0MnmE+4xlZoumy0GPG0D0MVIQbNA1A==
   /lowercase-keys/1.0.1:
@@ -4193,7 +4192,6 @@ packages:
     resolution:
       integrity: sha1-P/IfGYytIXX587eBhT/ZTQ0ZtZA=
   /signal-exit/3.0.3:
-    dev: true
     resolution:
       integrity: sha512-VUJ49FC8U1OxwZLxIbTTrDvLnf/6TDgxZcK8wxR8zs13xpx7xbG60ndBlhNrFi2EMuFRoeDoJO7wthSLq42EjA==
   /slash/3.0.0:
@@ -4710,7 +4708,6 @@ packages:
   /typedarray-to-buffer/3.1.5:
     dependencies:
       is-typedarray: 1.0.0
-    dev: true
     resolution:
       integrity: sha512-zdu8XMNEDepKKR+XYOXAVPtWui0ly0NtohUscw+UmaHiAWT8hrV1rr//H6V+0DvJ3OQ19S979M0laLfX8rm82Q==
   /typedarray/0.0.6:
@@ -5016,7 +5013,6 @@ packages:
       is-typedarray: 1.0.0
       signal-exit: 3.0.3
       typedarray-to-buffer: 3.1.5
-    dev: true
     resolution:
       integrity: sha512-AvHcyZ5JnSfq3ioSyjrBkH9yW4m7Ayk8/9My/DD9onKeu/94fwrMocemO2QAJFAlnnDN+ZDS+ZjAR5ua1/PV/Q==
   /write/1.0.3:
@@ -5131,10 +5127,11 @@ packages:
 specifiers:
   '@octokit/types': ^3.0.0
   '@types/discord-rpc': ^3.0.4
-  '@types/electron-settings': ^3.1.1
   '@types/gulp': ^4.0.6
+  '@types/lodash': ^4.14.154
   '@types/node': ^12.12.39
   '@types/node-fetch': ^2.5.7
+  '@types/write-file-atomic': ^3.0.0
   '@typescript-eslint/eslint-plugin': ^2.34.0
   '@typescript-eslint/parser': ^2.34.0
   discord-rpc: ^3.1.1
@@ -5143,7 +5140,6 @@ specifiers:
   electron-builder: ^22.6.1
   electron-context-menu: ^1.1.0
   electron-prompt: ^1.5.1
-  electron-settings: ^3.2.0
   eslint: ^7.0.0
   eslint-config-prettier: ^6.11.0
   eslint-plugin-json-format: ^2.0.1
@@ -5152,7 +5148,9 @@ specifiers:
   gulp-json-editor: ^2.5.4
   gulp-terser-js: ^5.2.2
   gulp-typescript: ^6.0.0-alpha.1
+  lodash: ^4.17.15
   node-fetch: ^2.6.0
   prettier: ^2.0.5
   typescript: ^3.9.3
+  write-file-atomic: ^3.0.3
   zip-local: ^0.3.4
