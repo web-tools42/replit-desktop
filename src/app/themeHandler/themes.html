@@ -33,7 +33,6 @@
             width: 100%;
             height: 50vh;
             overflow: hidden;
-            visibility: hidden;
         }
 
         .themeData {
@@ -159,6 +158,8 @@
 </div>
 <script>
     //TODO: Known Bug, if darktheme site is down, theme will be reset to default blue
+    //TODO: Make Local preview possible
+    
     const { ipcRenderer } = require('electron');
     document.getElementsByName('iframe').forEach((item) => {
         item.on('load', (e) => {

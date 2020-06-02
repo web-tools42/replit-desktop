@@ -180,7 +180,7 @@ function appMenuSetup(mainApp: App, themeHandler: ThemeHandler): Menu {
     ];
     if (PLATFORM == 'darwin') {
         //@ts-ignore
-        template[template.length].submenu.push({ role: 'about' });
+        template[template.length - 1].submenu.push({ role: 'about' });
     }
     // @ts-ignore
     return Menu.buildFromTemplate(template);

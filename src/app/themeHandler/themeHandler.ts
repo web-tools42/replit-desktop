@@ -5,7 +5,7 @@ import { ipcMain } from 'electron';
 import { readFileSync } from 'fs';
 import ejs from 'ejs';
 import { parse } from 'querystring';
-import { mergeWith } from 'lodash';
+import { assign, cloneDeep } from 'lodash';
 import { THEME_TEMPLATE } from './themeTemplate';
 
 interface themeQuery {
@@ -73,10 +73,8 @@ class ThemeHandler {
             this.resetTheme(true).then();
             return;
         }
-        console.log(parse(url));
-        const query: themeQuery = mergeWith(DEFAULT_THEME, parse(url));
-        //TODO: Fix theme query merging
-        console.log(query);
+        let query: themeQuery = cloneDeep(DEFAULT_THEME);
+        assign(query, parse(url));
         this.settings.set('theme', {
             cssString: ejs.render(THEME_TEMPLATE, query)
         });
@@ -111,6 +109,47 @@ class ThemeHandler {
                 this.themeWindow.show();
             });
         }
+    }
+    editHtml(html: string, css: string = '') {
+        return (
+            html
+                .replace(/<\/head>/gi, `<style>${css}</style></head>`)
+                .replace(/src="\/(?!\/)/gi, 'src="https://repl.it/') // make all scripts absolute
+                .replace(
+                    /(?<=<meta property="og:title" content=")(\S+)(?=".+>)/gi,
+                    'Repl Talk Dark Theme Preview'
+                ) // change opengraph description
+                .replace(
+                    /(?<=<meta property="og:description" content=")(\S+)(?=".+>)/gi,
+                    'Preview a custom Repl.it dark theme.'
+                ) // change opengraph title
+                // remove unnecessary scripts
+                .replace(
+                    /<script ([^<]{1,})analytics([^\\]{1,}?)<\/script>/gi,
+                    ''
+                ) // remove tracking scripts
+                .replace(
+                    /<script ([^<]{1,})recaptcha([^\\]{1,}?)<\/script>/gi,
+                    ''
+                ) // remove recaptcha
+                .replace(
+                    /<script ([^<]{1,}?)cloudflare([^\\]{1,}?)<\/script>/gi,
+                    ''
+                ) // remove cloudflare stuff
+                .replace(/<link ([^<]{1,}?)cloudflare([^>]{1,}?)>/gi, '') // remove cloudflare stuff
+                .replace(
+                    /<script ([^<]{1,}?)https:\/\/repl.it\/_next([^\\]{1,}?)<\/script>/gi,
+                    ''
+                ) // remove _next stuff
+                .replace(
+                    /<link ([^<]{1,}?)https:\/\/repl.it\/_next([^>]{1,}?)>/gi,
+                    ''
+                ) // remove _next stuff
+                .replace(
+                    /<script async=\"\" id=\"__NEXT_PAGE__\/([^<]{1,})<\/script>/gi,
+                    ''
+                )
+        ); // remove recaptcha
     }
 }
 
