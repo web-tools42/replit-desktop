@@ -46,10 +46,14 @@ class SettingHandler {
 
     loadSettings(): SettingsObject {
         this.ensureFileSync();
-
-        const data = fs.readFileSync(this.settingsFilePath, 'utf-8');
-
-        return JSON.parse(data);
+        let data: SettingsObject;
+        try {
+            data = JSON.parse(fs.readFileSync(this.settingsFilePath, 'utf-8'));
+        } catch {
+            this.resetAll();
+            data = JSON.parse(fs.readFileSync(this.settingsFilePath, 'utf-8'));
+        }
+        return data;
     }
 
     has(key: string): boolean {

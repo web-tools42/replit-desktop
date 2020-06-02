@@ -26,6 +26,7 @@
             float: right;
             width: 100%;
             max-height: 100vh;
+            visibility: hidden;
         }
 
         #iframes {
@@ -111,7 +112,7 @@
     </form>
     <div id="iframes">
         <iframe id="preview"
-                src="https://darktheme.matdoes.dev/proxy/talk/all?text=c0c0c0&amp;text2=adadad&amp;text3=a8a8a8&amp;bg=111c31&amp;main=212e44&amp;upvote=&amp;fallback=&amp;announcements=232528"
+                src="https://darktheme.matdoes.dev/proxy/talk/all?text=c0c0c0&text2=adadad&text3=a8a8a8&bg=111c31&main=212e44&upvote=&fallback=&announcements=232528"
                 style="height:50%;">error ur browser sucks
         </iframe>
         <iframe src="https://colorpickernotmine.ieatpython.repl.co/"
@@ -120,6 +121,11 @@
     </div>
 
     <script>
+        document.getElementsByName('iframe').forEach((item) => {
+            item.on('load', (e) => {
+                e.item.visibility = 'visible';
+            });
+        });
         let colorinputs = document.getElementsByClassName('color');
         for (const input of colorinputs) {
             input.style.border = '2px solid #' + input.value;

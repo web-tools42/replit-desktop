@@ -1,16 +1,30 @@
-import { ElectronWindow, getUrl } from '../common';
-import { session, Cookie, BrowserWindowConstructorOptions } from 'electron';
+import {
+    ElectronWindow,
+    getUrl,
+    handleExternalLink,
+    promptYesNoSync
+} from '../common';
+import {
+    session,
+    Cookie,
+    app,
+    dialog,
+    MessageBoxReturnValue,
+    shell,
+    ipcMain
+} from 'electron';
 import { ThemeHandler } from './themeHandler/themeHandler';
 import { DiscordHandler } from './discordHandler';
 import { SettingHandler } from './settingHandler';
+import contextMenu from 'electron-context-menu';
+import { appMenuSetup } from './menu/appMenuSetup';
 
 class App {
-    public mainWindow: ElectronWindow;
-    public themeHandler: ThemeHandler;
-    public discordHandler: DiscordHandler;
-    private windowArray: Array<ElectronWindow>;
-    private themeString: string;
-    private settingsHandler: SettingHandler;
+    public readonly mainWindow: ElectronWindow;
+    public readonly themeHandler: ThemeHandler;
+    public readonly discordHandler: DiscordHandler;
+    protected windowArray: ElectronWindow[];
+    private readonly settingsHandler: SettingHandler;
 
     constructor() {
         this.mainWindow = new ElectronWindow({
@@ -42,15 +56,22 @@ class App {
         this.windowArray = [];
         this.discordHandler = new DiscordHandler(this.mainWindow);
         this.mainWindow.setBackgroundColor('#393c42');
-        this.themeHandler = new ThemeHandler(
-            this.mainWindow,
-            this.settingsHandler
-        );
+        this.themeHandler = new ThemeHandler(this.settingsHandler);
         this.addWindow(this.mainWindow);
+        app.applicationMenu = appMenuSetup(this, this.themeHandler);
     }
 
     async clearCookies(oauthOnly: boolean) {
-        //TODO: Make this function available to appMenu
+        if (!oauthOnly) {
+            if (
+                !promptYesNoSync(
+                    'Are you sure you want to clear all cookies?',
+                    'Confirm'
+                )
+            ) {
+                return;
+            }
+        }
         const allCookies: Array<Cookie> = await session.defaultSession.cookies.get(
             {}
         );
@@ -75,10 +96,22 @@ class App {
             );
             session.defaultSession.flushStorageData();
         }
+        if (!oauthOnly) {
+            for (let x = 0; x < this.windowArray.length; x++) {
+                this.windowArray[x].reload();
+            }
+        }
     }
 
     addWindow(window: ElectronWindow) {
+        contextMenu({ window: window });
         this.windowArray.push(window);
+        ipcMain.on('choose-theme', () => {
+            window.reload();
+        });
+        window.webContents.on('will-navigate', (e, url) => {
+            handleExternalLink(e, window, url);
+        });
         window.webContents.on('did-stop-loading', () => {
             this.addTheme(window).then();
         });

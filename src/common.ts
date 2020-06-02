@@ -3,10 +3,11 @@ import {
     BrowserWindow,
     shell,
     dialog,
-    MessageBoxReturnValue
+    MessageBoxReturnValue,
+    BrowserWindowConstructorOptions
 } from 'electron';
 import { Endpoints } from '@octokit/types';
-import BrowserWindowConstructorOptions = Electron.BrowserWindowConstructorOptions;
+import { platform } from 'os';
 
 class ElectronWindow extends BrowserWindow {
     constructor(
@@ -20,7 +21,8 @@ class ElectronWindow extends BrowserWindow {
                 enableRemoteModule: false,
                 webSecurity: true,
                 allowRunningInsecureContent: false,
-                nodeIntegration: nodeIntegration
+                nodeIntegration: nodeIntegration,
+                spellcheck: true
             }
         });
     }
@@ -113,20 +115,25 @@ function selectInput(focusedWindow: ElectronWindow) {
     );
 }
 
-function handleExternalLink(windowObj: ElectronWindow, url: string) {
-    console.log(`External URL: ${url}`);
+function handleExternalLink(
+    event: Event,
+    windowObj: ElectronWindow,
+    url: string
+) {
     if (!url) {
         return;
     }
     if (url.toString().startsWith('about')) {
-        windowObj.loadURL('https://repl.it/repls');
+        windowObj.loadURL('https://repl.it/~').then();
     } else if (
-        url.toString().includes('repl.it') ||
-        url.toString().includes('repl.co') ||
-        url.toString().includes('google.com') ||
-        url.toString().includes('repl.run')
+        url.includes('repl.it') ||
+        url.includes('repl.co') ||
+        url.includes('google.com') ||
+        url.includes('repl.run')
     ) {
     } else {
+        console.log(`External URL: ${url}`);
+        event.preventDefault();
         dialog
             .showMessageBox({
                 title: 'Confirm External Links',
@@ -136,21 +143,31 @@ function handleExternalLink(windowObj: ElectronWindow, url: string) {
                 defaultId: 1
             })
             .then(function (resp: MessageBoxReturnValue) {
-                var index = resp.response;
+                const index = resp.response;
                 if (index === 1) {
-                    shell.openExternal(url);
-                    if (windowObj.webContents.canGoBack()) {
-                        windowObj.webContents.goBack();
-                    }
+                    shell.openExternal(url).then();
                 } else {
-                    if (windowObj.webContents.canGoBack()) {
-                        windowObj.webContents.goBack();
-                    }
                 }
             });
     }
 }
 
+function promptYesNoSync(
+    message: string,
+    title: string,
+    detail?: string
+): number {
+    return dialog.showMessageBoxSync({
+        type: 'info',
+        message: message,
+        title: title,
+        buttons: ['No', 'Yes'],
+        defaultId: 1,
+        detail: detail
+    });
+}
+
+const PLATFORM = platform();
 export {
     Version,
     checkUpdateResult,
@@ -161,5 +178,8 @@ export {
     downloadUpdateResult,
     errorMessage,
     getUrl,
-    handleExternalLink
+    handleExternalLink,
+    selectInput,
+    PLATFORM,
+    promptYesNoSync
 };

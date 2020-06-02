@@ -1,8 +1,9 @@
 import { Launcher, Updater } from './launcher/launcher';
-import { app, dialog } from 'electron';
+import { app, dialog, Menu } from 'electron';
 import { sep } from 'path';
-import { platform } from 'os';
+import { PLATFORM, promptYesNoSync } from './common';
 import { App } from './app/app';
+import { appMenuSetup } from './app/menu/appMenuSetup';
 
 app.setPath(
     'appData',
@@ -27,8 +28,8 @@ function initLauncher() {
 
 async function initApp() {
     mainApp = new App();
-    await mainApp.clearCookies(true);
     mainApp.mainWindow.loadURL('https://repl.it/~').then();
+    await mainApp.clearCookies(true);
     mainApp.mainWindow.webContents.once('did-finish-load', () => {
         mainApp.mainWindow.show();
         launcher.window.close();
@@ -55,17 +56,15 @@ async function initUpdater() {
     });
     if (res['hasUpdate']) {
         launcher.updateStatus({ text: 'Update detected' });
-        const choice = dialog.showMessageBoxSync({
-            type: 'info',
-            message: `A new update ${res['version']} is available. Do you want to update?`,
-            title: 'Update',
-            buttons: ['No', 'Yes'],
-            defaultId: 1,
-            detail: res['changeLog']
-        });
-        if (choice) {
+        if (
+            promptYesNoSync(
+                `A new update ${res['version']} is available. Do you want to update?`,
+                'Update Available',
+                res['changeLog']
+            )
+        ) {
             launcher.updateStatus({ text: 'Downloading Update' });
-            switch (platform()) {
+            switch (PLATFORM) {
                 case 'win32':
                     updater.once('download-finished', updater.afterDownloadWin);
                     await updater.downloadUpdate(

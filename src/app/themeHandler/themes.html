@@ -33,6 +33,7 @@
             width: 100%;
             height: 50vh;
             overflow: hidden;
+            visibility: hidden;
         }
 
         .themeData {
@@ -49,117 +50,126 @@
 </head>
 <body>
 <h1>Themes</h1>
-<script>
-    function openCustom() {
-        //TODO: IPC MAIN
-    }
-</script>
 <a onclick="openCustom();">Make your own!</a>
 <div id="themes">
-
     <div class="theme viewed" id="theme-0"><h3><a
-        href="https://darktheme.matdoes.dev/theme.user.js?bg=111c31&amp;main=212e44">Blue</a>
+        href="javascript:sendTheme('bg=111c31&main=212e44')">Blue (Default)</a>
     </h3>
         <iframe
-            src="https://darktheme.matdoes.dev/proxy/talk/all?bg=111c31&amp;main=212e44">
+            src="https://darktheme.matdoes.dev/proxy/talk/all?bg=111c31&main=212e44">
+            Loading...
+        </iframe>
+    </div>
+    <div class="theme viewed" id="theme-14"><h3><a
+        href="javascript:sendTheme('monospace=true&text=00aa00&text2=00ff00&text3=00aa00&bg=000000&main=111111&upvote=005500&announcements=121212')">Terminal
+        (special)</a></h3>
+        <iframe
+            src="https://darktheme.matdoes.dev/proxy/talk/all?monospace=true&text=00aa00&text2=00ff00&text3=00aa00&bg=000000&main=111111&upvote=005500&announcements=121212">
             Loading...
         </iframe>
     </div>
     <div class="theme viewed" id="theme-1"><h3><a
-        href="https://darktheme.matdoes.dev/theme.user.js?bg=232528&amp;main=393c42">Gray</a>
+        href="javascript:sendTheme('bg=232528&main=393c42')">Gray</a>
     </h3>
         <iframe
-            src="https://darktheme.matdoes.dev/proxy/talk/all?bg=232528&amp;main=393c42">
+            src="https://darktheme.matdoes.dev/proxy/talk/all?bg=232528&main=393c42">
             Loading...
         </iframe>
     </div>
     <div class="theme viewed" id="theme-2"><h3><a
-        href="https://darktheme.matdoes.dev/theme.user.js?text=c0c0c0&amp;text2=adadad&amp;text3=a8a8a8&amp;bg=10182b&amp;main=0d101e&amp;upvote=&amp;graylogo=on&amp;announcements=0d101e">Bluer
+        href="javascript:sendTheme('text=c0c0c0&text2=adadad&text3=a8a8a8&bg=10182b&main=0d101e&upvote=&graylogo=on&announcements=0d101e')">Bluer
         Blue</a></h3>
         <iframe
-            src="https://darktheme.matdoes.dev/proxy/talk/all?text=c0c0c0&amp;text2=adadad&amp;text3=a8a8a8&amp;bg=10182b&amp;main=0d101e&amp;upvote=&amp;graylogo=on&amp;announcements=0d101e">
+            src="https://darktheme.matdoes.dev/proxy/talk/all?text=c0c0c0text2=adadad&text3=a8a8a8&bg=10182b&main=0d101e&upvote=&graylogo=on&announcements=0d101e">
             Loading...
         </iframe>
     </div>
     <div class="theme viewed" id="theme-3"><h3><a
-        href="https://darktheme.matdoes.dev/theme.user.js?text=839496&amp;text2=819090&amp;text3=839496&amp;bg=002b36&amp;main=073642&amp;upvote=586e75&amp;fallback=586e75&amp;announcements=073642&amp;announcements=073642">Solarized
+        href="javascript:sendTheme('text=839496&text2=819090&text3=839496&bg=002b36&main=073642&upvote=586e75&fallback=586e75&announcements=073642&announcements=073642')">Solarized
         Dark</a></h3>
         <iframe
-            src="https://darktheme.matdoes.dev/proxy/talk/all?text=839496&amp;text2=819090&amp;text3=839496&amp;bg=002b36&amp;main=073642&amp;upvote=586e75&amp;fallback=586e75&amp;announcements=073642&amp;announcements=073642">
+            src="https://darktheme.matdoes.dev/proxy/talk/all?text=839496&text2=819090&text3=839496&bg=002b36&main=073642&upvote=586e75&fallback=586e75&announcements=073642&announcements=073642">
             Loading...
         </iframe>
     </div>
     <div class="theme viewed" id="theme-4"><h3><a
-        href="https://darktheme.matdoes.dev/theme.user.js?text=fff&amp;text2=fff&amp;text3=fff&amp;bg=000&amp;main=000&amp;upvote=fff&amp;graylogo=on&amp;announcements=000">Black
+        href="javascript:sendTheme('text=fff&text2=fff&text3=fff&bg=000&main=000&upvote=fff&graylogo=on&announcements=000')">Black
         Contrast</a></h3>
         <iframe
-            src="https://darktheme.matdoes.dev/proxy/talk/all?text=fff&amp;text2=fff&amp;text3=fff&amp;bg=000&amp;main=000&amp;upvote=fff&amp;graylogo=on&amp;announcements=000">
+            src="https://darktheme.matdoes.dev/proxy/talk/all?text=fff&text2=fff&text3=fff&bg=000&main=000&upvote=fff&graylogo=on&announcements=000">
             Loading...
         </iframe>
     </div>
     <div class="theme viewed" id="theme-5"><h3><a
-        href="https://darktheme.matdoes.dev/theme.user.js?text=ffff64&amp;text2=ffd932&amp;text3=ffd932&amp;bg=2c0400&amp;main=f05b00&amp;upvote=ffe93e&amp;graylogo=on&amp;announcements=f05b00">Volcano</a>
+        href="javascript:sendTheme('text=ffff64&text2=ffd932&text3=ffd932&bg=2c0400&main=f05b00&upvote=ffe93e&graylogo=on&announcements=f05b00')">Volcano</a>
     </h3>
         <iframe
-            src="https://darktheme.matdoes.dev/proxy/talk/all?text=ffff64&amp;text2=ffd932&amp;text3=ffd932&amp;bg=2c0400&amp;main=f05b00&amp;upvote=ffe93e&amp;graylogo=on&amp;announcements=f05b00">
+            src="https://darktheme.matdoes.dev/proxy/talk/all?text=ffff64&text2=ffd932&text3=ffd932&bg=2c0400&main=f05b00&upvote=ffe93e&graylogo=on&announcements=f05b00">
             Loading...
         </iframe>
     </div>
     <div class="theme viewed" id="theme-6"><h3><a
-        href="https://darktheme.matdoes.dev/theme.user.js?text=0f0&amp;text2=fff&amp;text3=fff&amp;bg=f00&amp;main=00f&amp;upvote=fff&amp;fallback=ff0&amp;graylogo=off&amp;announcements=00f">Actually
+        href="javascript:sendTheme('text=0f0&text2=fff&text3=fff&bg=f00&main=00f&upvote=fff&fallback=ff0&graylogo=off&announcements=00f')">Actually
         Bad</a></h3>
         <iframe
-            src="https://darktheme.matdoes.dev/proxy/talk/all?text=0f0&amp;text2=fff&amp;text3=fff&amp;bg=f00&amp;main=00f&amp;upvote=fff&amp;fallback=ff0&amp;graylogo=off&amp;announcements=00f">
+            src="https://darktheme.matdoes.dev/proxy/talk/all?text=0f0&text2=fff&text3=fff&bg=f00&main=00f&upvote=fff&fallback=ff0&graylogo=off&announcements=00f">
             Loading...
         </iframe>
     </div>
     <div class="theme viewed" id="theme-7"><h3><a
-        href="https://darktheme.matdoes.dev/theme.user.js?text=d321b2&amp;text2=900376&amp;text3=611d55&amp;bg=231e22&amp;main=393c42&amp;upvote=f848d8&amp;fallback=ac2493&amp;announcements=393c42">Purple
+        href="javascript:sendTheme('text=d321b2&text2=900376&text3=611d55&bg=231e22&main=393c42&upvote=f848d8&fallback=ac2493&announcements=393c42')">Purple
         Night</a></h3>
         <iframe
-            src="https://darktheme.matdoes.dev/proxy/talk/all?text=d321b2&amp;text2=900376&amp;text3=611d55&amp;bg=231e22&amp;main=393c42&amp;upvote=f848d8&amp;fallback=ac2493&amp;announcements=393c42">
+            src="https://darktheme.matdoes.dev/proxy/talk/all?text=d321b2&text2=900376&text3=611d55&bg=231e22&main=393c42&upvote=f848d8&fallback=ac2493&announcements=393c42">
             Loading...
         </iframe>
     </div>
     <div class="theme viewed" id="theme-8"><h3><a
-        href="https://darktheme.matdoes.dev/theme.user.js?text=b4f7f4&amp;text2=8ece44&amp;text3=358c07&amp;bg=10da82&amp;main=7cda10&amp;upvote=358c07&amp;announcements=7cda10&amp;fallback=">Mint
+        href="javascript:sendTheme('text=b4f7f4&text2=8ece44&text3=358c07&bg=10da82&main=7cda10&upvote=358c07&announcements=7cda10')">Mint
         Breeze</a></h3>
         <iframe
-            src="https://darktheme.matdoes.dev/proxy/talk/all?text=b4f7f4&amp;text2=8ece44&amp;text3=358c07&amp;bg=10da82&amp;main=7cda10&amp;upvote=358c07&amp;announcements=7cda10&amp;fallback=">
+            src="https://darktheme.matdoes.dev/proxy/talk/all?text=b4f7f4&text2=8ece44&text3=358c07&bg=10da82&main=7cda10&upvote=358c07&announcements=7cda10&fallback=">
             Loading...
         </iframe>
     </div>
     <div class="theme viewed" id="theme-9"><h3><a
-        href="https://darktheme.matdoes.dev/theme.user.js?text=ffd866&amp;text2=fc9867&amp;text3=ab9df2&amp;bg=2c292d&amp;main=2c292d&amp;upvote=a9dc76&amp;fallback=78dce8&amp;announcements=2c292d">Monokai</a>
+        href="javascript:sendTheme('text=ffd866&text2=fc9867&text3=ab9df2&bg=2c292d&main=2c292d&upvote=a9dc76&fallback=78dce8&announcements=2c292d')">Monokai</a>
     </h3>
         <iframe
-            src="https://darktheme.matdoes.dev/proxy/talk/all?text=ffd866&amp;text2=fc9867&amp;text3=ab9df2&amp;bg=2c292d&amp;main=2c292d&amp;upvote=a9dc76&amp;fallback=78dce8&amp;announcements=2c292d">
+            src="https://darktheme.matdoes.dev/proxy/talk/all?text=ffd866&text2=fc9867&text3=ab9df2&bg=2c292d&main=2c292d&upvote=a9dc76&fallback=78dce8&announcements=2c292d">
             Loading...
         </iframe>
     </div>
     <div class="theme viewed" id="theme-10"><h3><a
-        href="https://darktheme.matdoes.dev/theme.user.js?grayscale=true">Grayscale
+        href="javascript:sendTheme('grayscale=true')">Grayscale
         (special)</a></h3>
         <iframe
             src="https://darktheme.matdoes.dev/proxy/talk/all?grayscale=true">
             Loading...
         </iframe>
     </div>
-    <div class="theme viewed" id="theme-11"><h3><a
-        href="https://darktheme.matdoes.dev/theme.user.js?rainbow=true">Rainbow
-        [Epilepsy warning] (special)</a></h3>
-        <iframe src="https://darktheme.matdoes.dev/proxy/talk/all?rainbow=true">
-            Loading...
-        </iframe>
-    </div>
-    <div class="theme viewed" id="theme-14"><h3><a
-        href="https://darktheme.matdoes.dev/theme.user.js?monospace=true&amp;text=00aa00&amp;text2=00ff00&amp;text3=00aa00&amp;bg=000000&amp;main=111111&amp;upvote=005500&amp;announcements=121212">Terminal
-        (special)</a></h3>
+    <div class="theme viewed"><h3><a
+        href="javascript:sendTheme('white-theme')">White</a>
+    </h3>
         <iframe
-            src="https://darktheme.matdoes.dev/proxy/talk/all?monospace=true&amp;text=00aa00&amp;text2=00ff00&amp;text3=00aa00&amp;bg=000000&amp;main=111111&amp;upvote=005500&amp;announcements=121212">
+            src="https://darktheme.matdoes.dev/proxy/talk/all?bg=ffffff&main=ffffff">
             Loading...
         </iframe>
     </div>
 </div>
+<script>
+    //TODO: Known Bug, if darktheme site is down, theme will be reset to default blue
+    const { ipcRenderer } = require('electron');
+    document.getElementsByName('iframe').forEach((item) => {
+        item.on('load', (e) => {
+            console.log('loaded')
+            e.item.visibility = 'visible';
+        });
+    });
+    function sendTheme(url) {
+        ipcRenderer.send('choose-theme', url);
+    }
+    function openCustom(){ }
+</script>
 </body>
 </html>

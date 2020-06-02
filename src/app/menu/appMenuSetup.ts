@@ -1,55 +1,35 @@
-import { app, shell, clipboard, MenuItem } from 'electron';
-import { ElectronWindow } from '../../common';
+import {
+    app,
+    shell,
+    clipboard,
+    MenuItem,
+    Menu,
+    MenuItemConstructorOptions
+} from 'electron';
+import { ElectronWindow, selectInput, PLATFORM } from '../../common';
+import { ThemeHandler } from '../themeHandler/themeHandler';
+import { App } from '../app';
 
-function appMenuSetup(
-    startSubWindow: Function,
-    Preferences: object,
-    startCustomSession: Function,
-    sendSubToMain: Function,
-    selectInput: Function,
-    doUpdate: Function
-): object {
-    /*const template = [
+function appMenuSetup(mainApp: App, themeHandler: ThemeHandler): Menu {
+    const template: MenuItemConstructorOptions[] = [
         {
-            label: 'File',
+            label: 'App',
             submenu: [
                 {
-                    accelerator: 'CmdOrCtrl+N',
-                    click() {
-                        startSubWindow();
-                    },
-                    label: 'Sub Window'
-                },
-                {
-                    accelerator: 'CmdOrCtrl+L',
-                    click() {
-                        startCustomSession();
-                    },
-                    label: 'Join Multiplayer/Custom Repl.it Links'
-                },
-                {
-                    label: 'Send Sub to Main Window',
-                    click() {
-                        sendSubToMain();
+                    label: 'Choose Theme',
+                    click(i, win) {
+                        themeHandler.openThemeWindow(win);
                     }
                 },
+                { type: 'separator' },
                 {
-                    type: 'separator'
-                },
-                {
-                    label: 'Check Update Manually',
+                    label: 'Clear All Cookies',
                     click() {
-                        doUpdate(true, true);
+                        mainApp.clearCookies(false).then();
                     }
                 },
-                {
-                    accelerator: 'CmdOrCtrl+,',
-                    click() {
-                        // @ts-ignore
-                        Preferences.show();
-                    },
-                    label: 'Preferences'
-                },
+
+                { type: 'separator' },
                 {
                     role: 'quit'
                 }
@@ -77,13 +57,13 @@ function appMenuSetup(
                     role: 'paste'
                 },
                 {
-                    role: 'pasteandmatchstyle'
+                    role: 'pasteAndMatchStyle'
                 },
                 {
                     role: 'delete'
                 },
                 {
-                    role: 'selectall'
+                    role: 'selectAll'
                 },
                 {
                     type: 'separator'
@@ -97,7 +77,7 @@ function appMenuSetup(
             ]
         },
         {
-            label: 'View',
+            label: 'Window',
             submenu: [
                 {
                     label: 'Go Back',
@@ -119,15 +99,17 @@ function appMenuSetup(
                     type: 'separator'
                 },
                 {
-                    label: 'Open Current Link externally',
+                    label: 'Open Current Link in Default Browser',
                     click(item: any, focusedWindow: ElectronWindow) {
-                        shell.openExternal(focusedWindow.webContents.getURL());
+                        shell
+                            .openExternal(focusedWindow.webContents.getURL())
+                            .then((r) => {});
                     }
                 },
                 {
-                    label: 'Restore Blank Page',
+                    label: 'Go to Home',
                     click(item: any, focusedWindow: ElectronWindow) {
-                        focusedWindow.loadURL('https://repl.it/repls');
+                        focusedWindow.loadURL('https://repl.it/~').then();
                     }
                 },
                 {
@@ -162,25 +144,20 @@ function appMenuSetup(
                     type: 'separator'
                 },
                 {
-                    role: 'resetzoom'
+                    role: 'resetZoom'
                 },
                 {
-                    role: 'zoomin'
+                    role: 'zoomIn'
                 },
                 {
-                    role: 'zoomout'
+                    role: 'zoomOut'
                 },
                 {
                     type: 'separator'
                 },
                 {
                     role: 'togglefullscreen'
-                }
-            ]
-        },
-        {
-            role: 'window',
-            submenu: [
+                },
                 {
                     role: 'minimize'
                 },
@@ -193,103 +170,20 @@ function appMenuSetup(
             role: 'help',
             submenu: [
                 {
-                    type: 'separator'
-                },
-                {
                     label: 'Learn More about repl.it',
                     click() {
-                        shell.openExternal('https://repl.it/site/about');
+                        shell.openExternal('https://repl.it/site/about').then();
                     }
                 }
             ]
         }
     ];
-    if (process.platform === 'darwin') {
-        const name = app.getName();
-        template.unshift({
-            label: name,
-            submenu: [
-                {
-                    role: 'about'
-                },
-                {
-                    type: 'separator'
-                },
-                {
-                    role: 'services',
-                    // @ts-ignore
-                    submenu: []
-                },
-                {
-                    type: 'separator'
-                },
-                {
-                    role: 'hide'
-                },
-                {
-                    role: 'hideothers'
-                },
-                {
-                    role: 'unhide'
-                },
-                {
-                    type: 'separator'
-                },
-                {
-                    role: 'quit'
-                }
-            ]
-        });
-        // Edit menu.
-        template[1].submenu.splice(-1);
-        template[2].submenu.push(
-            {
-                type: 'separator'
-            },
-            {
-                label: 'Speech',
-                submenu: [
-                    {
-                        role: 'startspeaking'
-                    },
-                    {
-                        role: 'stopspeaking'
-                    }
-                ]
-            }
-        );
-        // Window menu.
-        template[4].submenu = [
-            {
-                label: 'Close',
-                accelerator: 'CmdOrCtrl+W',
-                role: 'close'
-            },
-            {
-                label: 'Minimize',
-                accelerator: 'CmdOrCtrl+M',
-                role: 'minimize'
-            },
-            {
-                label: 'Zoom',
-                role: 'zoom'
-            },
-            {
-                type: 'separator'
-            },
-            {
-                label: 'Bring All to Front',
-                role: 'front'
-            }
-        ];
+    if (PLATFORM == 'darwin') {
+        //@ts-ignore
+        template[template.length].submenu.push({ role: 'about' });
     }
-    if (process.platform !== 'darwin') {
-        template[template.length - 1].submenu.push({
-            role: 'about'
-        });
-    }
-    return template;*/
-    return {};
+    // @ts-ignore
+    return Menu.buildFromTemplate(template);
 }
 
 export { appMenuSetup };
