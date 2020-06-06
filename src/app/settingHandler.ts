@@ -28,7 +28,6 @@ class SettingHandler {
     ensureFileSync() {
         try {
             fs.statSync(this.settingsFilePath);
-            console.log('file exist');
         } catch (err) {
             if (err.code === 'ENOENT') {
                 console.log('creating file');

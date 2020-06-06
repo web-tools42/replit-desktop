@@ -1,4 +1,4 @@
-import { app, ipcMain, ClientRequest } from 'electron';
+import { app, ipcMain, ClientRequest, shell } from 'electron';
 import {
     ElectronWindow,
     Version,
@@ -23,7 +23,7 @@ class Updater extends EventEmitter {
     private logArray: [string] = [''];
     private downloadPath: string =
         app.getPath('appData') + 'updaterDownload' + this.pathSep;
-    private downloadFile: string;
+    private downloadFilePath: string;
     public downloadUrls: UpdateAssetsUrls = {
         windowsUrl: '',
         macOSUrl: '',
@@ -33,17 +33,11 @@ class Updater extends EventEmitter {
 
     constructor(launcher: Launcher) {
         super();
-        /*this.appVersion = {
+        this.appVersion = {
             major: parseInt(app.getVersion().split('.')[0]),
             minor: parseInt(app.getVersion().split('.')[1]),
             patch: parseInt(app.getVersion().split('.')[2]),
             versionString: app.getVersion()
-        };*/
-        this.appVersion = {
-            major: 0,
-            minor: 0,
-            patch: 5,
-            versionString: '0.0.5'
         };
         this.launcher = launcher;
     }
@@ -64,13 +58,6 @@ class Updater extends EventEmitter {
         return (
             parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i]
         );
-    }
-
-    cleanUp(skip?: boolean) {
-        //TODO: clean up download files.
-        //if (skip) {
-        this.emit('all-done', {});
-        //}
     }
 
     async checkUpdate(): Promise<checkUpdateResult> {
@@ -129,7 +116,7 @@ class Updater extends EventEmitter {
                 req.headers.get('content-length')
             );
             const filename = url.split('/').pop();
-            this.downloadFile = this.downloadPath + filename;
+            this.downloadFilePath = this.downloadPath + filename;
             let downloaded: number = 0;
             if (!fs.existsSync(this.downloadPath)) {
                 fs.mkdirSync(this.downloadPath, { recursive: true });
@@ -147,7 +134,7 @@ class Updater extends EventEmitter {
                         percentage: percentage.toString() + '%'
                     });
                 })
-                .pipe(fs.createWriteStream(this.downloadFile));
+                .pipe(fs.createWriteStream(this.downloadFilePath));
             req.body.on('end', () => {
                 this.launcher.updateStatus({ text: 'Download Finished' });
                 this.emit('download-finished');
@@ -157,19 +144,18 @@ class Updater extends EventEmitter {
         }
     }
 
-    afterDownloadWin() {
-        //TODO: open exe installer and exit app
-        this.cleanUp();
+    afterDownload() {
+        shell.showItemInFolder(this.downloadFilePath);
+        app.exit(0);
     }
 
-    afterDownloadMac() {
-        //TODO: open dmg and open it.
-        this.cleanUp();
-    }
-
-    afterDownloadLinux() {
-        //TODO:tar.gz and auto-install tar.gz.
-        this.cleanUp();
+    cleanUp(skip?: boolean) {
+        if (!skip) {
+            try {
+                fs.unlinkSync(this.downloadFilePath);
+            } catch (e) {}
+        }
+        this.emit('all-done');
     }
 }
 

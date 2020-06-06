@@ -64,22 +64,17 @@ async function initUpdater() {
             )
         ) {
             launcher.updateStatus({ text: 'Downloading Update' });
+            updater.once('download-finished', updater.afterDownload);
             switch (PLATFORM) {
                 case 'win32':
-                    updater.once('download-finished', updater.afterDownloadWin);
                     await updater.downloadUpdate(
                         updater.downloadUrls.windowsUrl
                     );
                     break;
                 case 'darwin':
-                    updater.once('download-finished', updater.afterDownloadMac);
                     await updater.downloadUpdate(updater.downloadUrls.macOSUrl);
                     break;
                 case 'linux':
-                    updater.once(
-                        'download-finished',
-                        updater.afterDownloadLinux
-                    );
                     await updater.downloadUpdate(updater.downloadUrls.linuxUrl);
                     break;
             }
