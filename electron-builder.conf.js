@@ -7,7 +7,7 @@ module.exports = {
     },
     mac: {
         target: 'pkg',
-        icon: 'src/assets/replit-logo/icns/lcon_set.icns'
+        icon: 'src/assets/replit-logo/icns/icon_set.icns'
     },
     pkg: {
         isVersionChecked: false,
@@ -28,6 +28,8 @@ module.exports = {
         target: {
             target: 'deb'
         },
-        icon: 'src/assets/replit-logo/logo.png'
+        //icon: 'src/assets/replit-logo/256x256.png',
+        maintainer: 'leon332157',
+        category: 'Development'
     }
 };

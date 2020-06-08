@@ -34,6 +34,9 @@ async function initApp() {
         mainApp.mainWindow.show();
         launcher.window.close();
     });
+    mainApp.mainWindow.on('close', () => {
+        app.quit();
+    });
 }
 
 async function initUpdater() {

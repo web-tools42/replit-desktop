@@ -23,7 +23,8 @@ class ElectronWindow extends BrowserWindow {
                 allowRunningInsecureContent: false,
                 nodeIntegration: nodeIntegration,
                 spellcheck: true
-            }
+            },
+            icon: __dirname + '/256x256.png'
         });
     }
 }
