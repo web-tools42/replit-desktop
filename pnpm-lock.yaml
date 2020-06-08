@@ -5,6 +5,7 @@ dependencies:
   electron-prompt: 1.5.1
   lodash: 4.17.15
   node-fetch: 2.6.0
+  semver: 7.3.2
   write-file-atomic: 3.0.3
 devDependencies:
   '@octokit/types': 3.0.0
@@ -14,6 +15,7 @@ devDependencies:
   '@types/lodash': 4.14.154
   '@types/node': 12.12.39
   '@types/node-fetch': 2.5.7
+  '@types/semver': 7.2.0
   '@types/write-file-atomic': 3.0.0
   '@typescript-eslint/eslint-plugin': 2.34.0_c2ce56dad406ac5b5afd5779dddf4f93
   '@typescript-eslint/parser': 2.34.0_eslint@7.0.0+typescript@3.9.3
@@ -218,6 +220,16 @@ packages:
     dev: true
     resolution:
       integrity: sha512-KUyZdkGCnVPuXfsKmDUu2XLui65LZIJ2s0M57noy5e+ixUT2oK33ep7zlvgzI8LElcWqbf8AR+o/3GqAPac2zA==
+  /@types/node/12.12.44:
+    dev: true
+    resolution:
+      integrity: sha512-jM6QVv0Sm5d3nW+nUD5jSzPcO6oPqboitSNcwgBay9hifVq/Rauq1PYnROnsmuw45JMBiTnsPAno0bKu2e2xrg==
+  /@types/semver/7.2.0:
+    dependencies:
+      '@types/node': 12.12.44
+    dev: true
+    resolution:
+      integrity: sha512-TbB0A8ACUWZt3Y6bQPstW9QNbhNeebdgLX4T/ZfkrswAfUzRiXrgd9seol+X379Wa589Pu4UEx9Uok0D4RjRCQ==
   /@types/undertaker-registry/1.0.1:
     dev: true
     resolution:
@@ -4150,7 +4162,6 @@ packages:
     resolution:
       integrity: sha512-b39TBaTSfV6yBrapU89p5fKekE2m/NwnDocOVruQFS1/veMgdzuPcnOM34M6CwxW8jH/lxEa5rBoDeUwu5HHTw==
   /semver/7.3.2:
-    dev: true
     engines:
       node: '>=10'
     hasBin: true
@@ -5143,6 +5154,7 @@ specifiers:
   '@types/lodash': ^4.14.154
   '@types/node': ^12.12.39
   '@types/node-fetch': ^2.5.7
+  '@types/semver': ^7.2.0
   '@types/write-file-atomic': ^3.0.0
   '@typescript-eslint/eslint-plugin': ^2.34.0
   '@typescript-eslint/parser': ^2.34.0
@@ -5164,6 +5176,7 @@ specifiers:
   lodash: ^4.17.15
   node-fetch: ^2.6.0
   prettier: ^2.0.5
+  semver: ^7.3.2
   typescript: ^3.9.3
   write-file-atomic: ^3.0.3
   zip-local: ^0.3.4

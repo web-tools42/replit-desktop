@@ -1,6 +1,6 @@
 {
   "name": "repl.it",
-  "version": "2.0.0-alpha1",
+  "version": "2.0.0-alpha2",
   "description": "electron version of repl.it",
   "keywords": [
     "electron",
@@ -28,6 +28,7 @@
     "electron-prompt": "^1.5.1",
     "lodash": "^4.17.15",
     "node-fetch": "^2.6.0",
+    "semver": "^7.3.2",
     "write-file-atomic": "^3.0.3"
   },
   "devDependencies": {
@@ -38,6 +39,7 @@
     "@types/lodash": "^4.14.154",
     "@types/node": "^12.12.39",
     "@types/node-fetch": "^2.5.7",
+    "@types/semver": "^7.2.0",
     "@types/write-file-atomic": "^3.0.0",
     "@typescript-eslint/eslint-plugin": "^2.34.0",
     "@typescript-eslint/parser": "^2.34.0",

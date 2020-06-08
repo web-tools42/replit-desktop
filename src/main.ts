@@ -78,9 +78,9 @@ async function initUpdater() {
                     await updater.downloadUpdate(updater.downloadUrls.linuxUrl);
                     break;
             }
-        } else {
-            updater.cleanUp(true);
         }
+    } else {
+        updater.cleanUp(true);
     }
 }
 

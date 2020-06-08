@@ -10,8 +10,8 @@ import {
 import * as fs from 'fs';
 import * as path from 'path';
 import fetch from 'node-fetch';
-import * as childProcess from 'child_process';
 import { EventEmitter } from 'events';
+import * as semver from 'semver';
 
 class Updater extends EventEmitter {
     private pathSep: string = path.sep;
@@ -75,7 +75,8 @@ class Updater extends EventEmitter {
             const version: Version = {
                 major: parseInt(tagNames[0]),
                 minor: parseInt(tagNames[1]),
-                patch: parseInt(tagNames[2])
+                patch: parseInt(tagNames[2]),
+                versionString: res.tag_name
             };
             for (let x = 0; x < res.assets.length; x++) {
                 const asset = res.assets[x];
@@ -88,11 +89,9 @@ class Updater extends EventEmitter {
                 } else {
                 }
             }
-
             if (
-                version.patch > this.appVersion.patch ||
-                version.minor > this.appVersion.minor ||
-                version.major > this.appVersion.major
+                semver.gt(version.versionString, this.appVersion.versionString)
+                // TODO: Maybe support pre-release versions
             ) {
                 return {
                     hasUpdate: true,
