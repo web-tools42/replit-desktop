@@ -26,7 +26,7 @@ module.exports = {
     },
     linux: {
         target: {
-            target: 'tar.gz'
+            target: 'deb'
         },
         icon: 'src/assets/replit-logo/logo.png'
     }

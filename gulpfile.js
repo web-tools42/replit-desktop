@@ -65,9 +65,14 @@ async function buildApp() {
             'electron-builder -c electron-builder.conf.js -wml',
             { stdio: 'inherit' }
         );
-    } else {
+    } else if (platform() === 'win32') {
         child_process.execSync(
             'electron-builder -c electron-builder.conf.js -w',
+            { stdio: 'inherit' }
+        );
+    } else {
+        child_process.execSync(
+            'electron-builder -c electron-builder.conf.js -l',
             { stdio: 'inherit' }
         );
     }
