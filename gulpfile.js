@@ -59,23 +59,9 @@ async function buildProd() {
             this.emit('end');
         })
         .pipe(dest('dist'));
-    src('src/**/*.js')
-        .pipe(
-            terser({
-                mangle: {
-                    toplevel: true
-                },
-                compress: {}
-            })
-        )
-        .on('error', (e) => {
-            this.emit('end');
-        })
-        .pipe(dest('dist'));
 }
 
 async function buildApp() {
-    let subprocess;
     if (platform() === 'darwin') {
         child_process.execSync(
             'electron-builder -c electron-builder.conf.js -wml',
@@ -99,7 +85,6 @@ async function copyFilesDev() {
 
     src('src/**/*.html').pipe(dest('ts-out'));
     src('src/**/*.css').pipe(dest('ts-out'));
-    src('src/**/*.js').pipe(dest('ts-out'));
     src('src/assets/replit-logo/256x256.png').pipe(dest('ts-out'));
 }
 
