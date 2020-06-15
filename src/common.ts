@@ -1,10 +1,9 @@
 import {
-    app,
     BrowserWindow,
-    shell,
+    BrowserWindowConstructorOptions,
     dialog,
     MessageBoxReturnValue,
-    BrowserWindowConstructorOptions
+    shell
 } from 'electron';
 import { Endpoints } from '@octokit/types';
 import { platform } from 'os';

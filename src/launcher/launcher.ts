@@ -1,11 +1,11 @@
-import { app, ipcMain, ClientRequest, shell } from 'electron';
+import { app, shell } from 'electron';
 import {
-    ElectronWindow,
-    Version,
     checkUpdateResult,
-    UpdateAssetsUrls,
+    ElectronWindow,
     githubReleaseResponse,
-    launcherStatus
+    launcherStatus,
+    UpdateAssetsUrls,
+    Version
 } from '../common';
 import * as fs from 'fs';
 import * as path from 'path';

@@ -1,6 +1,6 @@
 import { app } from 'electron';
 import fs from 'fs';
-import path, { sep } from 'path';
+import path from 'path';
 import writeFileAtomic from 'write-file-atomic';
 import * as _ from 'lodash';
 

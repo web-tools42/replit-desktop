@@ -1,12 +1,5 @@
-import {
-    app,
-    shell,
-    clipboard,
-    MenuItem,
-    Menu,
-    MenuItemConstructorOptions
-} from 'electron';
-import { ElectronWindow, selectInput, PLATFORM } from '../../common';
+import { clipboard, Menu, MenuItemConstructorOptions, shell } from 'electron';
+import { ElectronWindow, PLATFORM, selectInput } from '../../common';
 import { ThemeHandler } from '../themeHandler/themeHandler';
 import { App } from '../app';
 

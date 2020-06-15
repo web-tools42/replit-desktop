@@ -1,9 +1,8 @@
 import { Launcher, Updater } from './launcher/launcher';
-import { app, dialog, Menu } from 'electron';
+import { app } from 'electron';
 import { sep } from 'path';
 import { PLATFORM, promptYesNoSync } from './common';
 import { App } from './app/app';
-import { appMenuSetup } from './app/menu/appMenuSetup';
 
 app.setPath(
     'appData',

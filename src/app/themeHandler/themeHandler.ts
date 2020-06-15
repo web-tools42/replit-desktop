@@ -1,8 +1,6 @@
 import { ElectronWindow } from '../../common';
 import { SettingHandler } from '../settingHandler';
-import fetch from 'node-fetch';
 import { ipcMain } from 'electron';
-import { readFileSync } from 'fs';
 import ejs from 'ejs';
 import { parse } from 'querystring';
 import { assign, cloneDeep } from 'lodash';

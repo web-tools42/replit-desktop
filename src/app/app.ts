@@ -1,18 +1,5 @@
-import {
-    ElectronWindow,
-    getUrl,
-    handleExternalLink,
-    promptYesNoSync
-} from '../common';
-import {
-    session,
-    Cookie,
-    app,
-    dialog,
-    MessageBoxReturnValue,
-    shell,
-    ipcMain
-} from 'electron';
+import { ElectronWindow, handleExternalLink, promptYesNoSync } from '../common';
+import { app, Cookie, ipcMain, session } from 'electron';
 import { ThemeHandler } from './themeHandler/themeHandler';
 import { DiscordHandler } from './discordHandler';
 import { SettingHandler } from './settingHandler';
