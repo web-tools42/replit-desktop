@@ -7,23 +7,20 @@
 .Trashes/
 Thumbs.db
 
-# pkg
-home*
-*.dmg
-updater-log*
-update-window*
-dev*
-
-# ci
-coverage
+# dist
+dist
+ts-out
+build
 
 # npm
 node_modules
 
 # py
-venv*
+venv/
 
 # misc
 .env
-repl.it-*
-*dist
+coverage/
+*.log
+.bashrc
+

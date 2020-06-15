@@ -1,6 +1,8 @@
 # repl-it-electron
 
-[![Build Status](https://travis-ci.org/repl-it-discord/repl-it-electron.svg?branch=dev)](https://travis-ci.org/repl-it-discord/repl-it-electron)
+[![Travis (.org) branch](https://img.shields.io/travis/repl-it-discord/repl-it-electron/dev.svg?logo=travis)](https://travis-ci.org/repl-it-discord/repl-it-electron)
+[![Discord](https://img.shields.io/discord/437048931827056642.svg?logo=discord)](https://discord.gg/5gcPC6B)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/3bce49c376cf4c2bb1d2813d6b12dd6a)](https://www.codacy.com/manual/leon332157/repl-it-electron?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=repl-it-discord/repl-it-electron&amp;utm_campaign=Badge_Grade)
 
 ## Summary
 
@@ -14,23 +16,25 @@
 
 ## Requirements
 
-* From macOS 10.10 (Yosemite)
-* From Windows 7
-* From Ubuntu 12.04, Fedora 21, or Debian 8
+* macOS 10.10 (Yosemite)
+* Windows 10
+* Ubuntu 12.04, Fedora 21, or Debian 8
 
 Supported operating systems taken from the Electron [docs](https://electronjs.org/docs/tutorial/support)
+
+##### If you have trouble starting the app for an unknown developer on MacOS, use [this](https://support.apple.com/guide/mac-help/open-a-mac-app-from-an-unidentified-developer-mh40616/mac#:~:text=Open%20a%20Mac%20app%20from,as%20you%20can%20...) link.
 
 ## Contributing
 
 ```bash
 git clone --recurse-submodules https://github.com/repl-it-discord/repl-it-electron
 cd repl-it-electron
-pnpm install -g --production windows-build-tools # windows
+npx pnpm add -g pnpm
 pnpm install
 pnpm start
 ```
 
-Install pnpm [here](https://pnpm.js.org/docs/en/installation.html)
+Although node.js version 14 can be used, version 12 LTS is recommended as Electron still uses it.
 
 See [CONTRIBUTING.md](./.github/CONTRIBUTING.md) before contributing
 
@@ -38,26 +42,28 @@ See feature implementation details on the [roadmap](https://github.com/repl-it-d
 
 ## Scripts
 
-### `pnpm run dev:main`
+### `start`
 
-Runs `pnpm run dev:main:electron` and `pnpm run dev:main:webpack` concurrently.
+Runs `npm run build` and `npm run build:run`, used for running electron with compiled ts files.
 
-### `pnpm run dev:main:electron`
+### `lint`
 
-Starts electron main process. Watches files in `dist/dev` with `nodemon` and restarts Electron when changes are found.
+Identifies all linting issues with eslint. Lints TypeScript as well as JavaScript. Also formats code according to Prettier style guides. Use `npm run lint --fix` to correct all correctable errors.
 
-### `pnpm run dev:main:webpack`
+### `build`
 
-Starts webpack process to perform TypeScript compilation and JavaScript transpilation etc. that outputs to `dist/dev`. Restarts webpack bundling when changes in `src` are found.
+Uses gulp to create a JavaScript build of the app.
 
-### `pnpm run lint:fix`
+### `build:run`
 
-Automatically fixes all linting issues with eslint. Lints TypeScript as well as JavaScript. Also formats code according to Prettier style guides.
+Runs the production build of the website.
 
-### `pnpm run package`
+### `build:dist`
+Builds a production JS version of the app.
 
-Package the app before release.
+### `dist`
+Builds the app for release. 
 
 ## Acknowledgements
 
-[@mat1](https://repl.it/@mat1) for Discord Rich Presence Integration and custom dark theme
+[@mat1](https://matdoes.dev/) for Discord Rich Presence Integration and custom dark theme

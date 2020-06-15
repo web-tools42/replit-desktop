@@ -1,0 +1,35 @@
+module.exports = {
+    appId: 'repl-it-electron.repl-it-discord',
+    directories: {
+        output: 'build/',
+        app: 'dist/',
+        buildResources: __dirname
+    },
+    mac: {
+        target: 'pkg',
+        icon: 'src/assets/replit-logo/icns/icon_set.icns'
+    },
+    pkg: {
+        isVersionChecked: false,
+        hasStrictIdentifier: false,
+        overwriteAction: 'upgrade'
+    },
+    win: {
+        target: 'nsis',
+        icon: 'src/assets/replit-logo/ico/logo.ico'
+    },
+    nsis: {
+        oneClick: false,
+        differentialPackage: false,
+        //perMachine: true,
+        createDesktopShortcut: 'always'
+    },
+    linux: {
+        target: {
+            target: 'deb'
+        },
+        //icon: 'src/assets/replit-logo/256x256.png',
+        maintainer: 'leon332157',
+        category: 'Development'
+    }
+};

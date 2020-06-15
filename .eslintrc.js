@@ -7,11 +7,14 @@ module.exports = {
     },
     extends: ['prettier', 'plugin:prettier/recommended'],
     parser: '@typescript-eslint/parser',
-    plugins: ['@typescript-eslint'],
+    plugins: ['@typescript-eslint', 'json-format'],
     parserOptions: {
-        ecmaVersion: 2018
+        sourceType: 'module'
     },
     rules: {
         'prettier/prettier': 'error'
+    },
+    settings: {
+        'json/sort-package-json': 'standard'
     }
 };
