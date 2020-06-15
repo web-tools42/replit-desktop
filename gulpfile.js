@@ -3,9 +3,9 @@ const terser = require('gulp-terser-js');
 const jeditor = require('gulp-json-editor');
 const ts = require('gulp-typescript');
 const tsProject = ts.createProject('tsconfig.json');
-const fs = require('fs');
 const child_process = require('child_process');
 const { platform } = require('os');
+const htmlmin = require('gulp-htmlmin');
 
 async function copyFilesProd() {
     src('package.json')
@@ -24,8 +24,23 @@ async function copyFilesProd() {
         )
         .pipe(dest('dist'));
 
-    src('src/**/*.html').pipe(dest('dist'));
-    src('src/**/*.css').pipe(dest('dist'));
+    src('src/**/*.html')
+        .pipe(
+            htmlmin({
+                minifyCss: true,
+                minifyJs: true,
+                collapseWhitespace: true
+            })
+        )
+        .pipe(dest('dist'));
+    src('src/**/*.css')
+        .pipe(
+            htmlmin({
+                minifyCss: true,
+                collapseWhitespace: true
+            })
+        )
+        .pipe(dest('dist'));
     src('src/assets/replit-logo/256x256.png').pipe(dest('dist'));
 }
 
