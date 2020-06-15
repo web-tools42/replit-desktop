@@ -22,6 +22,8 @@
 
 Supported operating systems taken from the Electron [docs](https://electronjs.org/docs/tutorial/support)
 
+##### If you have trouble starting the app for an unknown developer on MacOS, use [this](https://support.apple.com/guide/mac-help/open-a-mac-app-from-an-unidentified-developer-mh40616/mac#:~:text=Open%20a%20Mac%20app%20from,as%20you%20can%20...) link.
+
 ## Contributing
 
 ```bash
