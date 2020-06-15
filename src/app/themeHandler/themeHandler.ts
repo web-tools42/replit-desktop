@@ -66,6 +66,7 @@ class ThemeHandler {
                 });
         });
     }
+
     async saveTheme(url: string) {
         if (url == 'white-theme') {
             this.resetTheme(true).then();
@@ -107,47 +108,6 @@ class ThemeHandler {
                 this.themeWindow.show();
             });
         }
-    }
-    editHtml(html: string, css: string = '') {
-        return (
-            html
-                .replace(/<\/head>/gi, `<style>${css}</style></head>`)
-                .replace(/src="\/(?!\/)/gi, 'src="https://repl.it/') // make all scripts absolute
-                .replace(
-                    /(?<=<meta property="og:title" content=")(\S+)(?=".+>)/gi,
-                    'Repl Talk Dark Theme Preview'
-                ) // change opengraph description
-                .replace(
-                    /(?<=<meta property="og:description" content=")(\S+)(?=".+>)/gi,
-                    'Preview a custom Repl.it dark theme.'
-                ) // change opengraph title
-                // remove unnecessary scripts
-                .replace(
-                    /<script ([^<]{1,})analytics([^\\]{1,}?)<\/script>/gi,
-                    ''
-                ) // remove tracking scripts
-                .replace(
-                    /<script ([^<]{1,})recaptcha([^\\]{1,}?)<\/script>/gi,
-                    ''
-                ) // remove recaptcha
-                .replace(
-                    /<script ([^<]{1,}?)cloudflare([^\\]{1,}?)<\/script>/gi,
-                    ''
-                ) // remove cloudflare stuff
-                .replace(/<link ([^<]{1,}?)cloudflare([^>]{1,}?)>/gi, '') // remove cloudflare stuff
-                .replace(
-                    /<script ([^<]{1,}?)https:\/\/repl.it\/_next([^\\]{1,}?)<\/script>/gi,
-                    ''
-                ) // remove _next stuff
-                .replace(
-                    /<link ([^<]{1,}?)https:\/\/repl.it\/_next([^>]{1,}?)>/gi,
-                    ''
-                ) // remove _next stuff
-                .replace(
-                    /<script async=\"\" id=\"__NEXT_PAGE__\/([^<]{1,})<\/script>/gi,
-                    ''
-                )
-        ); // remove recaptcha
     }
 }
 

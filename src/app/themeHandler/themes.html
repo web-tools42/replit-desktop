@@ -35,11 +35,6 @@
             overflow: hidden;
         }
 
-        .themeData {
-            width: 100px;
-            height: 100px;
-        }
-
         .themeData div {
             width: 10px;
             height: 100%;
@@ -159,18 +154,21 @@
 <script>
     //TODO: Known Bug, if darktheme site is down, theme will be reset to default blue
     //TODO: Make Local preview possible
-    
+
     const { ipcRenderer } = require('electron');
     document.getElementsByName('iframe').forEach((item) => {
         item.on('load', (e) => {
-            console.log('loaded')
+            console.log('loaded');
             e.item.visibility = 'visible';
         });
     });
+
     function sendTheme(url) {
         ipcRenderer.send('choose-theme', url);
     }
-    function openCustom(){ }
+
+    function openCustom() {
+    }
 </script>
 </body>
 </html>

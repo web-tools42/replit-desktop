@@ -14,6 +14,11 @@ import { EventEmitter } from 'events';
 import * as semver from 'semver';
 
 class Updater extends EventEmitter {
+    public downloadUrls: UpdateAssetsUrls = {
+        windowsUrl: '',
+        macOSUrl: '',
+        linuxUrl: ''
+    };
     private pathSep: string = path.sep;
     private appPath: string = app.getAppPath() + this.pathSep;
     private upperAppPath: string = path.dirname(this.appPath) + this.pathSep;
@@ -24,11 +29,6 @@ class Updater extends EventEmitter {
     private downloadPath: string =
         app.getPath('appData') + 'updaterDownload' + this.pathSep;
     private downloadFilePath: string;
-    public downloadUrls: UpdateAssetsUrls = {
-        windowsUrl: '',
-        macOSUrl: '',
-        linuxUrl: ''
-    };
     private launcher: Launcher;
 
     constructor(launcher: Launcher) {

@@ -117,7 +117,6 @@ class App {
                 console.error(`Error adding theme on window ${e} attempt ${i}`);
             }
         }
-        //windowObj.setBackgroundColor('#FFF');
     }
 }
 
