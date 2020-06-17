@@ -63,20 +63,27 @@ class DiscordHandler {
     private window: ElectronWindow;
 
     constructor(window: ElectronWindow) {
+        this.window = window;
+        this.initClient();
+    }
+    initClient() {
+        if (this.client) {
+            delete this.client;
+        }
         this.client = new Client({
             transport: 'ipc'
         });
-        this.window = window;
         this.client
-            .login({ clientId: '498635999274991626' })
+            .connect('498635999274991626')
             .then(() => {
                 console.log('login success');
             })
             .catch((error: string) => {
                 console.error(error);
+                //this.initClient();
+                //TODO: Resolve discord login issue after delay start
             });
         this.client.on('ready', () => {
-            // activity can only be set every 15 seconds
             setInterval(() => {
                 this.setPlayingDiscord()
                     .then(() => {
@@ -88,7 +95,6 @@ class DiscordHandler {
             }, 15e3);
         });
     }
-
     async setPlayingDiscord() {
         let url: string = getUrl(this.window);
         let spliturl: Array<string> = url.split('/');
