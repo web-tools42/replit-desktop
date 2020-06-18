@@ -1,4 +1,10 @@
-import { clipboard, Menu, MenuItemConstructorOptions, shell } from 'electron';
+import {
+    clipboard,
+    Menu,
+    MenuItemConstructorOptions,
+    MenuItem,
+    shell
+} from 'electron';
 import { ElectronWindow, PLATFORM, selectInput } from '../../common';
 import { ThemeHandler } from '../themeHandler/themeHandler';
 import { App } from '../app';
@@ -10,11 +16,31 @@ function appMenuSetup(mainApp: App, themeHandler: ThemeHandler): Menu {
             submenu: [
                 {
                     label: 'Choose Theme',
-                    click(i, win) {
+                    click(i: MenuItem, win: ElectronWindow) {
                         themeHandler.openThemeWindow(win);
                     }
                 },
+                {
+                    label: 'Use Ace Editor',
+                    type: 'checkbox',
+                    checked: false,
+                    click(item: MenuItem) {
+                        mainApp.toggleAce(item);
+                    }
+                },
                 { type: 'separator' },
+                {
+                    label: 'Re-connect to Discord',
+                    click() {
+                        mainApp.discordHandler.connectDiscord();
+                    }
+                },
+                {
+                    label: 'Disconnect from Discord',
+                    click() {
+                        mainApp.discordHandler.disconnectDiscord();
+                    }
+                },
                 {
                     label: 'Clear All Cookies',
                     click() {
@@ -63,7 +89,7 @@ function appMenuSetup(mainApp: App, themeHandler: ThemeHandler): Menu {
                 },
                 {
                     label: 'Copy URL to clipboard',
-                    click(item: any, focusedWindow: ElectronWindow) {
+                    click(item: MenuItem, focusedWindow: ElectronWindow) {
                         clipboard.writeText(focusedWindow.webContents.getURL());
                     }
                 }
@@ -96,7 +122,8 @@ function appMenuSetup(mainApp: App, themeHandler: ThemeHandler): Menu {
                     click(item: any, focusedWindow: ElectronWindow) {
                         shell
                             .openExternal(focusedWindow.webContents.getURL())
-                            .then((r) => {});
+                            .then((r) => {
+                            });
                     }
                 },
                 {
