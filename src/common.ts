@@ -3,7 +3,8 @@ import {
     BrowserWindowConstructorOptions,
     dialog,
     MessageBoxReturnValue,
-    shell
+    shell,
+    app
 } from 'electron';
 import { Endpoints } from '@octokit/types';
 import { platform } from 'os';
@@ -67,27 +68,25 @@ function errorMessage(
     errorCode: any,
     errorDescription: any
 ) {
-    //let id = windowObject.InternalId;
     if (errorCode > -6 || errorCode <= -300) {
         return;
     }
-    dialog
-        .showMessageBox({
-            title: 'Loading Failed',
-            message: `loading Failed on window reason ${errorDescription} code ${errorCode}, do you want to try again?`,
-            type: 'error',
-            buttons: ['Try again please', 'Quit'],
-            defaultId: 0
-        })
-        .then(function (resp: MessageBoxReturnValue) {
-            // if clicked "Try again please"
-            const index = resp.response;
-            if (index === 0) {
-                windowObject.reload();
-            } else {
-                process.exit();
-            }
-        });
+    const resp: number = dialog.showMessageBoxSync({
+        title: 'Loading Failed',
+        message: `loading Failed on window reason ${errorDescription} code ${errorCode}, do you want to try again?`,
+        type: 'error',
+        buttons: ['Try again please', 'Quit'],
+        defaultId: 0
+    });
+    if (resp === 0) {
+        windowObject.reload();
+    } else {
+        if (windowObject.webContents.canGoBack()) {
+            windowObject.webContents.goBack();
+        } else {
+            process.exit();
+        }
+    }
 }
 
 function capitalize(str: string) {
@@ -124,7 +123,7 @@ function handleExternalLink(
         return;
     }
     if (url.toString().startsWith('about')) {
-        windowObj.loadURL('https://repl.it/~').then();
+        windowObj.loadURL('https://repl.it/~').catch();
     } else if (
         url.includes('repl.it') ||
         url.includes('repl.co') ||
@@ -168,6 +167,11 @@ function promptYesNoSync(
 }
 
 const PLATFORM = platform();
+const IPAD_USER_AGENT: string =
+    'Mozilla/5.0 (iPad; CPU OS 11_3 like Mac OS X)' +
+    'AppleWebKit/605.1.15' +
+    ' (KHTML, like Gecko) Version/11.0 Tablet/15E148' +
+    ' Safari/604.1';
 export {
     Version,
     checkUpdateResult,
@@ -181,5 +185,6 @@ export {
     handleExternalLink,
     selectInput,
     PLATFORM,
+    IPAD_USER_AGENT,
     promptYesNoSync
 };

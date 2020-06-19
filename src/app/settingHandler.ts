@@ -25,7 +25,7 @@ class SettingHandler {
         this.ensureFileSync();
     }
 
-    ensureFileSync() {
+    private ensureFileSync() {
         try {
             fs.statSync(this.settingsFilePath);
         } catch (err) {
@@ -38,12 +38,12 @@ class SettingHandler {
         }
     }
 
-    saveSettings(obj: SettingsObject): void {
+    private saveSettings(obj: SettingsObject): void {
         const data = JSON.stringify(obj, null, 4);
         writeFileAtomic.sync(this.settingsFilePath, data);
     }
 
-    loadSettings(): SettingsObject {
+    private loadSettings(): SettingsObject {
         this.ensureFileSync();
         let data: SettingsObject;
         try {

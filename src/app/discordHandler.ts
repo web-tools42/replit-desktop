@@ -82,7 +82,7 @@ class DiscordHandler {
                 console.error(error);
             });
         this.client.on('ready', () => {
-            console.debug('Client ready');
+            console.debug('Discord Client ready');
             this.setPlayingDiscord().catch();
             this.discordTimer = setInterval(() => {
                 this.setPlayingDiscord().catch((e: string) => {
