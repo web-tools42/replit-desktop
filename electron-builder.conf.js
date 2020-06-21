@@ -20,6 +20,7 @@ module.exports = {
     },
     nsis: {
         oneClick: false,
+        allowToChangeInstallationDirectory: true,
         differentialPackage: false,
         //perMachine: true,
         createDesktopShortcut: 'always'
