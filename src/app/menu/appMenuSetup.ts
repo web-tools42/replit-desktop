@@ -1,20 +1,52 @@
-import { clipboard, Menu, MenuItemConstructorOptions, shell } from 'electron';
+import {
+    clipboard,
+    Menu,
+    MenuItemConstructorOptions,
+    MenuItem,
+    shell
+} from 'electron';
 import { ElectronWindow, PLATFORM, selectInput } from '../../common';
 import { ThemeHandler } from '../themeHandler/themeHandler';
 import { App } from '../app';
+import { SettingHandler } from '../settingHandler';
+import set = Reflect.set;
 
-function appMenuSetup(mainApp: App, themeHandler: ThemeHandler): Menu {
+function appMenuSetup(
+    mainApp: App,
+    themeHandler: ThemeHandler,
+    settings: SettingHandler
+): Menu {
     const template: MenuItemConstructorOptions[] = [
         {
             label: 'App',
             submenu: [
                 {
                     label: 'Choose Theme',
-                    click(i, win) {
+                    click(i: MenuItem, win: ElectronWindow) {
                         themeHandler.openThemeWindow(win);
                     }
                 },
+                {
+                    label: 'Use Ace Editor',
+                    type: 'checkbox',
+                    checked: <boolean>settings.get('enable-ace'),
+                    click(item: MenuItem) {
+                        mainApp.toggleAce(item);
+                    }
+                },
                 { type: 'separator' },
+                {
+                    label: 'Re-connect to Discord',
+                    click() {
+                        mainApp.discordHandler.connectDiscord();
+                    }
+                },
+                {
+                    label: 'Disconnect from Discord',
+                    click() {
+                        mainApp.discordHandler.disconnectDiscord();
+                    }
+                },
                 {
                     label: 'Clear All Cookies',
                     click() {
@@ -63,7 +95,7 @@ function appMenuSetup(mainApp: App, themeHandler: ThemeHandler): Menu {
                 },
                 {
                     label: 'Copy URL to clipboard',
-                    click(item: any, focusedWindow: ElectronWindow) {
+                    click(item: MenuItem, focusedWindow: ElectronWindow) {
                         clipboard.writeText(focusedWindow.webContents.getURL());
                     }
                 }
@@ -102,7 +134,7 @@ function appMenuSetup(mainApp: App, themeHandler: ThemeHandler): Menu {
                 {
                     label: 'Go to Home',
                     click(item: any, focusedWindow: ElectronWindow) {
-                        focusedWindow.loadURL('https://repl.it/~').then();
+                        focusedWindow.loadURL('https://repl.it/~').catch();
                     }
                 },
                 {

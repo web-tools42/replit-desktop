@@ -1,5 +1,11 @@
-import { ElectronWindow, handleExternalLink, promptYesNoSync } from '../common';
-import { app, Cookie, ipcMain, session } from 'electron';
+import {
+    ElectronWindow,
+    handleExternalLink,
+    promptYesNoSync,
+    IPAD_USER_AGENT,
+    errorMessage
+} from '../common';
+import { app, Cookie, ipcMain, session, MenuItem } from 'electron';
 import { ThemeHandler } from './themeHandler/themeHandler';
 import { DiscordHandler } from './discordHandler';
 import { SettingHandler } from './settingHandler';
@@ -45,7 +51,34 @@ class App {
         this.mainWindow.setBackgroundColor('#393c42');
         this.themeHandler = new ThemeHandler(this.settingsHandler);
         this.addWindow(this.mainWindow);
-        app.applicationMenu = appMenuSetup(this, this.themeHandler);
+        if (!this.settingsHandler.has('enable-ace')) {
+            this.settingsHandler.set('enable-ace', false);
+        } // Init settings for ace editor
+        app.applicationMenu = appMenuSetup(
+            this,
+            this.themeHandler,
+            this.settingsHandler
+        );
+        //Set Up menu
+    }
+
+    toggleAce(menu?: MenuItem) {
+        let userAgent: string;
+        if (menu) {
+            if (menu.checked == true) {
+                this.settingsHandler.set('enable-ace', true);
+                userAgent = IPAD_USER_AGENT;
+            } else {
+                this.settingsHandler.set('enable-ace', false);
+                userAgent = app.userAgentFallback;
+            }
+        } else {
+            userAgent = IPAD_USER_AGENT;
+        }
+        this.windowArray.forEach((window) => {
+            window.webContents.userAgent = userAgent;
+            window.reload();
+        });
     }
 
     async clearCookies(oauthOnly: boolean) {
@@ -98,9 +131,16 @@ class App {
         });
         window.webContents.on('will-navigate', (e, url) => {
             handleExternalLink(e, window, url);
+            console.log(this.settingsHandler.get('enable-ace'));
+            if (this.settingsHandler.get('enable-ace')) {
+                this.toggleAce();
+            }
         });
         window.webContents.on('did-stop-loading', () => {
             this.addTheme(window).then();
+        });
+        window.webContents.on('did-fail-load', (e, code, description) => {
+            errorMessage(window, code, description);
         });
     }
 

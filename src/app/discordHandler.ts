@@ -1,5 +1,6 @@
 import { Client } from 'discord-rpc';
 import { ElectronWindow, getUrl } from '../common';
+import Timeout = NodeJS.Timeout;
 
 const startTimestamp = new Date();
 const logosDiscordDict: { [key: string]: string } = {
@@ -60,33 +61,42 @@ const logosDiscordDict: { [key: string]: string } = {
 
 class DiscordHandler {
     private client: Client;
-    private window: ElectronWindow;
+    private readonly window: ElectronWindow;
+    private discordTimer: Timeout;
 
     constructor(window: ElectronWindow) {
-        this.client = new Client({
-            transport: 'ipc'
-        });
         this.window = window;
+        this.client = null;
+        this.connectDiscord();
+    }
+
+    connectDiscord() {
+        if (!this.client) {
+            this.client = new Client({
+                transport: 'ipc'
+            });
+        }
         this.client
             .login({ clientId: '498635999274991626' })
-            .then(() => {
-                console.log('login success');
-            })
             .catch((error: string) => {
                 console.error(error);
             });
         this.client.on('ready', () => {
-            // activity can only be set every 15 seconds
-            setInterval(() => {
-                this.setPlayingDiscord()
-                    .then(() => {
-                        //console.log('Status Updated');
-                    })
-                    .catch((e: string) => {
-                        console.log('Failed to update Discord status. ' + e);
-                    });
+            console.debug('Discord Client ready');
+            this.setPlayingDiscord().catch();
+            this.discordTimer = setInterval(() => {
+                this.setPlayingDiscord().catch((e: string) => {
+                    console.error('Failed to update Discord status. ' + e);
+                });
             }, 15e3);
         });
+    }
+
+    disconnectDiscord() {
+        this.client.clearActivity().catch();
+        clearInterval(this.discordTimer);
+        this.client.destroy().then();
+        delete this.client;
     }
 
     async setPlayingDiscord() {
