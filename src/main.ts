@@ -12,6 +12,9 @@ app.setPath(
     'userData',
     app.getPath('home') + sep + '.repl.it' + sep + 'userData' + sep
 );
+process.on('unhandledRejection', (rejection: any) => {
+    console.error(`[Unhandled Promise Rejction] ${rejection.stack}`);
+});
 let launcher: Launcher;
 let updater: Updater;
 let mainApp: App;
