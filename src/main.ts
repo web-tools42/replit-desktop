@@ -3,6 +3,7 @@ import { app } from 'electron';
 import { sep } from 'path';
 import { PLATFORM, promptYesNoSync } from './common';
 import { App } from './app/app';
+import DidFailLoadEvent = Electron.DidFailLoadEvent;
 
 app.setPath(
     'appData',
@@ -30,7 +31,9 @@ function initLauncher() {
 
 async function initApp() {
     mainApp = new App();
-    mainApp.mainWindow.loadURL('https://repl.it/~').catch();
+    mainApp.mainWindow
+        .loadURL('https://repl.it/~')
+        .catch(console.debug);
     await mainApp.clearCookies(true);
     mainApp.mainWindow.webContents.once('did-finish-load', () => {
         mainApp.mainWindow.show();

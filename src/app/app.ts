@@ -2,24 +2,26 @@ import {
     ElectronWindow,
     handleExternalLink,
     promptYesNoSync,
-    IPAD_USER_AGENT,
-    errorMessage
+    IPAD_USER_AGENT
 } from '../common';
-import { app, Cookie, ipcMain, session, MenuItem } from 'electron';
+import { app, Cookie, ipcMain, session, MenuItem, dialog } from 'electron';
 import { ThemeHandler } from './themeHandler/themeHandler';
 import { DiscordHandler } from './discordHandler';
 import { SettingHandler } from './settingHandler';
 import contextMenu from 'electron-context-menu';
 import { appMenuSetup } from './menu/appMenuSetup';
+import { EventEmitter } from 'events';
 
-class App {
+class App extends EventEmitter {
     public readonly mainWindow: ElectronWindow;
     public readonly themeHandler: ThemeHandler;
     public readonly discordHandler: DiscordHandler;
     protected windowArray: ElectronWindow[];
     private readonly settingsHandler: SettingHandler;
+    private isOffline: boolean;
 
     constructor() {
+        super();
         this.mainWindow = new ElectronWindow({
             height: 720,
             width: 1280
@@ -59,7 +61,30 @@ class App {
             this.themeHandler,
             this.settingsHandler
         );
+        this.isOffline = false;
         //Set Up menu
+    }
+
+    handleLoadingError(
+        event: Event,
+        windowObject?: ElectronWindow,
+        errorCode?: number,
+        errorDescription?: string
+    ) {
+        if (errorCode > -6 || errorCode <= -300) {
+            return;
+        }
+        this.windowArray.forEach((win: ElectronWindow) => {
+            this.isOffline = true;
+            win.loadFile('app/offline.html')
+                .then(() => {
+                    win.webContents.executeJavaScript(
+                        `updateError("${errorCode} ${errorDescription}")`
+                        )
+                        .catch(console.log);
+                })
+                .catch(console.log);
+        });
     }
 
     toggleAce(menu?: MenuItem) {
@@ -100,6 +125,7 @@ class App {
             const cookie: Cookie = allCookies[x];
             if (oauthOnly) {
                 if (!cookie.domain.includes('repl.it')) {
+                    // exclude repl.it cookies
                     cookiesToRemove.push(cookie);
                 }
             } else {
@@ -131,16 +157,17 @@ class App {
         });
         window.webContents.on('will-navigate', (e, url) => {
             handleExternalLink(e, window, url);
-            console.log(this.settingsHandler.get('enable-ace'));
             if (this.settingsHandler.get('enable-ace')) {
                 this.toggleAce();
             }
         });
         window.webContents.on('did-stop-loading', () => {
-            this.addTheme(window).then();
+            if (!this.isOffline) {
+                this.addTheme(window).then();
+            }
         });
         window.webContents.on('did-fail-load', (e, code, description) => {
-            errorMessage(window, code, description);
+            this.handleLoadingError(e, window, code, description);
         });
     }
 

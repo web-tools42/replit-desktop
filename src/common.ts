@@ -63,32 +63,6 @@ interface launcherStatus {
 
 type githubReleaseResponse = Endpoints['GET /repos/:owner/:repo/releases/latest']['response']['data'];
 
-function errorMessage(
-    windowObject: ElectronWindow,
-    errorCode: any,
-    errorDescription: any
-) {
-    if (errorCode > -6 || errorCode <= -300) {
-        return;
-    }
-    const resp: number = dialog.showMessageBoxSync({
-        title: 'Loading Failed',
-        message: `loading Failed on window reason ${errorDescription} code ${errorCode}, do you want to try again?`,
-        type: 'error',
-        buttons: ['Try again please', 'Quit'],
-        defaultId: 0
-    });
-    if (resp === 0) {
-        windowObject.reload();
-    } else {
-        if (windowObject.webContents.canGoBack()) {
-            windowObject.webContents.goBack();
-        } else {
-            process.exit();
-        }
-    }
-}
-
 function capitalize(str: string) {
     return str.replace(/(^|\s)([a-z])/g, function (p1: String, p2: String) {
         return p1 + p2.toUpperCase().toString();
@@ -180,7 +154,6 @@ export {
     githubReleaseResponse,
     launcherStatus,
     downloadUpdateResult,
-    errorMessage,
     getUrl,
     handleExternalLink,
     selectInput,
