@@ -67,9 +67,10 @@ class App extends EventEmitter {
 
     handleLoadingError(
         event: Event,
-        windowObject?: ElectronWindow,
-        errorCode?: number,
-        errorDescription?: string
+        windowObject: ElectronWindow,
+        errorCode: number,
+        errorDescription: string,
+        validateUrl: string
     ) {
         if (errorCode > -6 || errorCode <= -300) {
             return;
@@ -78,8 +79,9 @@ class App extends EventEmitter {
             this.isOffline = true;
             win.loadFile('app/offline.html')
                 .then(() => {
-                    win.webContents.executeJavaScript(
-                        `updateError("${errorCode} ${errorDescription}")`
+                    win.webContents
+                        .executeJavaScript(
+                            `updateError("${errorCode} ${errorDescription}","${validateUrl}")`
                         )
                         .catch(console.log);
                 })
@@ -166,8 +168,16 @@ class App extends EventEmitter {
                 this.addTheme(window).then();
             }
         });
-        window.webContents.on('did-fail-load', (e, code, description) => {
-            this.handleLoadingError(e, window, code, description);
+        window.webContents.on(
+            'did-fail-load',
+            (e, code, description, validateUrl) => {
+                this.handleLoadingError(
+                    e,
+                    window,
+                    code,
+                    description,
+                    validateUrl
+                );
         });
     }
 
