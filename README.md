@@ -24,8 +24,7 @@ Supported operating systems taken from the Electron [docs](https://electronjs.or
 
 ##### If you have trouble starting the app for an unknown developer on MacOS, use [this](https://support.apple.com/guide/mac-help/open-a-mac-app-from-an-unidentified-developer-mh40616/mac#:~:text=Open%20a%20Mac%20app%20from,as%20you%20can%20...) link.
 
-## Contributing
-
+## Installation
 ```bash
 git clone --recurse-submodules https://github.com/repl-it-discord/repl-it-electron
 cd repl-it-electron
@@ -36,7 +35,8 @@ pnpm start
 
 Although node.js version 14 can be used, version 12 LTS is recommended as Electron still uses it.
 
-See [CONTRIBUTING.md](./.github/CONTRIBUTING.md) before contributing
+## Contributing
+To contribute, see [CONTRIBUTING.md](./.github/CONTRIBUTING.md)
 
 See feature implementation details on the [roadmap](https://github.com/repl-it-discord/repl-it-electron/projects)
 
