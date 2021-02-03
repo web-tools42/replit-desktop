@@ -16,7 +16,7 @@
     "build:app:test": "electron-builder -c electron-builder.conf.js --dir",
     "build:dev": "gulp buildDev",
     "build:dist": "gulp buildProd",
-    "build:run": "electron ./ts-out/",
+    "build:run": "electron --no-sandbox ./ts-out/",
     "dist": "npm run build:dist && npm run build:app",
     "lint": "eslint \"**/*.{js,ts,json}\" --fix",
     "start": "npm run build:dev && npm run build:run"
