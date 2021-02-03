@@ -22,7 +22,8 @@ class ElectronWindow extends BrowserWindow {
                 webSecurity: true,
                 allowRunningInsecureContent: false,
                 nodeIntegration: nodeIntegration,
-                spellcheck: true
+                spellcheck: true,
+                contextIsolation: true
             },
             icon: __dirname + '/256x256.png'
         });

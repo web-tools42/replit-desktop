@@ -33,7 +33,7 @@
     "write-file-atomic": "^3.0.3"
   },
   "devDependencies": {
-    "@octokit/types": "^6.8.2",
+    "@octokit/types": "^3.0.3",
     "@types/discord-rpc": "^3.0.4",
     "@types/ejs": "^3.0.4",
     "@types/gulp": "^4.0.6",
