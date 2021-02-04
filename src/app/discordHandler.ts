@@ -1,10 +1,8 @@
 import { Client } from 'discord-rpc';
 import { ElectronWindow, getUrl } from '../common';
-import langs = require("./languages");
 import Timeout = NodeJS.Timeout;
 
 const startTimestamp = new Date();
-console.debug(langs);
 
 class DiscordHandler {
     private client: Client;
@@ -51,15 +49,16 @@ class DiscordHandler {
         let spliturl: Array<string> = url.split('/');
 
         let data: any = await this.window.webContents.executeJavaScript(
-            "document.getElementById('__NEXT_DATA__').innerHTML;", true
+            "document.getElementById('__NEXT_DATA__').innerHTML;",
+            true
         );
 
         data = JSON.parse(data).props.reduxState;
 
         if (data !== undefined) {
-            console.debug("__NEXT_DATA__ exists here.");
+            console.debug('__NEXT_DATA__ exists here.');
         } else {
-            console.debug("__NEXT_DATA__ does not exist here.");
+            console.debug('__NEXT_DATA__ does not exist here.');
         }
 
         if (spliturl[0] === 'repls') {
@@ -98,8 +97,7 @@ class DiscordHandler {
         } else if (spliturl[0][0] === '@' && spliturl[1] !== undefined) {
             let repl: any = data.repls;
 
-            console.log("-------------------");
-
+            console.log('-------------------');
 
             this.setEditing(this.window).then(
                 (res) => {
