@@ -1,63 +1,10 @@
 import { Client } from 'discord-rpc';
 import { ElectronWindow, getUrl } from '../common';
+import langs = require("./languages");
 import Timeout = NodeJS.Timeout;
 
 const startTimestamp = new Date();
-const logosDiscordDict: { [key: string]: string } = {
-    bash: 'bash',
-    basic: 'basic',
-    brainfuck: 'brainfuck',
-    c: 'c',
-    clojure: 'clojure',
-    coffeescript: 'coffeescript',
-    cpp: 'cpp',
-    crystal: 'crystal',
-    csharp: 'csharp',
-    dart: 'dart',
-    'deno-no-transparent': 'deno',
-    django: 'django',
-    elixir: 'elixir',
-    emacs: 'emacs',
-    erlang: 'erlang',
-    express: 'express',
-    flow: 'flow',
-    fsharp: 'fsharp',
-    gatsbyjs: 'gatsbyjs',
-    go: 'go',
-    haskell: 'haskell',
-    java: 'java',
-    javascript: 'javascript',
-    jest: 'jest',
-    julia: 'julia',
-    kotlin: 'kotlin',
-    language: 'language',
-    lolcode: 'lolcode',
-    love2d: 'language',
-    lua: 'lua',
-    nim: 'language',
-    nodejs: 'nodejs',
-    ocaml: 'ocaml',
-    perl6: 'perl6',
-    php: 'php',
-    python: 'python',
-    python_turtle: 'python_turtle',
-    rails: 'rails',
-    react: 'react',
-    reactre: 'reactre',
-    reason: 'language',
-    rlang: 'rlang',
-    roy: 'roy',
-    ruby: 'ruby',
-    rust: 'rust',
-    scala: 'scala',
-    scheme: 'scheme',
-    sinatra: 'language',
-    sqlite: 'sqlite',
-    swift: 'swift',
-    typescript: 'typescript',
-    wasm: 'wasm',
-    web_project: 'web_project'
-};
+console.debug(langs);
 
 class DiscordHandler {
     private client: Client;
@@ -77,7 +24,7 @@ class DiscordHandler {
             });
         }
         this.client
-            .login({ clientId: '498635999274991626' })
+            .login({ clientId: '806925922091270234' })
             .catch((error: string) => {
                 console.error(error);
             });
@@ -103,11 +50,23 @@ class DiscordHandler {
         let url: string = getUrl(this.window);
         let spliturl: Array<string> = url.split('/');
 
+        let data: any = await this.window.webContents.executeJavaScript(
+            "document.getElementById('__NEXT_DATA__').innerHTML;", true
+        );
+
+        data = JSON.parse(data).props.reduxState;
+
+        if (data !== undefined) {
+            console.debug("__NEXT_DATA__ exists here.");
+        } else {
+            console.debug("__NEXT_DATA__ does not exist here.");
+        }
+
         if (spliturl[0] === 'repls') {
             this.client
                 .setActivity({
                     details: `Browsing Repls`,
-                    state: `repl.it/${url}`,
+                    state: ``,
                     startTimestamp,
                     largeImageKey: 'logo',
                     largeImageText: 'Repl.it',
@@ -137,17 +96,22 @@ class DiscordHandler {
                 }
             );
         } else if (spliturl[0][0] === '@' && spliturl[1] !== undefined) {
+            let repl: any = data.repls;
+
+            console.log("-------------------");
+
+
             this.setEditing(this.window).then(
                 (res) => {
                     this.client
                         .setActivity({
                             details: `Editing: ${res.fileName}`,
-                            state: `${url} `,
+                            state: `${url}`,
                             startTimestamp,
                             smallImageKey: 'logo',
                             smallImageText: 'Repl.it',
-                            largeImageKey: logosDiscordDict[res.logoName],
-                            largeImageText: logosDiscordDict[res.logoName],
+                            largeImageKey: res.logoName,
+                            largeImageText: res.logoName,
                             instance: false
                         })
                         .catch((reason) => {
@@ -161,7 +125,7 @@ class DiscordHandler {
         } else if (spliturl[0] === 'talk') {
             this.client
                 .setActivity({
-                    details: `In Repl Talk`,
+                    details: `Browsing Repl Talk`,
                     state: `repl.it/${url}`,
                     startTimestamp,
                     largeImageKey: 'talk',
@@ -189,7 +153,7 @@ class DiscordHandler {
         } else if (spliturl[0] === 'account') {
             this.client
                 .setActivity({
-                    details: `Changing account settings`,
+                    details: `Changing Account Settings`,
                     state: `repl.it/${url}`,
                     startTimestamp,
                     largeImageKey: 'logo',
@@ -202,8 +166,8 @@ class DiscordHandler {
         } else {
             this.client
                 .setActivity({
-                    details: `On Repl.it`,
-                    state: `repl.it/${url}`,
+                    details: `Browsing Repl.it`,
+                    state: `Page Unkown`,
                     startTimestamp,
                     largeImageKey: 'logo',
                     largeImageText: 'Repl.it',
