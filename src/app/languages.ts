@@ -1,4 +1,4 @@
-langs: Object = {
+let langs: { [i: string]: string } = {
     "love2d_beta": {
         "title": "Love2D",
         "ext": "lua"
