@@ -1,4 +1,4 @@
-let langs: { [i: string]: string } = {
+let langs: any = {
     "love2d_beta": {
         "title": "Love2D",
         "ext": "lua"
