@@ -1,4 +1,4 @@
-langs = {
+langs: Object = {
     "love2d_beta": {
         "title": "Love2D",
         "ext": "lua"
