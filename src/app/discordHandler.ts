@@ -1,5 +1,6 @@
 import { Client } from 'discord-rpc';
 import { ElectronWindow, getUrl } from '../common';
+import languages from './languages';
 import Timeout = NodeJS.Timeout;
 
 const startTimestamp = new Date();
@@ -22,7 +23,7 @@ class DiscordHandler {
             });
         }
         this.client
-            .login({ clientId: '806925922091270234' })
+            .login({ clientId: '806972065709031514' })
             .catch((error: string) => {
                 console.error(error);
             });
