@@ -22,7 +22,7 @@ function runElectron() {
 
     if (child) child.kill();
 
-    child = proc.spawn(electron, ['--no-sandbox', './ts-out/']);
+    child = proc.spawn(electron, ['--no-sandbox', '.'], { cwd: './ts-out' });
 
     child.on('error', function (err) {
         errored = true;
