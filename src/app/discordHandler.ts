@@ -96,7 +96,7 @@ class DiscordHandler {
                     this.client
                         .setActivity({
                             details: `Editing ${res.fileName}`,
-                            state: `${url}`,
+                            state: `${res.replName}`,
                             startTimestamp,
                             smallImageKey: 'logo',
                             smallImageText: 'Repl.it',
@@ -205,13 +205,19 @@ class DiscordHandler {
     }
 
     async setEditing(windowObj: ElectronWindow) {
-        let target = getUrl(windowObj).split('#')[1];
+        let target = await windowObj.webContents.executeJavaScript(
+            'store.getState().activeFile',
+            true
+        );
 
-        let temp = target.split('/');
-        let parsed = temp[temp.length - 1];
+        let replName = await windowObj.webContents.executeJavaScript(
+            'store.getState().plugins.fs.state.repl.url',
+            true
+        );
 
-        console.debug('--------');
-        console.debug(parsed);
+        replName = replName.split('/')[1];
+        let parsed = target.split('/');
+        parsed = parsed[parsed.length - 1];
 
         let logoName;
         for (let el of Object.keys(languages.knownExtensions)) {
@@ -235,7 +241,7 @@ class DiscordHandler {
             }
         }
 
-        return { fileName: parsed, logoName: logoName };
+        return { fileName: parsed, logoName: logoName, replName: replName };
     }
 }
 
