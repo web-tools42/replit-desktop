@@ -14,7 +14,7 @@ let child = null;
 
 function printEc(data) {
     var str = data.toString().trim();
-    if (str) console.log('[electron] ' + str);
+    if (str) console.log(`[electron_debug]  ${str}`);
 }
 
 function runElectron() {

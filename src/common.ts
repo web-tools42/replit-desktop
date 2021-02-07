@@ -25,7 +25,7 @@ class ElectronWindow extends BrowserWindow {
                 spellcheck: true,
                 contextIsolation: true
             },
-            icon: __dirname + '/256x256.png'
+            icon: `${__dirname}/256x256.png`
         });
     }
 }
@@ -65,8 +65,8 @@ interface launcherStatus {
 type githubReleaseResponse = Endpoints['GET /repos/:owner/:repo/releases/latest']['response']['data'];
 
 function capitalize(str: string) {
-    return str.replace(/(^|\s)([a-z])/g, function (p1: String, p2: String) {
-        return p1 + p2.toUpperCase().toString();
+    return str.replace(/(^|\s)([a-z])/g, (p1: String, p2: String) => {
+        return `${p1}${p2.toUpperCase().toString()}`;
     });
 }
 

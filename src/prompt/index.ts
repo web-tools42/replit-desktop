@@ -90,18 +90,18 @@ function electronPrompt(options: Object, parentWindow: ElectronWindow) {
             cleanup();
         };
 
-        ipcMain.on('prompt-get-options:' + id, getOptionsListener);
-        ipcMain.on('prompt-post-data:' + id, postDataListener);
-        ipcMain.on('prompt-error:' + id, errorListener);
+        ipcMain.on(`prompt-get-options:${id}`, getOptionsListener);
+        ipcMain.on(`prompt-post-data:${id}`, postDataListener);
+        ipcMain.on(`prompt-error:${id}`, errorListener);
         promptWindow.on('unresponsive', unresponsiveListener);
 
         promptWindow.on('closed', () => {
             ipcMain.removeListener(
-                'prompt-get-options:' + id,
+                `prompt-get-options:${id}`,
                 getOptionsListener
             );
-            ipcMain.removeListener('prompt-post-data:' + id, postDataListener);
-            ipcMain.removeListener('prompt-error:' + id, postDataListener);
+            ipcMain.removeListener(`prompt-post-data:${id}`, postDataListener);
+            ipcMain.removeListener(`prompt-error:${id}`, postDataListener);
             resolve(null);
         });
 

@@ -62,7 +62,7 @@ class ThemeHandler {
                     e.returnValue = 'Success';
                 })
                 .catch((error) => {
-                    e.returnValue = 'Failed: ' + error;
+                    e.returnValue = `Failed: ${error}`;
                 });
         });
     }
