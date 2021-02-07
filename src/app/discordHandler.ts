@@ -96,7 +96,7 @@ class DiscordHandler {
                     this.client
                         .setActivity({
                             details: `${res.replName}`,
-                            state: `Editing ${res.fileName}}`,
+                            state: `Editing ${res.fileName}`,
                             startTimestamp,
                             smallImageKey: 'logo',
                             smallImageText: 'Repl.it',
