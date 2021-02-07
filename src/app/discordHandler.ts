@@ -1,4 +1,5 @@
 import { Client } from 'discord-rpc';
+import { parse } from 'semver';
 import { ElectronWindow, getUrl } from '../common';
 import languages from './languages';
 import Timeout = NodeJS.Timeout;
@@ -49,24 +50,18 @@ class DiscordHandler {
         let url: string = getUrl(this.window);
         let spliturl: Array<string> = url.split('/');
 
-        let data: any = await this.window.webContents.executeJavaScript(
+        let pageData: any = await this.window.webContents.executeJavaScript(
             "document.getElementById('__NEXT_DATA__').innerHTML;",
             true
         );
 
-        data = JSON.parse(data).props.reduxState;
-
-        if (data !== undefined) {
-            console.debug('__NEXT_DATA__ exists here.');
-        } else {
-            console.debug('__NEXT_DATA__ does not exist here.');
-        }
+        pageData = JSON.parse(pageData)['props']['reduxState'];
 
         if (spliturl[0] === 'repls') {
             this.client
                 .setActivity({
                     details: `Browsing Repls`,
-                    state: ``,
+                    state: `...`,
                     startTimestamp,
                     largeImageKey: 'logo',
                     largeImageText: 'Repl.it',
@@ -79,12 +74,12 @@ class DiscordHandler {
                     this.client
                         .setActivity({
                             state: `${res.viewing}`,
-                            details: `In Repl Talk ${res.talkBoard}`,
+                            details: `Repl Talk: ${res.talkBoard}`,
                             startTimestamp,
-                            largeImageKey: 'logo',
-                            largeImageText: 'Repl.it',
-                            smallImageKey: 'talk',
-                            smallImageText: 'Repl Talk',
+                            largeImageKey: 'repltalk',
+                            largeImageText: 'ReplTalk',
+                            smallImageKey: 'logo',
+                            smallImageText: 'Repl.it',
                             instance: false
                         })
                         .catch((reason) => {
@@ -96,21 +91,17 @@ class DiscordHandler {
                 }
             );
         } else if (spliturl[0][0] === '@' && spliturl[1] !== undefined) {
-            let repl: any = data.repls;
-
-            console.log('-------------------');
-
             this.setEditing(this.window).then(
                 (res) => {
                     this.client
                         .setActivity({
-                            details: `Editing: ${res.fileName}`,
+                            details: `Editing ${res.fileName}`,
                             state: `${url}`,
                             startTimestamp,
                             smallImageKey: 'logo',
                             smallImageText: 'Repl.it',
                             largeImageKey: res.logoName,
-                            largeImageText: res.logoName,
+                            largeImageText: `${res.logoName}`,
                             instance: false
                         })
                         .catch((reason) => {
@@ -166,7 +157,7 @@ class DiscordHandler {
             this.client
                 .setActivity({
                     details: `Browsing Repl.it`,
-                    state: `Page Unkown`,
+                    state: `...`,
                     startTimestamp,
                     largeImageKey: 'logo',
                     largeImageText: 'Repl.it',
@@ -214,15 +205,37 @@ class DiscordHandler {
     }
 
     async setEditing(windowObj: ElectronWindow) {
-        const fileName: string = await windowObj.webContents.executeJavaScript(
-            "document.querySelector('.file-header-name div').textContent"
-        );
-        const logoUrl: string = await windowObj.webContents.executeJavaScript(
-            "document.querySelector('.workspace-header-description-container" +
-                " img')['src']"
-        );
-        const imageName: string = logoUrl.split('/').pop().split('.')[0];
-        return { fileName: fileName, logoName: imageName };
+        let target = getUrl(windowObj).split('#')[1];
+
+        let temp = target.split('/');
+        let parsed = temp[temp.length - 1];
+
+        console.debug('--------');
+        console.debug(parsed);
+
+        let logoName;
+        for (let el of Object.keys(languages.knownExtensions)) {
+            const match = el.match(/^\/(.+)\/([a-z]*)$/);
+            console.debug(match);
+
+            if (match) {
+                const regex = new RegExp(match[1], match[2]);
+
+                if (regex.test(parsed)) {
+                    logoName = languages.knownExtensions[el].image;
+                    console.debug(logoName);
+                    break;
+                }
+            } else {
+                if (parsed.endsWith(el)) {
+                    logoName = languages.knownExtensions[el].image;
+                    console.debug(logoName);
+                    break;
+                }
+            }
+        }
+
+        return { fileName: parsed, logoName: logoName };
     }
 }
 
