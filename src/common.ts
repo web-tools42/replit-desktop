@@ -29,21 +29,15 @@ class ElectronWindow extends BrowserWindow {
                 enableRemoteModule: false,
                 webSecurity: true,
                 allowRunningInsecureContent: false,
-                nodeIntegration: nodeIntegration,
                 spellcheck: true,
-                contextIsolation: true
                 contextIsolation: false, // Enforce false since we are using preload scripts
                 nodeIntegration: nodeIntegration,
                 preload: preload
             },
-<<<<<<< HEAD
-            icon: `${__dirname}/256x256.png`
-=======
             icon: __dirname + '/512x512.png'
         });
         this.once('ready-to-show', () => {
             this.show();
->>>>>>> dev
         });
     }
 }
