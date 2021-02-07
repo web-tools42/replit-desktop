@@ -95,8 +95,8 @@ class DiscordHandler {
                 (res) => {
                     this.client
                         .setActivity({
-                            details: `Editing ${res.fileName}`,
-                            state: `${res.replName}`,
+                            details: `${res.replName}`,
+                            state: `Editing ${res.fileName}}`,
                             startTimestamp,
                             smallImageKey: 'logo',
                             smallImageText: 'Repl.it',
@@ -211,31 +211,27 @@ class DiscordHandler {
         );
 
         let replName = await windowObj.webContents.executeJavaScript(
-            'store.getState().plugins.fs.state.repl.url',
+            'store.getState().plugins.fs.state.repl.title',
             true
         );
 
-        replName = replName.split('/')[1];
         let parsed = target.split('/');
         parsed = parsed[parsed.length - 1];
 
         let logoName;
         for (let el of Object.keys(languages.knownExtensions)) {
             const match = el.match(/^\/(.+)\/([a-z]*)$/);
-            console.debug(match);
 
             if (match) {
                 const regex = new RegExp(match[1], match[2]);
 
                 if (regex.test(parsed)) {
                     logoName = languages.knownExtensions[el].image;
-                    console.debug(logoName);
                     break;
                 }
             } else {
                 if (parsed.endsWith(el)) {
                     logoName = languages.knownExtensions[el].image;
-                    console.debug(logoName);
                     break;
                 }
             }
