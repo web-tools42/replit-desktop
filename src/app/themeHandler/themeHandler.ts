@@ -19,7 +19,7 @@ class ThemeHandler {
         window.webContents.insertCSS(cssString);
     }
 
-    openThemeWindow(parentWindow: ElectronWindow, name: string = 'default') {
+    addTheme(parentWindow: ElectronWindow, name: string = 'default') {
         if (name == 'default') {
             if (this.settings.has('theme.name'))
                 name = <string>this.settings.get('theme.name');

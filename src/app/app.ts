@@ -182,9 +182,9 @@ class App extends EventEmitter {
             }
         });
 
-        this.themeHandler.openThemeWindow(window);
+        this.themeHandler.addTheme(window);
         window.webContents.on('did-finish-load', () => {
-            this.themeHandler.openThemeWindow(window);
+            this.themeHandler.addTheme(window);
         });
 
         window.webContents.on(

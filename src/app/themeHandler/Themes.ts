@@ -46,7 +46,7 @@ interface ThemeObject {
     [key: string]: ThemeStructure;
 }
 const Themes: ThemeObject = {
-    Dark: <ThemeStructure>{
+    darkTheme: <ThemeStructure>{
         'color-background-1': '#1d2333',
         'color-background-2': '#171d2d',
         'color-background-3': '#0e1525',
@@ -91,7 +91,7 @@ const Themes: ThemeObject = {
         'color-positive-transparent-3': 'rgba(24,204,81,0.12)'
     },
 
-    Light: <ThemeStructure>{
+    lightTheme: <ThemeStructure>{
         'color-background-1': '#ffffff',
         'color-background-2': '#f6f6f6',
         'color-background-3': '#eeeeee',
