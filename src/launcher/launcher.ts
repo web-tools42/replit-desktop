@@ -164,10 +164,10 @@ class Launcher {
         this.window = new ElectronWindow(
             {
                 show: false,
-                //resizable: false,
+                resizable: false,
                 height: 300,
                 width: 250,
-                //frame: false
+                frame: false
             },
             ``,
             true
