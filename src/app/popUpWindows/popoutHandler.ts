@@ -17,11 +17,10 @@ class PopoutHandler {
                 {
                     width: 600,
                     height: 600
-                    //show: false | turn this on
                 },
                 `${__dirname}/console.js`
             );
-            // wait for the ipc message to show so the screen is not white while loading
+
             Terminal.loadURL(
                 `https://repl.it/${repl_url.split('#')[0]}?outputonly=1`
             );

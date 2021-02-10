@@ -13,9 +13,11 @@ let Keep = [
     //after you load send a message to ipc to show the window
     'script'
 ];
+
 window.onload = () => {
     let Remove = (E) => {
-        E.remove();
+        // E.remove();
+        E.hidden = true
     };
     // Options for the observer (which mutations to observe)
     const config = { attributes: true, childList: true, subtree: true };
@@ -45,5 +47,7 @@ window.onload = () => {
         }
         if (!Level) observer.observe(document.body, config);
     };
-    Walker();
+    setTimeout(() => {
+        Walker();
+    }, 5000)
 };
