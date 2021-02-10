@@ -16,7 +16,11 @@ class ElectronWindow extends BrowserWindow {
         preload: string = '',
         nodeIntegration: boolean = false
     ) {
-        if (preload.length > 0) {
+        if (
+            preload.length > 0 &&
+            !preload.includes(__dirname) &&
+            !preload.startsWith('./')
+        ) {
             preload = path.join(__dirname, 'preload', preload);
         }
         super({

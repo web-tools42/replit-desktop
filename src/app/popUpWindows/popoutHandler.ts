@@ -1,20 +1,31 @@
-import { ipcMain } from "electron";
-import { ElectronWindow } from '../../common';
+// import { ipcMain } from 'electron';
+import { ElectronWindow, getUrl } from '../../common';
 
 class PopoutHandler {
     constructor() {
-      ipcMain.on('Popup', (event, status) => {
-           this.launch();
-      })
+        // this cant be handled here in the end as we need the repls url
+        // ipcMain.on('Popup', (event, status) => {
+        //     this.launch();
+        // });
     }
 
-    launch() {
-        let Terminal = new ElectronWindow({ width: 600, height: 600, webPreferences: {
-          preload: `${__dirname}/console.js`,
-          nodeIntegration: true
-          }
-        });
-        Terminal.loadURL(`https://repl.it/@JDOG787/UtterSoreManagement?outputonly=1`)
+    launch(win: ElectronWindow) {
+        // Handle the repl url, make sure it is there repl and a repl
+        let repl_url = getUrl(win);
+        if (/\@.*\/.*/.test(repl_url)) {
+            let Terminal = new ElectronWindow(
+                {
+                    width: 600,
+                    height: 600
+                    //show: false | turn this on
+                },
+                `${__dirname}/console.js`
+            );
+            // wait for the ipc message to show so the screen is not white while loading
+            Terminal.loadURL(
+                `https://repl.it/${repl_url.split('#')[0]}?outputonly=1`
+            );
+        }
     }
 }
 

@@ -41,8 +41,8 @@ function appMenuSetup(
                 },
                 {
                     label: 'Toggle monitor',
-                    click() {
-                         popoutHandler.launch();
+                    click(i: MenuItem, win: ElectronWindow) {
+                        popoutHandler.launch(win);
                     }
                 },
                 {

@@ -56,7 +56,6 @@ class App extends EventEmitter {
 
         // Handle The Login
         this.mainWindow.webContents.on('new-window', (event, url) => {
-            console.log(url);
             if (
                 url == 'https://repl.it/auth/google/get?close=1' ||
                 url == 'https://repl.it/auth/github/get?close=1'
