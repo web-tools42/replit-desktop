@@ -14,6 +14,7 @@ class PopoutHandler {
           nodeIntegration: true
           }
         });
+        console.log(`${__dirname}/console.js`)
         Terminal.loadURL(`https://repl.it/@JDOG787/UtterSoreManagement?outputonly=1`)
     }
 }
