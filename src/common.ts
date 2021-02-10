@@ -52,13 +52,13 @@ interface Version {
     versionString?: string;
 }
 
-interface checkUpdateResult {
+interface CheckUpdateResult {
     hasUpdate: boolean;
     changeLog?: string;
     version?: string;
 }
 
-interface downloadUpdateResult {
+interface DownloadUpdateResult {
     success: boolean;
     downloadFilePath?: string;
     error?: string;
@@ -70,14 +70,14 @@ interface UpdateAssetsUrls {
     linuxUrl: string;
 }
 
-interface launcherStatus {
+interface LauncherStatus {
     text: string;
     downloaded?: number;
     totalLength?: number;
     percentage?: string;
 }
 
-type githubReleaseResponse = Endpoints['GET /repos/:owner/:repo/releases/latest']['response']['data'];
+type GithubReleaseResponse = Endpoints['GET /repos/:owner/:repo/releases/latest']['response']['data'];
 
 function capitalize(str: string) {
     return str.replace(/(^|\s)([a-z])/g, function (p1: String, p2: String) {
@@ -164,12 +164,12 @@ const IPAD_USER_AGENT: string =
     ' Safari/604.1';
 export {
     Version,
-    checkUpdateResult,
+    CheckUpdateResult,
     ElectronWindow,
     UpdateAssetsUrls,
-    githubReleaseResponse,
-    launcherStatus,
-    downloadUpdateResult,
+    GithubReleaseResponse,
+    LauncherStatus,
+    DownloadUpdateResult,
     getUrl,
     handleExternalLink,
     selectInput,
