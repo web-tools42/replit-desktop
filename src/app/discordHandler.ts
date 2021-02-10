@@ -47,7 +47,7 @@ class DiscordHandler {
         let url: string = getUrl(this.window);
         let spliturl: Array<string> = url.split('/');
 
-        interface Rich_Presence {
+        interface Richpresence {
             details: string;
             state: string;
             startTimestamp: Date;
@@ -57,7 +57,7 @@ class DiscordHandler {
             smallImageText?: string;
             instance: boolean;
         }
-        let Presence: Rich_Presence = {
+        let Presence: Richpresence = {
             details: `Browsing Repl.it`,
             state: `...`,
             startTimestamp,

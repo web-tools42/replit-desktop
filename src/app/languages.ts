@@ -40,7 +40,6 @@ const languages: LangDict = {
         '/\\.rpy[bc]$/i': { image: 'assembly' },
         '/\\.py[co]$/i': { image: 'assembly' },
         '.swp': { image: 'assembly' },
-        '.DS_Store': { image: 'assembly' },
         '.au3': { image: 'autoit' },
         'babel.config.js': { image: 'babel' },
         '/\\.babelrc/i': { image: 'babel' },
@@ -226,9 +225,6 @@ const languages: LangDict = {
             image: 'manifest'
         },
         'lib/icons/.icondb.js': { image: 'manifest' },
-        '/\\.git[\\/\\\\](.*[\\/\\\\])?(HEAD|ORIG_HEAD|packed-refs|logs[\\/\\\\](.+[\\/\\\\])?[^\\/\\\\]+)$/': {
-            image: 'manifest'
-        },
         '/\\.(md|mdown|markdown|mkd|mkdown|mdwn|mkdn|rmd|ron|pmd)$/i': {
             image: 'markdown'
         },
@@ -326,9 +322,6 @@ const languages: LangDict = {
         '.scss': { image: 'scss' },
         '.sass': { image: 'scss' },
         '/\\.(sh|rc|bats|bash|tool|install|command)$/i': { image: 'shell' },
-        '/^(\\.?bash(rc|[-_]?(profile|login|logout|history|prompt))|_osc|config|install-sh|PKGBUILD)$/i': {
-            image: 'shell'
-        },
         '/\\.(ksh|mksh|pdksh)$/i': { image: 'shell' },
         '.sh-session': { image: 'shell' },
         '/\\.zsh(-theme|_history)?$|^\\.?(antigen|zpreztorc|zlogin|zlogout|zprofile|zshenv|zshrc)$/i': {
