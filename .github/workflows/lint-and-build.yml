@@ -1,7 +1,6 @@
-name: 'Build with gulp on push'
+name: 'Build with gulp and lint using ESLint on push'
 
-on:
-  push
+on: push
 
 jobs:
   eslint:
@@ -14,3 +13,4 @@ jobs:
     - run: "npm install"
     - run: "npm run build:dev"
     - run: "npm run build:prod"
+    - run: "npm run lint:check"
