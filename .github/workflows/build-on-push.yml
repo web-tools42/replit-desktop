@@ -1,4 +1,4 @@
-name: 'Lint using ESLint on push'
+name: 'Build with gulp on push'
 
 on:
   push
