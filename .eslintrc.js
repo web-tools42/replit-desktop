@@ -9,7 +9,9 @@ module.exports = {
     parser: '@typescript-eslint/parser',
     plugins: ['@typescript-eslint', 'json-format'],
     parserOptions: {
-        sourceType: 'module'
+        sourceType: 'module',
+        extends: './tsconfig.json',
+        include: ['src/**/*.ts']
     },
     rules: {
         'prettier/prettier': 'error',
@@ -17,7 +19,7 @@ module.exports = {
             'error',
             {
                 selector: 'typeLike',
-                format: ['camelCase', 'StrictPascalCase']
+                format: ['StrictPascalCase']
             },
             {
                 selector: ['variable', 'parameter'],
