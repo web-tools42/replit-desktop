@@ -30,7 +30,6 @@ async function initApp() {
     mainApp.mainWindow.loadURL('https://repl.it/~').catch(console.debug);
     await mainApp.clearCookies(true);
     mainApp.mainWindow.webContents.once('did-finish-load', () => {
-        mainApp.mainWindow.show();
         launcher.window.close();
     });
     mainApp.mainWindow.on('close', () => app.quit());
