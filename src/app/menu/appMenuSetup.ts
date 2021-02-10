@@ -9,12 +9,14 @@ import { ElectronWindow, PLATFORM, selectInput } from '../../common';
 import { ThemeHandler } from '../themeHandler/themeHandler';
 import { App } from '../app';
 import { SettingHandler } from '../settingHandler';
+import { PopoutHandler } from '../popUpWindows/popoutHandler';
 import set = Reflect.set;
 
 function appMenuSetup(
     mainApp: App,
     themeHandler: ThemeHandler,
-    settings: SettingHandler
+    settings: SettingHandler,
+    popoutHandler: PopoutHandler
 ): Menu {
     const template: MenuItemConstructorOptions[] = [
         {
@@ -36,6 +38,12 @@ function appMenuSetup(
                             }
                         }
                     ]
+                },
+                {
+                    label: 'Toggle monitor',
+                    click() {
+                         popoutHandler.launch();
+                    }
                 },
                 {
                     label: 'Use Ace Editor',

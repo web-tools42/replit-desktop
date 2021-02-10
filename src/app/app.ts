@@ -13,6 +13,7 @@ import {
     NewWindowWebContentsEvent,
     HandlerDetails
 } from 'electron';
+import { PopoutHandler } from './popUpWindows/popoutHandler';
 import { ThemeHandler } from './themeHandler/themeHandler';
 import { DiscordHandler } from './discordHandler';
 import { SettingHandler } from './settingHandler';
@@ -23,6 +24,7 @@ import { EventEmitter } from 'events';
 class App extends EventEmitter {
     public readonly mainWindow: ElectronWindow;
     public readonly themeHandler: ThemeHandler;
+    public readonly popoutHandler: PopoutHandler;
     public readonly discordHandler: DiscordHandler;
     protected windowArray: ElectronWindow[];
     private readonly settingsHandler: SettingHandler;
@@ -39,6 +41,7 @@ class App extends EventEmitter {
         this.discordHandler = new DiscordHandler(this.mainWindow);
         this.mainWindow.setBackgroundColor('#393c42');
         this.themeHandler = new ThemeHandler(this.settingsHandler);
+        this.popoutHandler = new PopoutHandler();
         this.addWindow(this.mainWindow);
         if (!this.settingsHandler.has('enable-ace')) {
             this.settingsHandler.set('enable-ace', false);
@@ -46,7 +49,8 @@ class App extends EventEmitter {
         app.applicationMenu = appMenuSetup(
             this,
             this.themeHandler,
-            this.settingsHandler
+            this.settingsHandler,
+            this.popoutHandler
         );
         this.isOffline = false;
 
