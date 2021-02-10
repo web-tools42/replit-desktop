@@ -22,8 +22,8 @@ class ElectronWindow extends BrowserWindow {
         super({
             ...options,
             show: false,
-            minHeight: 800, // TODO: Store window infos
-            minWidth: 600,
+            minHeight: 300, // TODO: Store window infos
+            minWidth: 400,
             webPreferences: {
                 devTools: true,
                 enableRemoteModule: false,
