@@ -1,31 +1,24 @@
-// CHANGE LATER
-
-let Path = {};
-let Keep = [
-    // Important stuff
+let Keep: string[] = [
     '.jsx-2759849619', // the console
     '.jsx-2460743671', // the shell
     '.jsx-2634825231', // the new http tab explorers only
     '.jsx-428003656',
     '.jsx-1817423798', // the start button
-    //add in the graphics window and the server window
-    // you removing something we shouldnt be or removing too early might wanna wait a second before
-    //after you load send a message to ipc to show the window
     'script'
 ];
 
 window.onload = () => {
-    let Remove = (E) => {
-        // E.remove();
-        E.hidden = true
+    let Remove = (E: HTMLElement) => {
+        E.remove();
     };
+
     // Options for the observer (which mutations to observe)
     const config = { attributes: true, childList: true, subtree: true };
     // Callback function to execute when mutations are observed
     const callback = (mutationsList, observer) => Walker();
-    const observer = new MutationObserver(callback);
+    const observer: MutationObserver = new MutationObserver(callback);
     let Walker = (Parent = document.body, Level) => {
-        if (observer && observer.dissconnct) observer.dissconnct();
+        if (observer && observer.disconnect) observer.disconnect();
         [...Parent.children].forEach((elm) => {
             // Basic Deletion Test
             if (!elm.children.length && !Keep.some((A) => elm.matches(A))) {
@@ -42,7 +35,7 @@ window.onload = () => {
                 }
             }
         });
-        if (Parent.children.length == 0) {
+        if (Parent.children.length === 0) {
             Remove(Parent);
         }
         if (!Level) observer.observe(document.body, config);
