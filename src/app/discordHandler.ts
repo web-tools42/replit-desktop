@@ -94,14 +94,14 @@ class DiscordHandler {
                 startTimestamp,
                 smallImageKey: 'logo',
                 smallImageText: 'Repl.it',
-                largeImageKey: res.logoName,
+                largeImageKey: `language: ${res.logoName}`,
                 largeImageText: res.logoName,
                 instance: false
             };
         } else if (spliturl[0] === 'talk') {
             Presence = {
-                details: `Browsing Repl Talk`,
-                state: `repl.it/${url}`,
+                details: `{...}`,
+                state: `Browsing Repl Talk`,
                 startTimestamp,
                 largeImageKey: 'talk',
                 largeImageText: 'Repl Talk',
@@ -111,8 +111,8 @@ class DiscordHandler {
             };
         } else if (spliturl[0][0] === '@') {
             Presence = {
-                details: `Looking at ${spliturl[0]}'s profile`,
-                state: `repl.it/${url}`,
+                details: `{...}`,
+                state: `Viewing ${spliturl[0]}'s profile`,
                 startTimestamp,
                 largeImageKey: 'logo',
                 largeImageText: 'Repl.it',
@@ -120,8 +120,8 @@ class DiscordHandler {
             };
         } else if (spliturl[0] === 'account') {
             Presence = {
-                details: `Changing Account Settings`,
-                state: `repl.it/${url}`,
+                details: `{...}`,
+                state: `Changing Account Settings`,
                 startTimestamp,
                 largeImageKey: 'logo',
                 largeImageText: 'Repl.it',
