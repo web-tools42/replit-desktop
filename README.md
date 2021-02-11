@@ -12,7 +12,8 @@
 
 ## Installation and Usage
 
-1. Install the application
+Install [git](https://git-scm.com) or [GitHub Desktop](https://desktop.github.com)
+1. Clone the repository
 ```bash
 git clone https://github.com/repl-it-discord/repl-it-electron.git
 cd repl-it-electron
