@@ -198,6 +198,22 @@ function appMenuSetup(
                     click() {
                         shell.openExternal('https://repl.it/site/about').then();
                     }
+                },
+                {
+                    label: 'Report a Bug, or Request a Feature',
+                    click() {
+                        shell.openExternal(
+                            'https://github.com/repl-it-discord/repl-it-electron/issues/new/choose'
+                        );
+                    }
+                },
+                {
+                    label: 'Go to Github Page',
+                    click() {
+                        shell.openExternal(
+                            'https://github.com/repl-it-discord/repl-it-electron'
+                        );
+                    }
                 }
             ]
         }
