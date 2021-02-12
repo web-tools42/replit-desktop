@@ -30,7 +30,7 @@ module.exports = {
             },
             {
                 selector: ['function', 'method'],
-                format: ['camelCase', 'snake_case']
+                format: ['camelCase']
             },
             { selector: ['property'], format: ['camelCase', 'snake_case'] }
         ]

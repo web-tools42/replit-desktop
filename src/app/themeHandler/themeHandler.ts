@@ -11,7 +11,7 @@ class ThemeHandler {
             this.addTheme(Main, code);
         });
     }
-    open_window() {
+    openWindow() {
         this.theme_market = new ElectronWindow(
             {
                 height: 900,
