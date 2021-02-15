@@ -4,6 +4,9 @@
         "formulahendry.github-actions",
         "eg2.vscode-npm-script",
         "christian-kohler.npm-intellisense",
-        "esbenp.prettier-vscode"
+        "esbenp.prettier-vscode",
+        "mhutchie.git-graph",
+        "eamodio.gitlens",
+        "donjayamanne.githistory"
     ]
 }
