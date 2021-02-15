@@ -24,7 +24,7 @@ class ThemeHandler {
         this.theme_market.loadURL(`file://${__dirname}/themes.html`);
     }
 
-    open_maker() {
+    openMaker() {
         this.theme_market = new ElectronWindow(
             {
                 height: 900,

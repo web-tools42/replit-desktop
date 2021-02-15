@@ -9,11 +9,13 @@ import { ElectronWindow, PLATFORM, selectInput } from '../../common';
 import { ThemeHandler } from '../themeHandler/themeHandler';
 import { App } from '../app';
 import { SettingHandler } from '../settingHandler';
+import { PopoutHandler } from '../popoutHandler/popoutHandler';
 
 function appMenuSetup(
     mainApp: App,
     themeHandler: ThemeHandler,
-    settings: SettingHandler
+    settings: SettingHandler,
+    popoutHandler: PopoutHandler
 ): Menu {
     const template: MenuItemConstructorOptions[] = [
         {
@@ -25,13 +27,13 @@ function appMenuSetup(
                         {
                             label: 'Choose Theme',
                             click(i: MenuItem, win: ElectronWindow) {
-                                themeHandler.open_window();
+                                themeHandler.openWindow();
                             }
                         },
                         {
                             label: 'Make Theme',
                             click(i: MenuItem, win: ElectronWindow) {
-                                themeHandler.open_maker();
+                                themeHandler.openMaker();
                             }
                         }
                     ]

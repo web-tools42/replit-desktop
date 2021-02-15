@@ -13,7 +13,7 @@ import {
     NewWindowWebContentsEvent,
     HandlerDetails
 } from 'electron';
-import { PopoutHandler } from './popUpWindows/popoutHandler';
+import { PopoutHandler } from './popoutHandler/popoutHandler';
 import { ThemeHandler } from './themeHandler/themeHandler';
 import { DiscordHandler } from './discordHandler';
 import { SettingHandler } from './settingHandler';
