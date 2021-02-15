@@ -1,64 +1,20 @@
 import { Client } from 'discord-rpc';
-import { ElectronWindow, getUrl } from '../common';
+import { ElectronWindow, capitalize } from '../common';
+import { displayNameToIcon } from './languages';
 import Timeout = NodeJS.Timeout;
-
 const startTimestamp = new Date();
-const logosDiscordDict: { [key: string]: string } = {
-    bash: 'bash',
-    basic: 'basic',
-    brainfuck: 'brainfuck',
-    c: 'c',
-    clojure: 'clojure',
-    coffeescript: 'coffeescript',
-    cpp: 'cpp',
-    crystal: 'crystal',
-    csharp: 'csharp',
-    dart: 'dart',
-    'deno-no-transparent': 'deno',
-    django: 'django',
-    elixir: 'elixir',
-    emacs: 'emacs',
-    erlang: 'erlang',
-    express: 'express',
-    flow: 'flow',
-    fsharp: 'fsharp',
-    gatsbyjs: 'gatsbyjs',
-    go: 'go',
-    haskell: 'haskell',
-    java: 'java',
-    javascript: 'javascript',
-    jest: 'jest',
-    julia: 'julia',
-    kotlin: 'kotlin',
-    language: 'language',
-    lolcode: 'lolcode',
-    love2d: 'language',
-    lua: 'lua',
-    nim: 'language',
-    nodejs: 'nodejs',
-    ocaml: 'ocaml',
-    perl6: 'perl6',
-    php: 'php',
-    python: 'python',
-    python_turtle: 'python_turtle',
-    rails: 'rails',
-    react: 'react',
-    reactre: 'reactre',
-    reason: 'language',
-    rlang: 'rlang',
-    roy: 'roy',
-    ruby: 'ruby',
-    rust: 'rust',
-    scala: 'scala',
-    scheme: 'scheme',
-    sinatra: 'language',
-    sqlite: 'sqlite',
-    swift: 'swift',
-    typescript: 'typescript',
-    wasm: 'wasm',
-    web_project: 'web_project'
-};
 
+function getUrl(windowObj: ElectronWindow) {
+    try {
+        let url = windowObj.webContents
+            .getURL()
+            .replace(/(^\w+:|^)\/\/repl\.it\//, '');
+        url = url.split('?')[0];
+        return url;
+    } catch (e) {
+        return '';
+    }
+}
 class DiscordHandler {
     private client: Client;
     private readonly window: ElectronWindow;
@@ -83,7 +39,7 @@ class DiscordHandler {
             });
         this.client.on('ready', () => {
             console.debug('Discord Client ready');
-            this.setPlayingDiscord().catch();
+            this.setPlayingDiscord();
             this.discordTimer = setInterval(() => {
                 this.setPlayingDiscord().catch((e: string) => {
                     console.error('Failed to update Discord status. ' + e);
@@ -93,27 +49,25 @@ class DiscordHandler {
     }
 
     disconnectDiscord() {
-        this.client.clearActivity().catch();
+        this.client.clearActivity();
         clearInterval(this.discordTimer);
-        this.client.destroy().then();
+        this.client.destroy();
         delete this.client;
     }
 
     async setPlayingDiscord() {
         let url: string = getUrl(this.window);
-        let spliturl: Array<string> = url.split('/');
+        let spliturl: string[] = url.split('/');
 
         if (spliturl[0] === 'repls') {
-            this.client
-                .setActivity({
-                    details: `Browsing Repls`,
-                    state: `repl.it/${url}`,
-                    startTimestamp,
-                    largeImageKey: 'logo',
-                    largeImageText: 'Repl.it',
-                    instance: false
-                })
-                .then();
+            this.client.setActivity({
+                details: `Browsing Repls`,
+                state: `repl.it/${url}`,
+                startTimestamp,
+                largeImageKey: 'logo-bg',
+                largeImageText: 'Repl.it',
+                instance: false
+            });
         } else if (spliturl[0] === 'talk') {
             this.setTalkBoard(spliturl, this.window).then(
                 (res) => {
@@ -122,10 +76,10 @@ class DiscordHandler {
                             state: `${res.viewing}`,
                             details: `In Repl Talk ${res.talkBoard}`,
                             startTimestamp,
-                            largeImageKey: 'logo',
-                            largeImageText: 'Repl.it',
-                            smallImageKey: 'talk',
-                            smallImageText: 'Repl Talk',
+                            largeImageKey: 'talk-bg',
+                            largeImageText: 'Repl Talk',
+                            smallImageKey: 'logo',
+                            smallImageText: 'Repl.it',
                             instance: false
                         })
                         .catch((reason) => {
@@ -146,8 +100,8 @@ class DiscordHandler {
                             startTimestamp,
                             smallImageKey: 'logo',
                             smallImageText: 'Repl.it',
-                            largeImageKey: logosDiscordDict[res.logoName],
-                            largeImageText: logosDiscordDict[res.logoName],
+                            largeImageKey: res.largeImageKey,
+                            largeImageText: res.largeImageText,
                             instance: false
                         })
                         .catch((reason) => {
@@ -164,7 +118,7 @@ class DiscordHandler {
                     details: `In Repl Talk`,
                     state: `repl.it/${url}`,
                     startTimestamp,
-                    largeImageKey: 'talk',
+                    largeImageKey: 'talk-bg',
                     largeImageText: 'Repl Talk',
                     smallImageKey: 'logo',
                     smallImageText: 'Repl.it',
@@ -215,7 +169,10 @@ class DiscordHandler {
         }
     }
 
-    async setTalkBoard(spliturl: Array<string>, windowObj: ElectronWindow) {
+    async setTalkBoard(
+        spliturl: string[],
+        windowObj: ElectronWindow
+    ): Promise<{ viewing: string; talkBoard: string }> {
         let viewing: string = 'Viewing ';
         if (spliturl[3] !== undefined) {
             viewing += await windowObj.webContents.executeJavaScript(
@@ -226,40 +183,30 @@ class DiscordHandler {
         } else {
             viewing = `Viewing ${spliturl[1]}`;
         }
-        let talkBoard: string = 'error';
-        switch (spliturl[1]) {
-            case 'announcements':
-                talkBoard = 'Announcements';
-                break;
-            case 'ask':
-                talkBoard = 'Ask';
-                break;
-            case 'challenge':
-                talkBoard = 'Challenge';
-                break;
-            case 'learn':
-                talkBoard = 'Learn';
-                break;
-            case 'share':
-                talkBoard = 'Share';
-                break;
-            default:
-                talkBoard = '';
-        }
-        console.log(viewing);
+        const talkBoard = capitalize(spliturl[1]);
         return { viewing: viewing, talkBoard: talkBoard };
     }
 
-    async setEditing(windowObj: ElectronWindow) {
+    async setEditing(
+        windowObj: ElectronWindow
+    ): Promise<{
+        fileName: string;
+        largeImageKey: string;
+        largeImageText: string;
+    }> {
         const fileName: string = await windowObj.webContents.executeJavaScript(
             "document.querySelector('.file-header-name div').textContent"
         );
+        const replType: string = await windowObj.webContents.executeJavaScript(
+            'document.querySelector("img.jsx-2652062152").title'
+        );
         const logoUrl: string = await windowObj.webContents.executeJavaScript(
-            "document.querySelector('.workspace-header-description-container" +
-                " img')['src']"
+            "document.querySelector('.workspace-header-description-container img')['src']"
         );
         const imageName: string = logoUrl.split('/').pop().split('.')[0];
-        return { fileName: fileName, logoName: imageName };
+        const largeImageKey = displayNameToIcon[replType];
+        const largeImageText = replType;
+        return { fileName, largeImageKey, largeImageText };
     }
 }
 

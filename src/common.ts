@@ -22,9 +22,10 @@ class ElectronWindow extends BrowserWindow {
         super({
             ...options,
             show: false,
-            minHeight: 800, // TODO: Store window infos
-            minWidth: 600,
+            minHeight: 300, // TODO: Store window infos
+            minWidth: 400,
             webPreferences: {
+                devTools: true,
                 enableRemoteModule: false,
                 webSecurity: true,
                 allowRunningInsecureContent: false,
@@ -76,21 +77,9 @@ interface LauncherStatus {
 type GithubReleaseResponse = Endpoints['GET /repos/:owner/:repo/releases/latest']['response']['data'];
 
 function capitalize(str: string) {
-    return str.replace(/(^|\s)([a-z])/g, function (p1: String, p2: String) {
-        return p1 + p2.toUpperCase().toString();
+    return str.replace(/(^|\s)([a-z])/g, (p1: String, p2: String) => {
+        return `${p1}${p2.toUpperCase().toString()}`;
     });
-}
-
-function getUrl(windowObj: ElectronWindow) {
-    try {
-        let url = windowObj.webContents
-            .getURL()
-            .replace(/(^\w+:|^)\/\/repl\.it\//, '');
-        url = url.split('?')[0];
-        return url;
-    } catch (e) {
-        return '';
-    }
 }
 
 function selectInput(focusedWindow: ElectronWindow) {
@@ -166,10 +155,10 @@ export {
     GithubReleaseResponse,
     LauncherStatus,
     DownloadUpdateResult,
-    getUrl,
     handleExternalLink,
     selectInput,
     PLATFORM,
     IPAD_USER_AGENT,
-    promptYesNoSync
+    promptYesNoSync, 
+    capitalize
 };

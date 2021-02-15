@@ -8,11 +8,11 @@ const promptError = (e) => {
         e = e.message;
     }
 
-    ipcRenderer.sendSync('prompt-error:' + promptId, e);
+    ipcRenderer.sendSync(`prompt-error:${promptId}`, e);
 };
 
 const promptCancel = () => {
-    ipcRenderer.sendSync('prompt-post-data:' + promptId, null);
+    ipcRenderer.sendSync(`prompt-post-data:${promptId}`, null);
 };
 
 const promptSubmit = () => {
@@ -31,12 +31,12 @@ const promptSubmit = () => {
         }
     }
 
-    ipcRenderer.sendSync('prompt-post-data:' + promptId, data);
+    ipcRenderer.sendSync(`prompt-post-data:${promptId}`, data);
 };
 
 window.addEventListener('error', (error) => {
     if (promptId) {
-        promptError('An error has occured on the prompt window: \n' + error);
+        promptError(`An error has occurred on the prompt window: \n${error}`);
     }
 });
 
@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', function (event) {
 
     try {
         promptOptions = JSON.parse(
-            ipcRenderer.sendSync('prompt-get-options:' + promptId)
+            ipcRenderer.sendSync(`prompt-get-options:${promptId}`)
         );
     } catch (error) {
         return promptError(error);

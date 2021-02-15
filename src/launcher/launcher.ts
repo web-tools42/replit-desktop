@@ -20,14 +20,17 @@ class Updater extends EventEmitter {
         linuxUrl: ''
     };
     private pathSep: string = path.sep;
-    private appPath: string = app.getAppPath() + this.pathSep;
-    private upperAppPath: string = path.dirname(this.appPath) + this.pathSep;
+    private appPath: string = `${app.getAppPath()}${this.pathSep}`;
+    private upperAppPath: string = `${path.dirname(this.appPath)}${
+        this.pathSep
+    }`;
     private userDesktop: string = app.getPath('desktop');
-    private logFilePath: string = this.userDesktop + 'updater-log.txt';
+    private logFilePath: string = `${this.userDesktop}updater-log.txt`;
     private appVersion: Version;
     private logArray: [string] = [''];
-    private downloadPath: string =
-        app.getPath('appData') + 'updaterDownload' + this.pathSep;
+    private downloadPath: string = `${app.getPath('appData')}updaterDownload${
+        this.pathSep
+    }`;
     private downloadFilePath: string;
     private launcher: Launcher;
 
@@ -55,9 +58,9 @@ class Updater extends EventEmitter {
 
         const i = Math.floor(Math.log(bytes) / Math.log(k));
 
-        return (
-            parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i]
-        );
+        return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${
+            sizes[i]
+        }`;
     }
 
     async checkUpdate(): Promise<CheckUpdateResult> {
@@ -114,7 +117,7 @@ class Updater extends EventEmitter {
                 req.headers.get('content-length')
             );
             const filename = url.split('/').pop();
-            this.downloadFilePath = this.downloadPath + filename;
+            this.downloadFilePath = `${this.downloadPath}${filename}`;
             let downloaded: number = 0;
             if (!fs.existsSync(this.downloadPath)) {
                 fs.mkdirSync(this.downloadPath, { recursive: true });
@@ -129,7 +132,7 @@ class Updater extends EventEmitter {
                         text: `${this.formatBytes(
                             downloaded
                         )}/${this.formatBytes(contentLength)}`,
-                        percentage: percentage.toString() + '%'
+                        percentage: `${percentage.toString()}%`
                     });
                 })
                 .pipe(fs.createWriteStream(this.downloadFilePath));

@@ -30,9 +30,13 @@ module.exports = {
             },
             {
                 selector: ['function', 'method'],
+                format: ['camelCase']
+            },
+            {
+                selector: ['classProperty', 'typeProperty'],
                 format: ['camelCase', 'snake_case']
             },
-            { selector: ['property'], format: ['camelCase', 'snake_case'] }
+            { selector: ['objectLiteralMethod'], format: null }
         ]
     },
     settings: {
