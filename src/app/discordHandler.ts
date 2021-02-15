@@ -3,7 +3,7 @@ import { ElectronWindow, capitalize, getUrl } from '../common';
 import { displayNameToIcon } from './languages';
 import Timeout = NodeJS.Timeout;
 //const startTimestamp = new Date();
-const startTimestamp:any = null;
+const startTimestamp: any = null;
 class DiscordHandler {
     private client: Client;
     private readonly window: ElectronWindow;
