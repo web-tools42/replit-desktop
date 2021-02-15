@@ -24,7 +24,7 @@
     "watchDev": "gulp watchDev"
   },
   "dependencies": {
-    "discord-rpc": "^3.1.4",
+    "discord-rpc": "^3.2.0",
     "electron-context-menu": "^2.1.0",
     "electron-prompt": "^1.5.1",
     "lodash": "^4.17.19",
