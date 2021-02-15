@@ -39,6 +39,12 @@ function appMenuSetup(
                     ]
                 },
                 {
+                    label: 'Popup',
+                    click(i: MenuItem, win: ElectronWindow) {
+                        popoutHandler.launch(win);
+                    }
+                },
+                {
                     label: 'Use Ace Editor',
                     type: 'checkbox',
                     checked: <boolean>settings.get('enable-ace'),
