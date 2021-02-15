@@ -131,6 +131,17 @@ function handleExternalLink(
             });
     }
 }
+function getUrl(windowObj: ElectronWindow) {
+    try {
+        let url = windowObj.webContents
+            .getURL()
+            .replace(/(^\w+:|^)\/\/repl\.it\//, '');
+        url = url.split('?')[0];
+        return url;
+    } catch (e) {
+        return '';
+    }
+}
 
 function promptYesNoSync(
     message: string,
@@ -165,6 +176,7 @@ export {
     selectInput,
     PLATFORM,
     IPAD_USER_AGENT,
-    promptYesNoSync, 
-    capitalize
+    promptYesNoSync,
+    capitalize,
+    getUrl
 };
