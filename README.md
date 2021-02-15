@@ -1,8 +1,12 @@
-# repl-it-electron [![Discord](https://img.shields.io/discord/437048931827056642.svg?logo=discord)](https://discord.gg/5gcPC6B) [![Codacy Badge](https://app.codacy.com/project/badge/Grade/3bce49c376cf4c2bb1d2813d6b12dd6a)](https://www.codacy.com/manual/leon332157/repl-it-electron?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=repl-it-discord/repl-it-electron&amp;utm_campaign=Badge_Grade) [![Run on Repl.it](https://repl.it/badge/github/leon332157/repl-it-electron)](https://repl.it/@leon332157/repl-it-electron)
+# replit-electron [![Discord](https://img.shields.io/discord/437048931827056642.svg?logo=discord)](https://discord.gg/5gcPC6B) [![Codacy Badge](https://app.codacy.com/project/badge/Grade/3bce49c376cf4c2bb1d2813d6b12dd6a)](https://www.codacy.com/manual/leon332157/repl-it-electron?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=repl-it-discord/repl-it-electron&amp;utm_campaign=Badge_Grade) [![Run on Repl.it](https://repl.it/badge/github/leon332157/repl-it-electron)](https://repl.it/@leon332157/repl-it-electron)
 
+
+### Join the [repl.it discord](https://repl.it/discord) for quicker communitcation with our community and ask questions about the app.
+
+#### Before you make an issue, come in the discord and ask us because the issue might be fixed on another branch, which isn't always up-to-date with `dev`.
 ## Summary
 
-[Repl.it](https://repl.it) is an online coding platform that provides a browser-based IDE. `repl-it-electron` is an unofficial electron application that interfaces with repl.it. It's intentions is to improve the developer experience and boost efficiency.
+[Repl.it](https://repl.it) is an online coding platform that provides a browser-based IDE. `replit-electron` is an unofficial desktop application that interfaces with repl.it. It's intentions is to improve the developer experience and boost efficiency.
 
 ## Features
 
