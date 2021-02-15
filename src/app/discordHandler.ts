@@ -2,8 +2,8 @@ import { Client } from 'discord-rpc';
 import { ElectronWindow, capitalize, getUrl } from '../common';
 import { displayNameToIcon } from './languages';
 import Timeout = NodeJS.Timeout;
-const startTimestamp = new Date();
-
+//const startTimestamp = new Date();
+const startTimestamp:any = null;
 class DiscordHandler {
     private client: Client;
     private readonly window: ElectronWindow;
@@ -67,7 +67,7 @@ class DiscordHandler {
                             startTimestamp,
                             largeImageKey: 'talk-bg',
                             largeImageText: 'Repl Talk',
-                            smallImageKey: 'logo',
+                            smallImageKey: 'logo-bg',
                             smallImageText: 'Repl.it',
                             instance: false
                         })
@@ -87,7 +87,7 @@ class DiscordHandler {
                             details: `Editing: ${res.fileName}`,
                             state: `${url} `,
                             startTimestamp,
-                            smallImageKey: 'logo',
+                            smallImageKey: 'logo-bg',
                             smallImageText: 'Repl.it',
                             largeImageKey: res.largeImageKey,
                             largeImageText: res.largeImageText,
@@ -109,7 +109,7 @@ class DiscordHandler {
                     startTimestamp,
                     largeImageKey: 'talk-bg',
                     largeImageText: 'Repl Talk',
-                    smallImageKey: 'logo',
+                    smallImageKey: 'logo-bg',
                     smallImageText: 'Repl.it',
                     instance: false
                 })
@@ -122,7 +122,7 @@ class DiscordHandler {
                     details: `Looking at ${spliturl[0]}'s profile`,
                     state: `repl.it/${url}`,
                     startTimestamp,
-                    largeImageKey: 'logo',
+                    largeImageKey: 'logo-bg',
                     largeImageText: 'Repl.it',
                     instance: false
                 })
@@ -135,7 +135,7 @@ class DiscordHandler {
                     details: `Changing account settings`,
                     state: `repl.it/${url}`,
                     startTimestamp,
-                    largeImageKey: 'logo',
+                    largeImageKey: 'logo-bg',
                     largeImageText: 'Repl.it',
                     instance: false
                 })
@@ -148,7 +148,7 @@ class DiscordHandler {
                     details: `On Repl.it`,
                     state: `repl.it/${url}`,
                     startTimestamp,
-                    largeImageKey: 'logo',
+                    largeImageKey: 'logo-bg',
                     largeImageText: 'Repl.it',
                     instance: false
                 })
@@ -190,7 +190,7 @@ class DiscordHandler {
             'document.querySelector("img.jsx-2652062152").title'
         );
         const logoUrl: string = await windowObj.webContents.executeJavaScript(
-            "document.querySelector('.workspace-header-description-container img')['src']"
+            "document.querySelector('#workspace-root > div > div.jsx-132086333.content > div.jsx-1913007021.workspace-page-wrapper.desktop > div > div > div:nth-child(1) > header > div > div.jsx-2997400350.left > div > div > div > div.jsx-2652062152.language-icon-container > img').src"
         );
         const imageName: string = logoUrl.split('/').pop().split('.')[0];
         const largeImageKey = displayNameToIcon[replType];

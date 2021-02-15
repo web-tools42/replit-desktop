@@ -39,6 +39,12 @@ function appMenuSetup(
                     ]
                 },
                 {
+                    label: 'Popup',
+                    click(i: MenuItem, win: ElectronWindow) {
+                        popoutHandler.launch(win);
+                    }
+                },
+                {
                     label: 'Use Ace Editor',
                     type: 'checkbox',
                     checked: <boolean>settings.get('enable-ace'),
@@ -206,6 +212,7 @@ function appMenuSetup(
         {
             role: 'help',
             submenu: [
+                { role: 'about' },
                 {
                     label: 'Learn More about repl.it',
                     click() {
@@ -231,11 +238,6 @@ function appMenuSetup(
             ]
         }
     ];
-    if (PLATFORM == 'darwin') {
-        //@ts-ignore
-        template[template.length - 1].submenu.push({ role: 'about' });
-    }
-    // @ts-ignore
     return Menu.buildFromTemplate(template);
 }
 
