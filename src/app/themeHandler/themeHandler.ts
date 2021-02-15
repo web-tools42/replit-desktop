@@ -24,6 +24,20 @@ class ThemeHandler {
         this.theme_market.loadURL(`file://${__dirname}/themes.html`);
     }
 
+    openMaker() {
+        this.theme_market = new ElectronWindow(
+            {
+                height: 900,
+                width: 1600
+            },
+            '',
+            true,
+            true
+        );
+        this.theme_market.setBackgroundColor('#393c42');
+        this.theme_market.loadURL(`file://${__dirname}/Editor/Editor.html`);
+    }
+
     setTheme(window: ElectronWindow, code: string) {
         if (!code) return;
         window.webContents.executeJavaScript(

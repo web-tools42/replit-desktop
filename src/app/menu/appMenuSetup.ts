@@ -9,20 +9,39 @@ import { ElectronWindow, PLATFORM, selectInput } from '../../common';
 import { ThemeHandler } from '../themeHandler/themeHandler';
 import { App } from '../app';
 import { SettingHandler } from '../settingHandler';
+import { PopoutHandler } from '../popoutHandler/popoutHandler';
 
 function appMenuSetup(
     mainApp: App,
     themeHandler: ThemeHandler,
-    settings: SettingHandler
+    settings: SettingHandler,
+    popoutHandler: PopoutHandler
 ): Menu {
     const template: MenuItemConstructorOptions[] = [
         {
             label: 'App',
             submenu: [
                 {
-                    label: 'Choose Theme',
+                    label: 'Themes',
+                    submenu: [
+                        {
+                            label: 'Choose Theme',
+                            click(i: MenuItem, win: ElectronWindow) {
+                                themeHandler.openWindow();
+                            }
+                        },
+                        {
+                            label: 'Make Theme',
+                            click(i: MenuItem, win: ElectronWindow) {
+                                themeHandler.openMaker();
+                            }
+                        }
+                    ]
+                },
+                {
+                    label: 'Popup',
                     click(i: MenuItem, win: ElectronWindow) {
-                        themeHandler.open_window();
+                        popoutHandler.launch(win);
                     }
                 },
                 {
@@ -193,6 +212,7 @@ function appMenuSetup(
         {
             role: 'help',
             submenu: [
+                { role: 'about' },
                 {
                     label: 'Learn More about repl.it',
                     click() {
@@ -218,11 +238,6 @@ function appMenuSetup(
             ]
         }
     ];
-    if (PLATFORM == 'darwin') {
-        //@ts-ignore
-        template[template.length - 1].submenu.push({ role: 'about' });
-    }
-    // @ts-ignore
     return Menu.buildFromTemplate(template);
 }
 

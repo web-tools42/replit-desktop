@@ -14,9 +14,14 @@ class ElectronWindow extends BrowserWindow {
     constructor(
         options: BrowserWindowConstructorOptions,
         preload: string = '',
-        nodeIntegration: boolean = false
+        nodeIntegration: boolean = false,
+        webviewTag: boolean = false
     ) {
-        if (preload.length > 0) {
+        if (
+            preload.length > 0 &&
+            !preload.includes(__dirname) &&
+            !preload.startsWith('./')
+        ) {
             preload = path.join(__dirname, 'preload', preload);
         }
         super({
@@ -32,7 +37,8 @@ class ElectronWindow extends BrowserWindow {
                 spellcheck: true,
                 contextIsolation: false, // Enforce false since we are using preload scripts
                 nodeIntegration: nodeIntegration,
-                preload: preload
+                preload: preload,
+                webviewTag: webviewTag
             },
             icon: __dirname + '/512x512.png'
         });
@@ -125,6 +131,17 @@ function handleExternalLink(
             });
     }
 }
+function getUrl(windowObj: ElectronWindow) {
+    try {
+        let url = windowObj.webContents
+            .getURL()
+            .replace(/(^\w+:|^)\/\/repl\.it\//, '');
+        url = url.split('?')[0];
+        return url;
+    } catch (e) {
+        return '';
+    }
+}
 
 function promptYesNoSync(
     message: string,
@@ -159,6 +176,7 @@ export {
     selectInput,
     PLATFORM,
     IPAD_USER_AGENT,
-    promptYesNoSync, 
-    capitalize
+    promptYesNoSync,
+    capitalize,
+    getUrl
 };

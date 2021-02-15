@@ -1,20 +1,9 @@
 import { Client } from 'discord-rpc';
-import { ElectronWindow, capitalize } from '../common';
+import { ElectronWindow, capitalize, getUrl } from '../common';
 import { displayNameToIcon } from './languages';
 import Timeout = NodeJS.Timeout;
 const startTimestamp = new Date();
 
-function getUrl(windowObj: ElectronWindow) {
-    try {
-        let url = windowObj.webContents
-            .getURL()
-            .replace(/(^\w+:|^)\/\/repl\.it\//, '');
-        url = url.split('?')[0];
-        return url;
-    } catch (e) {
-        return '';
-    }
-}
 class DiscordHandler {
     private client: Client;
     private readonly window: ElectronWindow;
