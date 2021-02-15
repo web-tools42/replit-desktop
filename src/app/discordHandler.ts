@@ -1,10 +1,20 @@
 import { Client } from 'discord-rpc';
-import { ElectronWindow, getUrl } from '../common';
-import languages from './languages';
+import { ElectronWindow, capitalize } from '../common';
+import { displayNameToIcon } from './languages';
 import Timeout = NodeJS.Timeout;
-
 const startTimestamp = new Date();
 
+function getUrl(windowObj: ElectronWindow) {
+    try {
+        let url = windowObj.webContents
+            .getURL()
+            .replace(/(^\w+:|^)\/\/repl\.it\//, '');
+        url = url.split('?')[0];
+        return url;
+    } catch (e) {
+        return '';
+    }
+}
 class DiscordHandler {
     private client: Client;
     private readonly window: ElectronWindow;
@@ -23,168 +33,180 @@ class DiscordHandler {
             });
         }
         this.client
-            .login({ clientId: '806972065709031514' })
-            .catch((error: string) => console.error(error));
+            .login({ clientId: '498635999274991626' })
+            .catch((error: string) => {
+                console.error(error);
+            });
         this.client.on('ready', () => {
             console.debug('Discord Client ready');
-            this.setPlayingDiscord().catch();
+            this.setPlayingDiscord();
             this.discordTimer = setInterval(() => {
-                this.setPlayingDiscord().catch((e: string) =>
-                    console.error(`Failed to update Discord status. ${e}`)
-                );
+                this.setPlayingDiscord().catch((e: string) => {
+                    console.error('Failed to update Discord status. ' + e);
+                });
             }, 15e3);
         });
     }
 
     disconnectDiscord() {
-        this.client.clearActivity().catch();
+        this.client.clearActivity();
         clearInterval(this.discordTimer);
-        this.client.destroy().then();
+        this.client.destroy();
         delete this.client;
     }
 
     async setPlayingDiscord() {
         let url: string = getUrl(this.window);
-        let spliturl: Array<string> = url.split('/');
+        let spliturl: string[] = url.split('/');
 
-        interface Richpresence {
-            details: string;
-            state: string;
-            startTimestamp: Date;
-            largeImageKey: string;
-            largeImageText: string;
-            smallImageKey?: string;
-            smallImageText?: string;
-            instance: boolean;
-        }
-        let Presence: Richpresence = {
-            details: `Browsing Repl.it`,
-            state: `...`,
-            startTimestamp,
-            largeImageKey: 'logo',
-            largeImageText: 'Repl.it',
-            instance: false
-        };
         if (spliturl[0] === 'repls') {
-            Presence = {
+            this.client.setActivity({
                 details: `Browsing Repls`,
-                state: `...`,
+                state: `repl.it/${url}`,
                 startTimestamp,
-                largeImageKey: 'logo',
+                largeImageKey: 'logo-bg',
                 largeImageText: 'Repl.it',
                 instance: false
-            };
+            });
         } else if (spliturl[0] === 'talk') {
-            let res = await this.setTalkBoard(spliturl, this.window);
-            Presence = {
-                state: `${res.viewing}`,
-                details: `Repl Talk: ${res.talkBoard}`,
-                startTimestamp,
-                largeImageKey: 'repltalk',
-                largeImageText: 'ReplTalk',
-                smallImageKey: 'logo',
-                smallImageText: 'Repl.it',
-                instance: false
-            };
+            this.setTalkBoard(spliturl, this.window).then(
+                (res) => {
+                    this.client
+                        .setActivity({
+                            state: `${res.viewing}`,
+                            details: `In Repl Talk ${res.talkBoard}`,
+                            startTimestamp,
+                            largeImageKey: 'talk-bg',
+                            largeImageText: 'Repl Talk',
+                            smallImageKey: 'logo',
+                            smallImageText: 'Repl.it',
+                            instance: false
+                        })
+                        .catch((reason) => {
+                            console.error(`error@talk board ${reason}`);
+                        });
+                },
+                (reason: string) => {
+                    console.error(`Set Talk board Failed ${reason}`);
+                }
+            );
         } else if (spliturl[0][0] === '@' && spliturl[1] !== undefined) {
-            let res = await this.setEditing(this.window);
-            Presence = {
-                details: res.replName,
-                state: `Editing ${res.fileName}`,
-                startTimestamp,
-                smallImageKey: 'logo',
-                smallImageText: 'Repl.it',
-                largeImageKey: `language: ${res.logoName}`,
-                largeImageText: res.logoName,
-                instance: false
-            };
+            this.setEditing(this.window).then(
+                (res) => {
+                    this.client
+                        .setActivity({
+                            details: `Editing: ${res.fileName}`,
+                            state: `${url} `,
+                            startTimestamp,
+                            smallImageKey: 'logo',
+                            smallImageText: 'Repl.it',
+                            largeImageKey: res.largeImageKey,
+                            largeImageText: res.largeImageText,
+                            instance: false
+                        })
+                        .catch((reason) => {
+                            console.error(`error@editing ${reason}`);
+                        });
+                },
+                (reason: string) => {
+                    console.error(`Set editing failed ${reason}`);
+                }
+            );
         } else if (spliturl[0] === 'talk') {
-            Presence = {
-                details: `{...}`,
-                state: `Browsing Repl Talk`,
-                startTimestamp,
-                largeImageKey: 'talk',
-                largeImageText: 'Repl Talk',
-                smallImageKey: 'logo',
-                smallImageText: 'Repl.it',
-                instance: false
-            };
+            this.client
+                .setActivity({
+                    details: `In Repl Talk`,
+                    state: `repl.it/${url}`,
+                    startTimestamp,
+                    largeImageKey: 'talk-bg',
+                    largeImageText: 'Repl Talk',
+                    smallImageKey: 'logo',
+                    smallImageText: 'Repl.it',
+                    instance: false
+                })
+                .catch((reason) => {
+                    console.error(`error@talk ${reason}`);
+                });
         } else if (spliturl[0][0] === '@') {
-            Presence = {
-                details: `{...}`,
-                state: `Viewing ${spliturl[0]}'s profile`,
-                startTimestamp,
-                largeImageKey: 'logo',
-                largeImageText: 'Repl.it',
-                instance: false
-            };
+            this.client
+                .setActivity({
+                    details: `Looking at ${spliturl[0]}'s profile`,
+                    state: `repl.it/${url}`,
+                    startTimestamp,
+                    largeImageKey: 'logo',
+                    largeImageText: 'Repl.it',
+                    instance: false
+                })
+                .catch((reason) => {
+                    console.debug(`error@profile ${reason}`);
+                });
         } else if (spliturl[0] === 'account') {
-            Presence = {
-                details: `{...}`,
-                state: `Changing Account Settings`,
-                startTimestamp,
-                largeImageKey: 'logo',
-                largeImageText: 'Repl.it',
-                instance: false
-            };
+            this.client
+                .setActivity({
+                    details: `Changing account settings`,
+                    state: `repl.it/${url}`,
+                    startTimestamp,
+                    largeImageKey: 'logo',
+                    largeImageText: 'Repl.it',
+                    instance: false
+                })
+                .catch((reason) => {
+                    console.debug(`error@acount ${reason}`);
+                });
+        } else {
+            this.client
+                .setActivity({
+                    details: `On Repl.it`,
+                    state: `repl.it/${url}`,
+                    startTimestamp,
+                    largeImageKey: 'logo',
+                    largeImageText: 'Repl.it',
+                    instance: false
+                })
+                .catch((reason) => {
+                    console.error(`error@main ${reason}`);
+                });
         }
-        this.client
-            .setActivity(Presence)
-            .catch((error: string) => console.error(`RPC_Error: ${error}`));
     }
 
-    async setTalkBoard(spliturl: Array<string>, windowObj: ElectronWindow) {
-        let viewing: string = `Viewing ${spliturl[1]}`;
+    async setTalkBoard(
+        spliturl: string[],
+        windowObj: ElectronWindow
+    ): Promise<{ viewing: string; talkBoard: string }> {
+        let viewing: string = 'Viewing ';
         if (spliturl[3] !== undefined) {
             viewing += await windowObj.webContents.executeJavaScript(
                 "document.getElementsByClassName('board-post-detail-title')[0].textContent"
             ); // gets the repl talk post name
         } else if (spliturl[2] !== undefined) {
             viewing = `Viewing ${spliturl[2]}`;
+        } else {
+            viewing = `Viewing ${spliturl[1]}`;
         }
-        let talkBoard: string = '';
-        switch (spliturl[1]) {
-            case 'announcements':
-                talkBoard = 'Announcements';
-                break;
-            case 'ask':
-                talkBoard = 'Ask';
-                break;
-            case 'challenge':
-                talkBoard = 'Challenge';
-                break;
-            case 'learn':
-                talkBoard = 'Learn';
-                break;
-            case 'share':
-                talkBoard = 'Share';
-                break;
-        }
+        const talkBoard = capitalize(spliturl[1]);
         return { viewing: viewing, talkBoard: talkBoard };
     }
 
-    async setEditing(windowObj: ElectronWindow) {
-        let { activeFile: target, plugins } = JSON.parse(
-            await windowObj.webContents.executeJavaScript(
-                'JSON.stringify(store.getState())',
-                true
-            )
+    async setEditing(
+        windowObj: ElectronWindow
+    ): Promise<{
+        fileName: string;
+        largeImageKey: string;
+        largeImageText: string;
+    }> {
+        const fileName: string = await windowObj.webContents.executeJavaScript(
+            "document.querySelector('.file-header-name div').textContent"
         );
-        let replName = plugins.fs.state.repl.title,
-            parsed = target.split('/').reverse()[0];
-        for (let [k, v] of Object.entries(languages.knownExtensions)) {
-            const match = k.match(/^\/(.+)\/([a-z]*)$/);
-            let is_match = match
-                ? new RegExp(match[1], match[2]).test(parsed)
-                : parsed.endsWith(k);
-            if (is_match) {
-                return {
-                    fileName: parsed,
-                    logoName: v.image,
-                    replName: replName
-                };
-            }
-        }
+        const replType: string = await windowObj.webContents.executeJavaScript(
+            'document.querySelector("img.jsx-2652062152").title'
+        );
+        const logoUrl: string = await windowObj.webContents.executeJavaScript(
+            "document.querySelector('.workspace-header-description-container img')['src']"
+        );
+        const imageName: string = logoUrl.split('/').pop().split('.')[0];
+        const largeImageKey = displayNameToIcon[replType];
+        const largeImageText = replType;
+        return { fileName, largeImageKey, largeImageText };
     }
 }
 

@@ -82,18 +82,6 @@ function capitalize(str: string) {
     });
 }
 
-function getUrl(windowObj: ElectronWindow) {
-    try {
-        let url = windowObj.webContents
-            .getURL()
-            .replace(/(^\w+:|^)\/\/repl\.it\//, '');
-        url = url.split('?')[0];
-        return url;
-    } catch (e) {
-        return '';
-    }
-}
-
 function selectInput(focusedWindow: ElectronWindow) {
     focusedWindow.webContents.executeJavaScript(
         `document.getElementsByTagName('input')[0].focus().select()`,
@@ -167,10 +155,10 @@ export {
     GithubReleaseResponse,
     LauncherStatus,
     DownloadUpdateResult,
-    getUrl,
     handleExternalLink,
     selectInput,
     PLATFORM,
     IPAD_USER_AGENT,
-    promptYesNoSync
+    promptYesNoSync, 
+    capitalize
 };
