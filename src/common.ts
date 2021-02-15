@@ -14,7 +14,8 @@ class ElectronWindow extends BrowserWindow {
     constructor(
         options: BrowserWindowConstructorOptions,
         preload: string = '',
-        nodeIntegration: boolean = false
+        nodeIntegration: boolean = false,
+        webviewTag: boolean = false
     ) {
         if (preload.length > 0) {
             preload = path.join(__dirname, 'preload', preload);
@@ -32,7 +33,8 @@ class ElectronWindow extends BrowserWindow {
                 spellcheck: true,
                 contextIsolation: false, // Enforce false since we are using preload scripts
                 nodeIntegration: nodeIntegration,
-                preload: preload
+                preload: preload,
+                webviewTag: webviewTag
             },
             icon: __dirname + '/512x512.png'
         });

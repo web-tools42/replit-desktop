@@ -120,7 +120,9 @@ section {
           `;
       };
       //
-      let themes = new Map();
+      let themes = new Map([
+        ['None', {name: 'None', user: 'None', 'code-jswa': ''}]
+      ]);
       // Load the cards
       let start = async () => {
           let html = '';

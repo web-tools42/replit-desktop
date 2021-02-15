@@ -20,10 +20,21 @@ function appMenuSetup(
             label: 'App',
             submenu: [
                 {
-                    label: 'Choose Theme',
-                    click(i: MenuItem, win: ElectronWindow) {
-                        themeHandler.open_window();
-                    }
+                    label: 'Themes',
+                    submenu: [
+                        {
+                            label: 'Choose Theme',
+                            click(i: MenuItem, win: ElectronWindow) {
+                                themeHandler.open_window();
+                            }
+                        },
+                        {
+                            label: 'Make Theme',
+                            click(i: MenuItem, win: ElectronWindow) {
+                                themeHandler.open_maker();
+                            }
+                        }
+                    ]
                 },
                 {
                     label: 'Use Ace Editor',
