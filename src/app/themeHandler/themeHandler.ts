@@ -11,7 +11,7 @@ class ThemeHandler {
             this.addTheme(Main, code);
         });
     }
-    open_window() {
+    openWindow() {
         this.theme_market = new ElectronWindow(
             {
                 height: 900,
@@ -22,6 +22,20 @@ class ThemeHandler {
         );
         this.theme_market.setBackgroundColor('#393c42');
         this.theme_market.loadURL(`file://${__dirname}/themes.html`);
+    }
+
+    open_maker() {
+        this.theme_market = new ElectronWindow(
+            {
+                height: 900,
+                width: 1600
+            },
+            '',
+            true,
+            true
+        );
+        this.theme_market.setBackgroundColor('#393c42');
+        this.theme_market.loadURL(`file://${__dirname}/Editor/Editor.html`);
     }
 
     setTheme(window: ElectronWindow, code: string) {

@@ -20,8 +20,9 @@ class SettingHandler {
     public settingsFilePath: string;
 
     constructor() {
-        this.settingsFilePath =
-            path.dirname(app.getPath('userData')) + path.sep + 'settings.json';
+        this.settingsFilePath = `${path.dirname(app.getPath('userData'))}${
+            path.sep
+        }settings.json`;
         this.ensureFileSync();
     }
 

@@ -9,41 +9,32 @@ import { ElectronWindow, PLATFORM, selectInput } from '../../common';
 import { ThemeHandler } from '../themeHandler/themeHandler';
 import { App } from '../app';
 import { SettingHandler } from '../settingHandler';
-import { PopoutHandler } from '../popUpWindows/popoutHandler';
-import set = Reflect.set;
 
 function appMenuSetup(
     mainApp: App,
     themeHandler: ThemeHandler,
-    settings: SettingHandler,
-    popoutHandler: PopoutHandler
+    settings: SettingHandler
 ): Menu {
     const template: MenuItemConstructorOptions[] = [
         {
             label: 'App',
             submenu: [
                 {
-                    label: 'Choose Theme',
+                    label: 'Themes',
                     submenu: [
                         {
-                            label: 'Light',
+                            label: 'Choose Theme',
                             click(i: MenuItem, win: ElectronWindow) {
-                                themeHandler.addTheme(win, 'lightTheme');
+                                themeHandler.open_window();
                             }
                         },
                         {
-                            label: 'Dark',
+                            label: 'Make Theme',
                             click(i: MenuItem, win: ElectronWindow) {
-                                themeHandler.addTheme(win, 'darkTheme');
+                                themeHandler.open_maker();
                             }
                         }
                     ]
-                },
-                {
-                    label: 'Toggle monitor',
-                    click(i: MenuItem, win: ElectronWindow) {
-                        popoutHandler.launch(win);
-                    }
                 },
                 {
                     label: 'Use Ace Editor',
