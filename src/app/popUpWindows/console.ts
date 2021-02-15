@@ -1,4 +1,4 @@
-let Keep: string[] = [
+let keepElem: string[] = [
     '.jsx-2759849619', // the console
     '.jsx-2460743671', // the shell
     '.jsx-2634825231', // the new http tab explorers only
@@ -8,25 +8,31 @@ let Keep: string[] = [
 ];
 
 window.onload = () => {
-    let Remove = (E: HTMLElement) => {
-        E.remove();
-    };
-
     // Options for the observer (which mutations to observe)
     const config = { attributes: true, childList: true, subtree: true };
     // Callback function to execute when mutations are observed
-    const callback = (mutationsList, observer) => Walker();
-    const observer: MutationObserver = new MutationObserver(callback);
-    let Walker = (Parent = document.body, Level) => {
-        if (observer && observer.disconnect) observer.disconnect();
-        [...Parent.children].forEach((elm) => {
+
+    const observer: MutationObserver = new MutationObserver(
+        (mutationsList, observer) => {
+            elemWalker(document.body);
+        }
+    );
+
+    function elemWalker(parent: Element, level: boolean = false) {
+        if (observer && observer.disconnect) {
+            observer.disconnect();
+        }
+        [...parent.children].forEach((elm: Element) => {
             // Basic Deletion Test
-            if (!elm.children.length && !Keep.some((A) => elm.matches(A))) {
-                Remove(elm);
-            } else if (!Keep.some((A) => elm.matches(A))) {
-                Walker(elm, true);
+            if (
+                !elm.children.length &&
+                !keepElem.some((A: string) => elm.matches(A))
+            ) {
+                elm.remove();
+            } else if (!keepElem.some((A: string) => elm.matches(A))) {
+                elemWalker(elm, true);
             }
-            if (Keep.some((A) => elm.matches(A))) {
+            if (keepElem.some((A: string) => elm.matches(A))) {
                 if (elm.matches('.jsx-2759849619')) {
                     elm.parentElement.style.top = '50px';
                     elm.parentElement.style.left = '0';
@@ -35,12 +41,12 @@ window.onload = () => {
                 }
             }
         });
-        if (Parent.children.length === 0) {
-            Remove(Parent);
+        if (parent.children.length === 0) {
+            parent.remove();
         }
-        if (!Level) observer.observe(document.body, config);
-    };
+        if (!level) observer.observe(document.body, config);
+    }
     setTimeout(() => {
-        Walker();
-    }, 5000)
+        elemWalker(document.body);
+    }, 5000);
 };
