@@ -52,6 +52,14 @@ function appMenuSetup(
                         mainApp.toggleAce(item);
                     }
                 },
+                {
+                    label: 'Crosis Logs',
+                    click(i: MenuItem, win: ElectronWindow) {
+                        win.webContents.executeJavaScript(
+                            "window.store.dispatch({type: 'LOAD_PLUGIN',pluginPud: 'adminpanel',pluginType: 'adminpanel',title: 'adminpanel'});window.store.dispatch({type: 'ADD_SIDE_NAV_ITEM',navItem: {pud: 'adminpanel',pluginType: 'adminpanel',tooltip: 'Crosis Logs',svg: 'Alien'}});"
+                        );
+                    }
+                },
                 { type: 'separator' },
                 {
                     label: 'Re-connect to Discord',
