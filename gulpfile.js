@@ -98,6 +98,25 @@ async function buildProd() {
         .pipe(gulp.dest('dist'));
 }
 
+async function buildAppPreRelease() {
+    //TODO: add package.json script
+    if (platform() === 'darwin') {
+        child_process.execSync(
+            'electron-builder -c electron-builder.pre-release.conf.js -wml',
+            { stdio: 'inherit' }
+        );
+    } else if (platform() === 'win32') {
+        child_process.execSync(
+            'electron-builder -c electron-builder.pre-release.conf.js -w',
+            { stdio: 'inherit' }
+        );
+    } else {
+        child_process.execSync(
+            'electron-builder -c electron-builder.pre-release.conf.js -l',
+            { stdio: 'inherit' }
+        );
+    }
+}
 async function buildApp() {
     if (platform() === 'darwin') {
         child_process.execSync(
