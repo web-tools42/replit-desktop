@@ -17,7 +17,7 @@ window.onload = () => {
             top: 60px !important; 
             left: 0px !important; 
             width: 100% !important; 
-            height: calc(100% - 60px) !important
+            height: calc(100vh - 60px) !important;
             position: absolute !important;
         }
     `)
@@ -30,7 +30,7 @@ window.onload = () => {
     const observer: MutationObserver = new MutationObserver(
         (mutationsList, observer) => {
             elemWalker(document.body);
-            store.dispatch({ type: 'OPEN_SHELL' });
+            // store.dispatch({ type: 'OPEN_SHELL' });
         }
     );
     let Remove = (E: Element) => {
@@ -91,5 +91,5 @@ window.onload = () => {
         return Keep;
     }
     elemWalker(document.body);
-    store.dispatch({ type: 'OPEN_SHELL' });
+    // store.dispatch({ type: 'OPEN_SHELL' });
 };
