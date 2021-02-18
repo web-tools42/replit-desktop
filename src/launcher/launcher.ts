@@ -73,6 +73,12 @@ class Updater extends EventEmitter {
                 ).json()
             );
 
+            if (
+                res.tag_name.includes('alpha') ||
+                res.tag_name.includes('beta')
+            ) {
+                return { hasUpdate: false };
+            }
             const tagNames = res.tag_name.split('.');
             const changeLog = res.body;
             const version: Version = {
