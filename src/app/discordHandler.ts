@@ -25,6 +25,7 @@ class DiscordHandler {
             .login({ clientId: '498635999274991626' })
             .catch((error: string) => {
                 console.error(error);
+                this.disconnectDiscord();
             });
         this.client.on('ready', () => {
             console.debug('Discord Client ready');
