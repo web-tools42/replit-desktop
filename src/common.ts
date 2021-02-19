@@ -45,6 +45,37 @@ class ElectronWindow extends BrowserWindow {
         this.once('ready-to-show', () => {
             this.show();
         });
+
+        this.webContents.on(
+            'did-fail-load',
+            (e, code, description, validateUrl) => {
+                this.handleLoadingError(
+                    e,
+                    this,
+                    code,
+                    description,
+                    validateUrl
+                );
+            }
+        );
+    }
+
+    async handleLoadingError(
+        event: Event,
+        windowObject: ElectronWindow,
+        errorCode: number,
+        errorDescription: string,
+        validateUrl: string
+    ) {
+        if (errorCode > -6 || errorCode <= -300) {
+            return;
+        }
+        await windowObject.loadFile('app/offline.html');
+        windowObject.webContents
+            .executeJavaScript(
+                `updateError("${errorCode} ${errorDescription}","${validateUrl}")`
+            )
+            .catch(console.log);
     }
 }
 

@@ -92,30 +92,6 @@ class App extends EventEmitter {
         event.newGuest = authWin;
     }
 
-    handleLoadingError(
-        event: Event,
-        windowObject: ElectronWindow,
-        errorCode: number,
-        errorDescription: string,
-        validateUrl: string
-    ) {
-        if (errorCode > -6 || errorCode <= -300) {
-            return;
-        }
-        this.isOffline = true;
-        this.windowArray.forEach((win: ElectronWindow) => {
-            win.loadFile('app/offline.html')
-                .then(() => {
-                    win.webContents
-                        .executeJavaScript(
-                            `updateError("${errorCode} ${errorDescription}","${validateUrl}")`
-                        )
-                        .catch(console.log);
-                })
-                .catch(console.log);
-        });
-    }
-
     toggleAce(menu?: MenuItem) {
         let userAgent: string;
         if (menu) {
@@ -192,19 +168,6 @@ class App extends EventEmitter {
         window.webContents.on('did-finish-load', () => {
             this.themeHandler.addTheme(window);
         });
-
-        window.webContents.on(
-            'did-fail-load',
-            (e, code, description, validateUrl) => {
-                this.handleLoadingError(
-                    e,
-                    window,
-                    code,
-                    description,
-                    validateUrl
-                );
-            }
-        );
     }
 }
 
