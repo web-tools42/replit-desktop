@@ -3,8 +3,7 @@ import {
     BrowserWindowConstructorOptions,
     dialog,
     MessageBoxReturnValue,
-    shell,
-    app
+    shell
 } from 'electron';
 import { Endpoints } from '@octokit/types';
 import { platform } from 'os';
@@ -40,8 +39,10 @@ class ElectronWindow extends BrowserWindow {
                 preload: preload,
                 webviewTag: webviewTag
             },
-            icon: __dirname + '/512x512.png'
+            icon: `${__dirname}/512x512.png`
         });
+        this.setBackgroundColor('#393c42');
+
         this.once('ready-to-show', () => {
             this.show();
         });
