@@ -59,11 +59,22 @@ class App extends EventEmitter {
 
         // Handle The Login
         this.mainWindow.webContents.on('new-window', (event, url) => {
+            event.preventDefault();
             if (
                 url == 'https://repl.it/auth/google/get?close=1' ||
                 url == 'https://repl.it/auth/github/get?close=1'
             ) {
                 this.handleOAuth(event, url);
+            } else {
+                const win = new ElectronWindow({
+                    height: 900,
+                    width: 1600
+                });
+                win.loadURL(url, {
+                    userAgent: 'chrome'
+                });
+                event.newGuest = win;
+                this.addWindow(win);
             }
         });
     }
@@ -73,7 +84,6 @@ class App extends EventEmitter {
 
     handleOAuth(event: NewWindowWebContentsEvent, url: string) {
         this.clearCookies(true);
-        event.preventDefault();
         const authWin = new ElectronWindow(
             {
                 height: 900,
