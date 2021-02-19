@@ -13,13 +13,11 @@ const tsProject = ts.createProject('tsconfig.json');
 let child = null;
 
 function printEc(data) {
-    var str = data.toString().trim();
+    const str = data.toString().trim();
     if (str) console.log(`[electron_debug]  ${str}`);
 }
 
 async function runElectron() {
-    var errored = false;
-
     if (child) {
         child.kill();
     }
@@ -30,7 +28,7 @@ async function runElectron() {
 
     child.on('error', function (err) {
         errored = true;
-        throw new Error(`gulp-run-electron ${err}`);
+        throw new Error(`Electron Error: ${err}`);
     });
 
     child.once('exit', (code) => {
@@ -61,19 +59,11 @@ async function copyFilesProd() {
         )
         .pipe(gulp.dest('dist'));
 
-    gulp.src('src/**/*.html')
+    gulp.src('src/**/*(.html||.css)')
         .pipe(
             htmlmin({
                 minifyCss: true,
                 minifyJs: true,
-                collapseWhitespace: true
-            })
-        )
-        .pipe(gulp.dest('dist'));
-    gulp.src('src/**/*.css')
-        .pipe(
-            htmlmin({
-                minifyCss: true,
                 collapseWhitespace: true
             })
         )
@@ -99,7 +89,6 @@ async function buildProd() {
 }
 
 async function buildAppPreRelease() {
-    //TODO: add package.json script
     if (platform() === 'darwin') {
         child_process.execSync(
             'electron-builder -c electron-builder.pre-release.conf.js -wml',
@@ -117,6 +106,7 @@ async function buildAppPreRelease() {
         );
     }
 }
+
 async function buildApp() {
     if (platform() === 'darwin') {
         child_process.execSync(
@@ -183,6 +173,12 @@ async function buildDev() {
 }
 
 module.exports.watchDev = watchDev;
+module.exports.buildAndRun = gulp.series(
+    buildDev,
+    copyFilesDevNoCache,
+    runElectron
+);
 module.exports.buildDev = gulp.series(buildDev, copyFilesDevNoCache);
 module.exports.buildProd = gulp.series(buildProd, copyFilesProd);
-module.exports.buildApp = gulp.series(buildApp);
+module.exports.buildApp = buildApp;
+module.exports.buildAppPreRelease = buildAppPreRelease;

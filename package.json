@@ -13,15 +13,17 @@
   "main": "main.js",
   "scripts": {
     "build:app": "gulp buildApp",
+    "build:app-pre": "gulp buildAppPreRelease",
     "build:app:test": "electron-builder -c electron-builder.conf.js --dir",
     "build:dev": "gulp buildDev",
     "build:prod": "gulp buildProd",
     "build:run": "electron --trace-warnings -no-sandbox ./ts-out/",
     "dist": "npm run build:prod && npm run build:app",
+    "pre-dist": "npm run build:prod && npm run build:app-pre",
+    "start": "gulp buildAndRun",
+    "watchDev": "gulp watchDev",
     "lint:check": "eslint \"**/*.{js,ts,json}\"",
-    "lint": "eslint \"**/*.{js,ts,json}\" --fix",
-    "start": "npm run build:dev && npm run build:run",
-    "watchDev": "gulp watchDev"
+    "lint": "eslint \"**/*.{js,ts,json}\" --fix"
   },
   "dependencies": {
     "discord-rpc": "^3.2.0",
@@ -44,7 +46,7 @@
     "@typescript-eslint/eslint-plugin": "^4.14.2",
     "@typescript-eslint/parser": "^4.14.2",
     "dotenv": "^8.2.0",
-    "electron": "^12.0.0-beta.25",
+    "electron": "12.0.0-beta.27",
     "electron-builder": "^22.9.1",
     "eslint": "^7.20.0",
     "eslint-config-prettier": "^7.2.0",
