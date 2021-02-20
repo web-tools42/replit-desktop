@@ -6,7 +6,7 @@ import {
     shell,
     BrowserWindow
 } from 'electron';
-import { ElectronWindow, PLATFORM, selectInput } from '../../common';
+import { ElectronWindow, selectInput } from '../../common';
 import { ThemeHandler } from '../themeHandler/themeHandler';
 import { App } from '../app';
 import { SettingHandler } from '../settingHandler';
@@ -77,7 +77,7 @@ function appMenuSetup(
                 {
                     label: 'Clear All Cookies',
                     click() {
-                        mainApp.clearCookies(false).then();
+                        mainApp.clearCookies(false);
                     }
                 },
 
@@ -223,9 +223,15 @@ function appMenuSetup(
             submenu: [
                 { role: 'about' },
                 {
-                    label: 'Learn More about repl.it',
+                    label: 'Join the Replit discord',
                     click() {
-                        shell.openExternal('https://repl.it/site/about').then();
+                        shell.openExternal('https://repl.it/discord');
+                    }
+                },
+                {
+                    label: 'Learn More about Replit',
+                    click() {
+                        shell.openExternal('https://repl.it/site/about');
                     }
                 },
                 {

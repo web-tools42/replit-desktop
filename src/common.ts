@@ -43,9 +43,7 @@ class ElectronWindow extends BrowserWindow {
         });
         this.setBackgroundColor('#393c42');
 
-        this.once('ready-to-show', () => {
-            this.show();
-        });
+        this.once('ready-to-show', () => this.show());
 
         this.webContents.on(
             'did-fail-load',
@@ -76,7 +74,7 @@ class ElectronWindow extends BrowserWindow {
             .executeJavaScript(
                 `updateError("${errorCode} ${errorDescription}","${validateUrl}")`
             )
-            .catch(console.log);
+            .catch(console.debug);
     }
 }
 
@@ -132,19 +130,18 @@ function handleExternalLink(
     windowObj: ElectronWindow,
     url: string
 ) {
-    if (!url) {
-        return;
-    }
+    if (!url) return;
     if (url.toString().startsWith('about')) {
         windowObj.loadURL('https://repl.it/~').catch();
     } else if (
-        url.includes('repl.it') ||
-        url.includes('repl.co') ||
-        url.includes('google.com') ||
-        url.includes('repl.run')
+        !(
+            url.includes('repl.it') ||
+            url.includes('repl.co') ||
+            url.includes('google.com') ||
+            url.includes('repl.run')
+        )
     ) {
-    } else {
-        console.log(`External URL: ${url}`);
+        console.debug(`External URL: ${url}`);
         event.preventDefault();
         dialog
             .showMessageBox({
@@ -154,22 +151,20 @@ function handleExternalLink(
                 buttons: ['No', 'Yes'],
                 defaultId: 1
             })
-            .then(function (resp: MessageBoxReturnValue) {
+            .then((resp: MessageBoxReturnValue) => {
                 const index = resp.response;
                 if (index === 1) {
                     shell.openExternal(url).then();
-                } else {
                 }
             });
     }
 }
 function getUrl(windowObj: ElectronWindow) {
     try {
-        let url = windowObj.webContents
+        return windowObj.webContents
             .getURL()
-            .replace(/(^\w+:|^)\/\/repl\.it\//, '');
-        url = url.split('?')[0];
-        return url;
+            .replace(/(^\w+:|^)\/\/repl\.it\//, '')
+            .split('?')[0];
     } catch (e) {
         return '';
     }
@@ -191,11 +186,6 @@ function promptYesNoSync(
 }
 
 const PLATFORM = platform();
-const IPAD_USER_AGENT: string =
-    'Mozilla/5.0 (iPad; CPU OS 11_3 like Mac OS X)' +
-    'AppleWebKit/605.1.15' +
-    ' (KHTML, like Gecko) Version/11.0 Tablet/15E148' +
-    ' Safari/604.1';
 export {
     Version,
     CheckUpdateResult,
@@ -207,7 +197,6 @@ export {
     handleExternalLink,
     selectInput,
     PLATFORM,
-    IPAD_USER_AGENT,
     promptYesNoSync,
     capitalize,
     getUrl

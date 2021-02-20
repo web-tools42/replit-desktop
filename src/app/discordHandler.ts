@@ -2,8 +2,7 @@ import { Client } from 'discord-rpc';
 import { ElectronWindow, capitalize, getUrl } from '../common';
 import { displayNameToIcon } from './languages';
 import Timeout = NodeJS.Timeout;
-//const startTimestamp = new Date();
-const startTimestamp: any = null;
+const startTimestamp = Date.now();
 class DiscordHandler {
     private client: Client;
     private readonly window: ElectronWindow;
@@ -16,11 +15,7 @@ class DiscordHandler {
     }
 
     connectDiscord() {
-        if (!this.client) {
-            this.client = new Client({
-                transport: 'ipc'
-            });
-        }
+        if (!this.client) this.client = new Client({ transport: 'ipc' });
         this.client
             .login({ clientId: '498635999274991626' })
             .catch((error: string) => {
@@ -31,9 +26,9 @@ class DiscordHandler {
             console.debug('Discord Client ready');
             this.setPlayingDiscord();
             this.discordTimer = setInterval(() => {
-                this.setPlayingDiscord().catch((e: string) => {
-                    console.error('Failed to update Discord status. ' + e);
-                });
+                this.setPlayingDiscord().catch((e: string) =>
+                    console.error(`Failed to update Discord status. ${e}`)
+                );
             }, 15e3);
         });
     }
@@ -48,14 +43,13 @@ class DiscordHandler {
     async setPlayingDiscord() {
         let url: string = getUrl(this.window);
         let spliturl: string[] = url.split('/');
-
         if (spliturl[0] === 'repls') {
             this.client.setActivity({
                 details: `Browsing Repls`,
                 state: `repl.it/${url}`,
                 startTimestamp,
                 largeImageKey: 'logo-bg',
-                largeImageText: 'Repl.it',
+                largeImageText: 'Replit',
                 instance: false
             });
         } else if (spliturl[0] === 'talk') {
@@ -69,7 +63,7 @@ class DiscordHandler {
                             largeImageKey: 'talk-bg',
                             largeImageText: 'Repl Talk',
                             smallImageKey: 'logo-bg',
-                            smallImageText: 'Repl.it',
+                            smallImageText: 'Replit',
                             instance: false
                         })
                         .catch((reason) => {
@@ -89,7 +83,7 @@ class DiscordHandler {
                             state: `${url} `,
                             startTimestamp,
                             smallImageKey: 'logo-bg',
-                            smallImageText: 'Repl.it',
+                            smallImageText: 'Replit',
                             largeImageKey: res.largeImageKey,
                             largeImageText: res.largeImageText,
                             instance: false
@@ -111,7 +105,7 @@ class DiscordHandler {
                     largeImageKey: 'talk-bg',
                     largeImageText: 'Repl Talk',
                     smallImageKey: 'logo-bg',
-                    smallImageText: 'Repl.it',
+                    smallImageText: 'Replit',
                     instance: false
                 })
                 .catch((reason) => {
@@ -124,7 +118,7 @@ class DiscordHandler {
                     state: `repl.it/${url}`,
                     startTimestamp,
                     largeImageKey: 'logo-bg',
-                    largeImageText: 'Repl.it',
+                    largeImageText: 'Replit',
                     instance: false
                 })
                 .catch((reason) => {
@@ -137,7 +131,7 @@ class DiscordHandler {
                     state: `repl.it/${url}`,
                     startTimestamp,
                     largeImageKey: 'logo-bg',
-                    largeImageText: 'Repl.it',
+                    largeImageText: 'Replit',
                     instance: false
                 })
                 .catch((reason) => {
@@ -146,11 +140,11 @@ class DiscordHandler {
         } else {
             this.client
                 .setActivity({
-                    details: `On Repl.it`,
+                    details: `On Replit`,
                     state: `repl.it/${url}`,
                     startTimestamp,
                     largeImageKey: 'logo-bg',
-                    largeImageText: 'Repl.it',
+                    largeImageText: 'Replit',
                     instance: false
                 })
                 .catch((reason) => {
@@ -168,13 +162,12 @@ class DiscordHandler {
             viewing += await windowObj.webContents.executeJavaScript(
                 "document.getElementsByClassName('board-post-detail-title')[0].textContent"
             ); // gets the repl talk post name
-        } else if (spliturl[2] !== undefined) {
-            viewing = `Viewing ${spliturl[2]}`;
         } else {
-            viewing = `Viewing ${spliturl[1]}`;
+            viewing = `Viewing ${
+                spliturl[2] !== undefined ? spliturl[2] : spliturl[1]
+            }`;
         }
-        const talkBoard = capitalize(spliturl[1]);
-        return { viewing: viewing, talkBoard: talkBoard };
+        return { viewing: viewing, talkBoard: capitalize(spliturl[1]) };
     }
 
     async setEditing(
@@ -184,19 +177,19 @@ class DiscordHandler {
         largeImageKey: string;
         largeImageText: string;
     }> {
-        const fileName: string = await windowObj.webContents.executeJavaScript(
-            "document.querySelector('.file-header-name div').textContent"
+        const { activeFile, plugins }: any = JSON.parse(
+            await windowObj.webContents.executeJavaScript(
+                'JSON.stringify(window.store.getState())'
+            )
         );
         const replType: string = await windowObj.webContents.executeJavaScript(
             'document.querySelector("img.jsx-2652062152").title'
-        );
-        const logoUrl: string = await windowObj.webContents.executeJavaScript(
-            "document.querySelector('#workspace-root > div > div.jsx-132086333.content > div.jsx-1913007021.workspace-page-wrapper.desktop > div > div > div:nth-child(1) > header > div > div.jsx-2997400350.left > div > div > div > div.jsx-2652062152.language-icon-container > img').src"
-        );
-        const imageName: string = logoUrl.split('/').pop().split('.')[0];
-        const largeImageKey = displayNameToIcon[replType];
-        const largeImageText = replType;
-        return { fileName, largeImageKey, largeImageText };
+        ); //i could change this but i cant because the style in the other file is wrong
+        return {
+            fileName: activeFile,
+            largeImageKey: displayNameToIcon[replType],
+            largeImageText: plugins.fs.state.repl.language
+        };
     }
 }
 
