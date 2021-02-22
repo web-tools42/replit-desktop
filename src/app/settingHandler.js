@@ -1,40 +1,40 @@
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.SettingHandler = void 0;
-const electron_1 = require("electron");
-const fs_1 = __importDefault(require("fs"));
-const path_1 = __importDefault(require("path"));
-const write_file_atomic_1 = __importDefault(require("write-file-atomic"));
+const electron = require('electron');
+const fs = __importDefault(require('fs'));
+const path = __importDefault(require('path'));
+const write_file_atomic = __importDefault(require('write-file-atomic'));
 class SettingHandler {
     constructor() {
-        this.settingsFilePath = `${path_1.default.dirname(electron_1.app.getPath('userData'))}${path_1.default.sep}settings.json`;
+        this.settingsFilePath = `${path.default.dirname(
+            electron.app.getPath('userData')
+        )}${path.default.sep}settings.json`;
         this.ensureFileSync();
         this.settings = {};
         try {
-            this.settings = JSON.parse(fs_1.default.readFileSync(this.settingsFilePath, 'utf-8'));
-        }
-        catch {
+            this.settings = JSON.parse(
+                fs.default.readFileSync(this.settingsFilePath, 'utf-8')
+            );
+        } catch {
             this.resetAll();
-            this.settings = JSON.parse(fs_1.default.readFileSync(this.settingsFilePath, 'utf-8'));
+            this.settings = JSON.parse(
+                fs.default.readFileSync(this.settingsFilePath, 'utf-8')
+            );
         }
     }
     ensureFileSync() {
         try {
-            fs_1.default.statSync(this.settingsFilePath);
-        }
-        catch (err) {
+            fs.default.statSync(this.settingsFilePath);
+        } catch (err) {
             if (err.code === 'ENOENT') {
                 console.debug('creating file');
                 this.saveSettings();
-            }
-            else
-                throw err;
+            } else throw err;
         }
     }
     saveSettings() {
-        write_file_atomic_1.default.sync(this.settingsFilePath, JSON.stringify(this.settings, null, 4));
+        write_file_atomic.default.sync(
+            this.settingsFilePath,
+            JSON.stringify(this.settings, null, 4)
+        );
     }
     has(key) {
         return this.settings.hasOwnProperty(key);

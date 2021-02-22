@@ -1,16 +1,11 @@
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Updater = exports.Launcher = void 0;
-const electron_1 = require("electron");
-const common_1 = require("../common");
-const fs = require("fs");
-const path = require("path");
-const node_fetch_1 = __importDefault(require("node-fetch"));
-const events_1 = require("events");
-const semver = require("semver");
-class Updater extends events_1.EventEmitter {
+const electron = require('electron');
+const common = require('../common');
+const fs = require('fs');
+const path = require('path');
+const node_fetch = __importDefault(require('node-fetch'));
+const events = require('events');
+const semver = require('semver');
+class Updater extends events.EventEmitter {
     constructor(launcher) {
         super();
         this.downloadUrls = {
@@ -19,17 +14,19 @@ class Updater extends events_1.EventEmitter {
             linuxUrl: ''
         };
         this.pathSep = path.sep;
-        this.appPath = `${electron_1.app.getAppPath()}${this.pathSep}`;
+        this.appPath = `${electron.app.getAppPath()}${this.pathSep}`;
         this.upperAppPath = `${path.dirname(this.appPath)}${this.pathSep}`;
-        this.userDesktop = electron_1.app.getPath('desktop');
+        this.userDesktop = electron.app.getPath('desktop');
         this.logFilePath = `${this.userDesktop}updater-log.txt`;
         this.logArray = [''];
-        this.downloadPath = `${electron_1.app.getPath('appData')}updaterDownload${this.pathSep}`;
+        this.downloadPath = `${electron.app.getPath('appData')}updaterDownload${
+            this.pathSep
+        }`;
         this.appVersion = {
-            major: parseInt(electron_1.app.getVersion().split('.')[0]),
-            minor: parseInt(electron_1.app.getVersion().split('.')[1]),
-            patch: parseInt(electron_1.app.getVersion().split('.')[2]),
-            versionString: electron_1.app.getVersion()
+            major: parseInt(electron.app.getVersion().split('.')[0]),
+            minor: parseInt(electron.app.getVersion().split('.')[1]),
+            patch: parseInt(electron.app.getVersion().split('.')[2]),
+            versionString: electron.app.getVersion()
         };
         this.launcher = launcher;
     }
@@ -37,19 +34,28 @@ class Updater extends events_1.EventEmitter {
         return Object.assign({}, resp);
     }
     formatBytes(bytes, decimals = 1) {
-        if (bytes === 0)
-            return '0 Bytes';
+        if (bytes === 0) return '0 Bytes';
         const k = 1024;
         const dm = decimals < 0 ? 0 : decimals;
         const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
         const i = Math.floor(Math.log(bytes) / Math.log(k));
-        return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
+        return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${
+            sizes[i]
+        }`;
     }
     async checkUpdate() {
         try {
-            const res = this.decodeReleaseResponse(await (await node_fetch_1.default('https://api.github.com/repos/repl-it-discord/repl-it-electron/releases/latest')).json());
-            if (res.tag_name.includes('alpha') ||
-                res.tag_name.includes('beta')) {
+            const res = this.decodeReleaseResponse(
+                await (
+                    await node_fetch.default(
+                        'https://api.github.com/repos/repl-it-discord/repl-it-electron/releases/latest'
+                    )
+                ).json()
+            );
+            if (
+                res.tag_name.includes('alpha') ||
+                res.tag_name.includes('beta')
+            ) {
                 return { hasUpdate: false };
             }
             const tagNames = res.tag_name.split('.');
@@ -64,33 +70,31 @@ class Updater extends events_1.EventEmitter {
                 const asset = res.assets[x];
                 if (asset.name.includes('exe') || asset.name.includes('win')) {
                     this.downloadUrls.windowsUrl = asset.browser_download_url;
-                }
-                else if (asset.name.includes('dmg')) {
+                } else if (asset.name.includes('dmg')) {
                     this.downloadUrls.macOSUrl = asset.browser_download_url;
-                }
-                else if (asset.name.includes('tar.gz')) {
+                } else if (asset.name.includes('tar.gz')) {
                     this.downloadUrls.linuxUrl = asset.browser_download_url;
                 }
             }
-            if (semver.gt(version.versionString, this.appVersion.versionString)) {
+            if (
+                semver.gt(version.versionString, this.appVersion.versionString)
+            ) {
                 return {
                     hasUpdate: true,
                     changeLog: changeLog,
                     version: res.tag_name
                 };
-            }
-            else {
+            } else {
                 return { hasUpdate: false };
             }
-        }
-        catch (e) {
+        } catch (e) {
             console.error(e);
             return { hasUpdate: false, changeLog: 'error' };
         }
     }
     async downloadUpdate(url) {
         try {
-            const req = await node_fetch_1.default(url);
+            const req = await node_fetch.default(url);
             const contentLength = parseInt(req.headers.get('content-length'));
             const filename = url.split('/').pop();
             this.downloadFilePath = `${this.downloadPath}${filename}`;
@@ -100,33 +104,35 @@ class Updater extends events_1.EventEmitter {
             }
             req.body
                 .on('data', (chunk) => {
-                downloaded += chunk.length;
-                const percentage = Math.floor((downloaded / contentLength) * 100);
-                this.launcher.updateStatus({
-                    text: `${this.formatBytes(downloaded)}/${this.formatBytes(contentLength)}`,
-                    percentage: `${percentage.toString()}%`
-                });
-            })
+                    downloaded += chunk.length;
+                    const percentage = Math.floor(
+                        (downloaded / contentLength) * 100
+                    );
+                    this.launcher.updateStatus({
+                        text: `${this.formatBytes(
+                            downloaded
+                        )}/${this.formatBytes(contentLength)}`,
+                        percentage: `${percentage.toString()}%`
+                    });
+                })
                 .pipe(fs.createWriteStream(this.downloadFilePath));
             req.body.on('end', () => {
                 this.launcher.updateStatus({ text: 'Download Finished' });
                 this.emit('download-finished');
             });
-        }
-        catch (e) {
+        } catch (e) {
             this.emit('download-error', e);
         }
     }
     afterDownload() {
-        electron_1.shell.showItemInFolder(this.downloadFilePath);
-        electron_1.app.exit(0);
+        electron.shell.showItemInFolder(this.downloadFilePath);
+        electron.app.exit(0);
     }
     cleanUp(skip) {
         if (!skip) {
             try {
                 fs.unlinkSync(this.downloadFilePath);
-            }
-            catch (e) { }
+            } catch (e) {}
         }
         this.emit('all-done');
     }
@@ -134,13 +140,17 @@ class Updater extends events_1.EventEmitter {
 exports.Updater = Updater;
 class Launcher {
     constructor() {
-        this.window = new common_1.ElectronWindow({
-            show: false,
-            resizable: false,
-            height: 300,
-            width: 250,
-            frame: false
-        }, ``, true);
+        this.window = new common.ElectronWindow(
+            {
+                show: false,
+                resizable: false,
+                height: 300,
+                width: 250,
+                frame: false
+            },
+            ``,
+            true
+        );
     }
     init() {
         this.window.loadFile('launcher/launcher.html').then();

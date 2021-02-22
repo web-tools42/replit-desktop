@@ -1,5 +1,3 @@
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.displayNameToIcon = exports.languages = void 0;
 const displayNameToIcon = {
     'APL': 'text',
     'Bash': 'bash',

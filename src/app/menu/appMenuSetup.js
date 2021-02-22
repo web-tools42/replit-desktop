@@ -1,7 +1,5 @@
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.appMenuSetup = void 0;
-const electron_1 = require("electron");
-const common_1 = require("../../common");
+const electron = require('electron');
+const common = require('../../common');
 function appMenuSetup(mainApp, themeHandler, settings, popoutHandler) {
     const template = [
         {
@@ -41,7 +39,9 @@ function appMenuSetup(mainApp, themeHandler, settings, popoutHandler) {
                 {
                     label: 'Crosis Logs',
                     click(i, win) {
-                        win.webContents.executeJavaScript("window.store.dispatch({type: 'LOAD_PLUGIN',pluginPud: 'adminpanel',pluginType: 'adminpanel',title: 'adminpanel'});window.store.dispatch({type: 'ADD_SIDE_NAV_ITEM',navItem: {pud: 'adminpanel',pluginType: 'adminpanel',tooltip: 'Crosis Logs',svg: 'Alien'}});");
+                        win.webContents.executeJavaScript(
+                            "window.store.dispatch({type: 'LOAD_PLUGIN',pluginPud: 'adminpanel',pluginType: 'adminpanel',title: 'adminpanel'});window.store.dispatch({type: 'ADD_SIDE_NAV_ITEM',navItem: {pud: 'adminpanel',pluginType: 'adminpanel',tooltip: 'Crosis Logs',svg: 'Alien'}});"
+                        );
                     }
                 },
                 { type: 'separator' },
@@ -105,7 +105,9 @@ function appMenuSetup(mainApp, themeHandler, settings, popoutHandler) {
                 {
                     label: 'Copy URL to clipboard',
                     click(item, focusedWindow) {
-                        electron_1.clipboard.writeText(focusedWindow.webContents.getURL());
+                        electron.clipboard.writeText(
+                            focusedWindow.webContents.getURL()
+                        );
                     }
                 }
             ]
@@ -135,9 +137,9 @@ function appMenuSetup(mainApp, themeHandler, settings, popoutHandler) {
                 {
                     label: 'Open Current Link in Default Browser',
                     click(item, focusedWindow) {
-                        electron_1.shell
+                        electron.shell
                             .openExternal(focusedWindow.webContents.getURL())
-                            .then((r) => { });
+                            .then((r) => {});
                     }
                 },
                 {
@@ -150,7 +152,7 @@ function appMenuSetup(mainApp, themeHandler, settings, popoutHandler) {
                     accelerator: 'CmdOrCtrl+f',
                     label: 'Select Input',
                     click(item, focusedWindow) {
-                        common_1.selectInput(focusedWindow);
+                        common.selectInput(focusedWindow);
                     }
                 },
                 {
@@ -159,16 +161,16 @@ function appMenuSetup(mainApp, themeHandler, settings, popoutHandler) {
                 {
                     accelerator: 'CmdOrCtrl+R',
                     click(item, focusedWindow) {
-                        if (focusedWindow)
-                            focusedWindow.reload();
+                        if (focusedWindow) focusedWindow.reload();
                     },
                     label: 'Reload'
                 },
                 {
                     label: 'Toggle Developer Tools',
-                    accelerator: process.platform === 'darwin'
-                        ? 'Alt+Command+I'
-                        : 'Ctrl+Shift+I',
+                    accelerator:
+                        process.platform === 'darwin'
+                            ? 'Alt+Command+I'
+                            : 'Ctrl+Shift+I',
                     click(item, focusedWindow) {
                         if (focusedWindow)
                             focusedWindow.webContents.toggleDevTools();
@@ -207,30 +209,36 @@ function appMenuSetup(mainApp, themeHandler, settings, popoutHandler) {
                 {
                     label: 'Join the Replit discord',
                     click() {
-                        electron_1.shell.openExternal('https://repl.it/discord');
+                        electron.shell.openExternal('https://repl.it/discord');
                     }
                 },
                 {
                     label: 'Learn More about Replit',
                     click() {
-                        electron_1.shell.openExternal('https://repl.it/site/about');
+                        electron.shell.openExternal(
+                            'https://repl.it/site/about'
+                        );
                     }
                 },
                 {
                     label: 'Report a Bug, or Request a Feature',
                     click() {
-                        electron_1.shell.openExternal('https://github.com/repl-it-discord/repl-it-electron/issues/new/choose');
+                        electron.shell.openExternal(
+                            'https://github.com/repl-it-discord/repl-it-electron/issues/new/choose'
+                        );
                     }
                 },
                 {
                     label: 'Go to Github Page',
                     click() {
-                        electron_1.shell.openExternal('https://github.com/repl-it-discord/repl-it-electron');
+                        electron.shell.openExternal(
+                            'https://github.com/repl-it-discord/repl-it-electron'
+                        );
                     }
                 }
             ]
         }
     ];
-    return electron_1.Menu.buildFromTemplate(template);
+    return electron.Menu.buildFromTemplate(template);
 }
 exports.appMenuSetup = appMenuSetup;

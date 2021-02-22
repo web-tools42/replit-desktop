@@ -1,12 +1,17 @@
-Object.defineProperty(exports, "__esModule", { value: true });
-const launcher_1 = require("./launcher/launcher");
-const electron_1 = require("electron");
-const path = require("path");
-const common_1 = require("./common");
-const app_1 = require("./app/app");
-electron_1.app.setPath('appData', path.join(electron_1.app.getPath('home'), '.repl.it', 'appData'));
-electron_1.app.setPath('userData', path.join(electron_1.app.getPath('home'), '.repl.it', 'userData'));
-electron_1.app.disableHardwareAcceleration();
+const launcher = require('./launcher/launcher');
+const electron = require('electron');
+const path = require('path');
+const common = require('./common');
+const app = require('./app/app');
+electron.app.setPath(
+    'appData',
+    path.join(electron.app.getPath('home'), '.repl.it', 'appData')
+);
+electron.app.setPath(
+    'userData',
+    path.join(electron.app.getPath('home'), '.repl.it', 'userData')
+);
+electron.app.disableHardwareAcceleration();
 process.on('unhandledRejection', (rejection) => {
     console.error(`[Unhandled Promise Rejction] ${rejection.stack}`);
 });
@@ -14,24 +19,24 @@ let launcher;
 let updater;
 let mainApp;
 function initLauncher() {
-    launcher = new launcher_1.Launcher();
+    launcher = new launcher.Launcher();
     launcher.init();
     launcher.window.webContents.once('did-finish-load', () => {
         launcher.window.show();
-        initUpdater().then(() => { });
+        initUpdater().then(() => {});
     });
 }
 async function initApp() {
-    mainApp = new app_1.App();
+    mainApp = new app.App();
     mainApp.mainWindow.loadURL('https://repl.it/~').catch(console.debug);
     await mainApp.clearCookies(true);
     mainApp.mainWindow.webContents.once('did-finish-load', () => {
         launcher.window.close();
     });
-    mainApp.mainWindow.on('close', () => electron_1.app.quit());
+    mainApp.mainWindow.on('close', () => electron.app.quit());
 }
 async function initUpdater() {
-    updater = new launcher_1.Updater(launcher);
+    updater = new launcher.Updater(launcher);
     if (process.execPath.includes('electron')) {
         updater.cleanUp(true);
     }
@@ -53,12 +58,20 @@ async function initUpdater() {
     });
     if (res['hasUpdate']) {
         launcher.updateStatus({ text: 'Update detected' });
-        if (common_1.promptYesNoSync(`A new update ${res['version']} is available. Do you want to update?`, 'Update Available', res['changeLog'])) {
+        if (
+            common.promptYesNoSync(
+                `A new update ${res['version']} is available. Do you want to update?`,
+                'Update Available',
+                res['changeLog']
+            )
+        ) {
             launcher.updateStatus({ text: 'Downloading Update' });
             updater.once('download-finished', updater.afterDownload);
-            switch (common_1.PLATFORM) {
+            switch (common.PLATFORM) {
                 case 'win32':
-                    await updater.downloadUpdate(updater.downloadUrls.windowsUrl);
+                    await updater.downloadUpdate(
+                        updater.downloadUrls.windowsUrl
+                    );
                     break;
                 case 'darwin':
                     await updater.downloadUpdate(updater.downloadUrls.macOSUrl);
@@ -68,14 +81,13 @@ async function initUpdater() {
                     break;
             }
         }
-    }
-    else {
+    } else {
         updater.cleanUp(true);
     }
 }
-electron_1.app.on('window-all-closed', () => {
-    electron_1.app.quit();
+electron.app.on('window-all-closed', () => {
+    electron.app.quit();
 });
-electron_1.app.once('ready', () => {
+electron.app.once('ready', () => {
     initLauncher();
 });

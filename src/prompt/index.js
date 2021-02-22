@@ -1,37 +1,41 @@
-Object.defineProperty(exports, "__esModule", { value: true });
-const common_1 = require("../common");
-const electron_1 = require("electron");
-const url = require("url");
-const path = require("path");
+const common = require('../common');
+const electron = require('electron');
+const url = require('url');
+const path = require('path');
 const DEFAULT_WIDTH = 370;
 const DEFAULT_HEIGHT = 160;
 function electronPrompt(options, parentWindow) {
     return new Promise((resolve, reject) => {
         const id = `${new Date().getTime()}-${Math.random()}`;
-        const opts = Object.assign({
-            width: DEFAULT_WIDTH,
-            height: DEFAULT_HEIGHT,
-            minWidth: DEFAULT_WIDTH,
-            minHeight: DEFAULT_HEIGHT,
-            title: 'Prompt',
-            label: 'Please input a value:',
-            buttonLabels: null,
-            alwaysOnTop: false,
-            value: null,
-            type: 'input',
-            selectOptions: null,
-            icon: null,
-            useHtmlLabel: false,
-            customStylesheet: null,
-            menuBarVisible: false,
-            skipTaskbar: true
-        }, options || {});
-        if (opts.type === 'select' &&
+        const opts = Object.assign(
+            {
+                width: DEFAULT_WIDTH,
+                height: DEFAULT_HEIGHT,
+                minWidth: DEFAULT_WIDTH,
+                minHeight: DEFAULT_HEIGHT,
+                title: 'Prompt',
+                label: 'Please input a value:',
+                buttonLabels: null,
+                alwaysOnTop: false,
+                value: null,
+                type: 'input',
+                selectOptions: null,
+                icon: null,
+                useHtmlLabel: false,
+                customStylesheet: null,
+                menuBarVisible: false,
+                skipTaskbar: true
+            },
+            options || {}
+        );
+        if (
+            opts.type === 'select' &&
             (opts.selectOptions === null ||
-                typeof opts.selectOptions !== 'object')) {
+                typeof opts.selectOptions !== 'object')
+        ) {
             return reject(new Error('"selectOptions" must be an object'));
         }
-        let promptWindow = new common_1.ElectronWindow({
+        let promptWindow = new common.ElectronWindow({
             width: opts.width,
             height: opts.height,
             minWidth: opts.minWidth,
@@ -73,14 +77,23 @@ function electronPrompt(options, parentWindow) {
             event.returnValue = null;
             cleanup();
         };
-        electron_1.ipcMain.on(`prompt-get-options:${id}`, getOptionsListener);
-        electron_1.ipcMain.on(`prompt-post-data:${id}`, postDataListener);
-        electron_1.ipcMain.on(`prompt-error:${id}`, errorListener);
+        electron.ipcMain.on(`prompt-get-options:${id}`, getOptionsListener);
+        electron.ipcMain.on(`prompt-post-data:${id}`, postDataListener);
+        electron.ipcMain.on(`prompt-error:${id}`, errorListener);
         promptWindow.on('unresponsive', unresponsiveListener);
         promptWindow.on('closed', () => {
-            electron_1.ipcMain.removeListener(`prompt-get-options:${id}`, getOptionsListener);
-            electron_1.ipcMain.removeListener(`prompt-post-data:${id}`, postDataListener);
-            electron_1.ipcMain.removeListener(`prompt-error:${id}`, postDataListener);
+            electron.ipcMain.removeListener(
+                `prompt-get-options:${id}`,
+                getOptionsListener
+            );
+            electron.ipcMain.removeListener(
+                `prompt-post-data:${id}`,
+                postDataListener
+            );
+            electron.ipcMain.removeListener(
+                `prompt-error:${id}`,
+                postDataListener
+            );
             resolve(null);
         });
         const promptUrl = url.format({

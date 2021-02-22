@@ -10,7 +10,8 @@ window.onload = () => {
         'style'
     ];
     let style = document.createElement('style');
-    style.appendChild(document.createTextNode(`
+    style.appendChild(
+        document.createTextNode(`
         .jsx-2759849619:not(.console, .controls, .xterm-container) { 
             top: 60px !important; 
             left: 0px !important; 
@@ -18,7 +19,8 @@ window.onload = () => {
             height: calc(100vh - 60px) !important;
             position: absolute !important;
         }
-    `));
+    `)
+    );
     document.head.appendChild(style);
     const config = { attributes: true, childList: true, subtree: true };
     const observer = new MutationObserver((mutationsList, observer) => {
@@ -28,45 +30,52 @@ window.onload = () => {
         E.setAttribute('style', 'display: none;');
     };
     function elemWalker(parent, level = false) {
-        if (keepElem.some((A) => !A.startsWith('text:')
-            ? parent.matches(A)
-            : parent.innerText ==
-                A.replace('text:', '')))
+        if (
+            keepElem.some((A) =>
+                !A.startsWith('text:')
+                    ? parent.matches(A)
+                    : parent.innerText == A.replace('text:', '')
+            )
+        )
             return true;
         let Keep = false;
         if (observer && observer.disconnect) {
             observer.disconnect();
         }
         [...parent.children].forEach((elm) => {
-            if (!elm.children.length &&
-                !keepElem.some((A) => !A.startsWith('text:')
-                    ? elm.matches(A)
-                    : elm.innerText ==
-                        A.replace('text:', ''))) {
+            if (
+                !elm.children.length &&
+                !keepElem.some((A) =>
+                    !A.startsWith('text:')
+                        ? elm.matches(A)
+                        : elm.innerText == A.replace('text:', '')
+                )
+            ) {
                 Remove(elm);
-            }
-            else if (!keepElem.some((A) => !A.startsWith('text:')
-                ? elm.matches(A)
-                : elm.innerText ==
-                    A.replace('text:', ''))) {
+            } else if (
+                !keepElem.some((A) =>
+                    !A.startsWith('text:')
+                        ? elm.matches(A)
+                        : elm.innerText == A.replace('text:', '')
+                )
+            ) {
                 let Important = elemWalker(elm, true);
-                if (Important)
-                    Keep = true;
+                if (Important) Keep = true;
             }
-            if (keepElem.some((A) => !A.startsWith('text:')
-                ? elm.matches(A)
-                : elm.innerText ==
-                    A.replace('text:', ''))) {
+            if (
+                keepElem.some((A) =>
+                    !A.startsWith('text:')
+                        ? elm.matches(A)
+                        : elm.innerText == A.replace('text:', '')
+                )
+            ) {
                 elm.setAttribute('style', '');
                 Keep = true;
             }
         });
-        if (!Keep)
-            Remove(parent);
-        else
-            parent.setAttribute('style', '');
-        if (!level)
-            observer.observe(document.body, config);
+        if (!Keep) Remove(parent);
+        else parent.setAttribute('style', '');
+        if (!level) observer.observe(document.body, config);
         return Keep;
     }
     elemWalker(document.body);
