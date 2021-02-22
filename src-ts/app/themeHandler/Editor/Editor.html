@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Replit</title>
+    <link href="./style.css" rel="stylesheet" type="text/css"/>
+
+    <script src="./script.js"></script>
+  </head>
+  <body>
+    <div class="Color">
+      <div id="Gen" style="background: #1e2536;"><div style="color:#fff;">Generate Theme</div></div>
+      <div id="Current"></div>
+      <fieldset class="color-picker">
+        <select class="format">
+          <option selected>Hex</option>
+          <option>RGB</option>
+          <option>HSL</option>
+        </select>
+        <input class="color" type="text" value="#41bebe" />
+        <div class="spectrum">
+          <div class="lightness-filter"></div>
+          <div class="pin"></div>
+        </div>
+        <input class="lightness" type="range" min="0" max="100" />
+      </fieldset>
+      <div class="Colors">
+      </div>
+    </div>
+    <div>
+      <webview src="https://www.repl.it/~" preload="./Collector.js"></webview>
+    </div>
+  </body>
+</html>
