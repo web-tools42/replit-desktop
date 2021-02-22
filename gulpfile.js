@@ -156,10 +156,13 @@ async function watchDev() {
     runElectron();
 }
 async function buildDevWatch() {
-    gulp.src('src/**/*.ts')
-        .pipe(cache('buildDev'))
-        .pipe(tsProject(ts.reporter.fullReporter()))
-        .pipe(gulp.dest('ts-out/'));
+    return new Promise((resolve, reject) => {
+        gulp.src('src/**/*.ts')
+            .pipe(cache('buildDev', { optimizeMemory: true }))
+            .pipe(tsProject(ts.reporter.fullReporter()))
+            .pipe(gulp.dest('ts-out/'))
+            .on('end', resolve);
+    });
 }
 
 async function buildDev() {
