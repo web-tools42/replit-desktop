@@ -187,7 +187,7 @@ class DiscordHandler {
             `
             (
                 () => {
-                    return window.store && document.querySelector('.jsx-3298514671.heading') ? {
+                    return window.store && document.querySelector('img.jsx-2652062152') ? {
                         "activeFile": window.store.getState().activeFile,
                         "largeImageText": window.store.getState().plugins.fs.state.repl.language,
                         "replType": document.querySelector('img.jsx-2652062152').title,
