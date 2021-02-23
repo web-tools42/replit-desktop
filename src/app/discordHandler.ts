@@ -45,7 +45,7 @@ class DiscordHandler {
         let spliturl: string[] = url.split('/');
         if (spliturl[0] === 'repls') {
             this.client.setActivity({
-                details: `Browsing Repls`,
+                details: 'Browsing Repls',
                 state: `repl.it/${url}`,
                 startTimestamp,
                 largeImageKey: 'logo-bg',
@@ -99,7 +99,7 @@ class DiscordHandler {
         } else if (spliturl[0] === 'talk') {
             this.client
                 .setActivity({
-                    details: `In Repl Talk`,
+                    details: 'In Repl Talk',
                     state: `repl.it/${url}`,
                     startTimestamp,
                     largeImageKey: 'talk-bg',
@@ -127,7 +127,7 @@ class DiscordHandler {
         } else if (spliturl[0] === 'account') {
             this.client
                 .setActivity({
-                    details: `Changing account settings`,
+                    details: 'Changing account settings',
                     state: `repl.it/${url}`,
                     startTimestamp,
                     largeImageKey: 'logo-bg',
@@ -140,7 +140,7 @@ class DiscordHandler {
         } else {
             this.client
                 .setActivity({
-                    details: `On Replit`,
+                    details: 'On Replit',
                     state: `repl.it/${url}`,
                     startTimestamp,
                     largeImageKey: 'logo-bg',
@@ -177,19 +177,33 @@ class DiscordHandler {
         largeImageKey: string;
         largeImageText: string;
     }> {
-        const { activeFile, plugins }: any = JSON.parse(
-            await windowObj.webContents.executeJavaScript(
-                'JSON.stringify(window.store.getState())'
-            )
+        const {
+            activeFile,
+            largeImageText,
+            replType
+        }: {
+            [key: string]: string;
+        } = await windowObj.webContents.executeJavaScript(
+            `
+            (
+                () => {
+                    return window.store && document.querySelector('.jsx-3298514671.heading') ? {
+                        "activeFile": window.store.getState().activeFile,
+                        "largeImageText": window.store.getState().plugins.fs.state.repl.language,
+                        "replType": document.querySelector('img.jsx-2652062152').title,
+                    } : {
+                        "activeFile": window.location.pathname,
+                        "largeImageText": 'Someone Elses Post Probably Coder100s',
+                        "replType": document.querySelector('.jsx-3298514671.heading').innerText,
+                    };
+                }
+            )();
+            `
         );
-        const replType: string = await windowObj.webContents.executeJavaScript(
-            'document.querySelector("img.jsx-2652062152").title'
-        ); //i could change this but i cant because the style in the other file is wrong
-        // Match file type
         return {
             fileName: activeFile,
             largeImageKey: displayNameToIcon[replType],
-            largeImageText: plugins.fs.state.repl.language
+            largeImageText: largeImageText
         };
     }
 }

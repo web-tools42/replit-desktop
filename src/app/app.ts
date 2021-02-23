@@ -13,14 +13,14 @@ class App extends EventEmitter {
     public readonly themeHandler: ThemeHandler;
     public readonly popoutHandler: PopoutHandler;
     public readonly discordHandler: DiscordHandler;
-    protected windowArray: ElectronWindow[];
+    protected windowArray: Map<number, ElectronWindow>;
     private readonly settingsHandler: SettingHandler;
 
     constructor() {
         super();
         this.mainWindow = new ElectronWindow({ height: 900, width: 1600 });
         this.settingsHandler = new SettingHandler();
-        this.windowArray = [];
+        this.windowArray = new Map();
         this.discordHandler = new DiscordHandler(this.mainWindow);
 
         this.themeHandler = new ThemeHandler(
@@ -76,9 +76,11 @@ class App extends EventEmitter {
                 userAgent = app.userAgentFallback;
             }
         }
-        this.windowArray.forEach((window) => {
-            window.webContents.userAgent = userAgent;
-            window.reload();
+        [...this.windowArray.values()].forEach((window) => {
+            if (window.webContents) {
+                window.webContents.userAgent = userAgent;
+                window.reload();
+            }
         });
     }
 
@@ -112,15 +114,15 @@ class App extends EventEmitter {
             }
         }
         if (!oauthOnly) {
-            for (let x = 0; x < this.windowArray.length; x++) {
-                this.windowArray[x].reload();
-            }
+            [...this.windowArray.values()].forEach((win) => {
+                win.reload();
+            });
         }
     }
 
     addWindow(window: ElectronWindow) {
         contextMenu({ window: window });
-        this.windowArray.push(window);
+        this.windowArray.set(window.id, window);
         window.webContents.on('will-navigate', (e, url) => {
             // Deal with the logout
             if (url == 'https://repl.it/logout') {
@@ -133,6 +135,11 @@ class App extends EventEmitter {
         window.webContents.on('did-finish-load', () =>
             this.themeHandler.addTheme(window)
         );
+
+        window.on('close', () => {
+            if (this.windowArray.has(window.id))
+                this.windowArray.delete(window.id);
+        });
     }
 }
 
