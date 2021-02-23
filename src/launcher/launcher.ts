@@ -68,11 +68,11 @@ class Updater extends EventEmitter {
             const res: GithubReleaseResponse = this.decodeReleaseResponse(
                 await (
                     await fetch(
-                        'https://api.github.com/repos/repl-it-discord/repl-it-electron/releases/latest'
+                        'https://api.github.com/repos/replit-discord/replit-desktop/releases/latest'
                     )
                 ).json()
             );
-
+            if (!res.tag_name) return { hasUpdate: false };
             if (
                 res.tag_name.includes('alpha') ||
                 res.tag_name.includes('beta')

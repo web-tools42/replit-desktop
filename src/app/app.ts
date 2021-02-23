@@ -18,7 +18,10 @@ class App extends EventEmitter {
 
     constructor() {
         super();
-        this.mainWindow = new ElectronWindow({ height: 900, width: 1600 });
+        this.mainWindow = new ElectronWindow(
+            { height: 900, width: 1600 },
+            'Ace_Fix.js'
+        );
         this.settingsHandler = new SettingHandler();
         this.windowArray = new Map();
         this.discordHandler = new DiscordHandler(this.mainWindow);
@@ -31,7 +34,6 @@ class App extends EventEmitter {
         this.addWindow(this.mainWindow);
         if (!this.settingsHandler.has('enable-ace'))
             this.settingsHandler.set('enable-ace', false);
-
         app.applicationMenu = appMenuSetup(
             this,
             this.themeHandler,
@@ -75,6 +77,8 @@ class App extends EventEmitter {
                 this.settingsHandler.set('enable-ace', false);
                 userAgent = app.userAgentFallback;
             }
+        } else if (this.settingsHandler.get('enable-ace')) {
+            userAgent = app.userAgentFallback;
         }
         [...this.windowArray.values()].forEach((window) => {
             if (window.webContents) {
@@ -123,6 +127,7 @@ class App extends EventEmitter {
     addWindow(window: ElectronWindow) {
         contextMenu({ window: window });
         this.windowArray.set(window.id, window);
+        this.toggleAce();
         window.webContents.on('will-navigate', (e, url) => {
             // Deal with the logout
             if (url == 'https://repl.it/logout') {
