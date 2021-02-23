@@ -7,7 +7,7 @@ const { platform } = require('os');
 const htmlmin = require('gulp-htmlmin');
 const cache = require('gulp-cached');
 const electron = require('electron');
-const proc = require('child_process');
+const sucrase = require('@sucrase/gulp-plugin');
 
 const tsProject = ts.createProject('tsconfig.json');
 let child = null;
@@ -22,9 +22,13 @@ async function runElectron() {
         child.kill();
     }
 
-    child = proc.spawn(electron, ['--no-sandbox', '--trace-warnings', '.'], {
-        cwd: './ts-out'
-    });
+    child = child_process.spawn(
+        electron,
+        ['--no-sandbox', '--trace-warnings', '.'],
+        {
+            cwd: './ts-out'
+        }
+    );
 
     child.on('error', function (err) {
         errored = true;
@@ -83,7 +87,9 @@ async function buildProd() {
                     compress: {}
                 })
             )
-            .on('error', reject)
+            .on('error', (e) => {
+                reject;
+            })
             .pipe(gulp.dest('dist'))
             .on('end', resolve);
     });
@@ -148,25 +154,20 @@ async function copyFilesDevNoCache() {
 }
 
 async function watchDev() {
-    gulp.series(buildDevWatch, copyFilesDev)();
+    gulp.series(buildDev, copyFilesDev)();
     gulp.watch(
         'src/**/*',
         { delay: 10 * 100 }, // Poll every 10 seconds
-        gulp.series(buildDevWatch, copyFilesDev, runElectron)
+        gulp.series(buildDev, copyFilesDev, runElectron)
     );
     runElectron();
-}
-async function buildDevWatch() {
-    gulp.src('src/**/*.ts')
-        .pipe(cache('buildDev'))
-        .pipe(tsProject(ts.reporter.fullReporter()))
-        .pipe(gulp.dest('ts-out/'));
 }
 
 async function buildDev() {
     return new Promise((resolve, reject) => {
         gulp.src('src/**/*.ts')
-            .pipe(tsProject(ts.reporter.fullReporter()))
+            .pipe(cache('buildDev'))
+            .pipe(sucrase({ transforms: ['typescript', 'imports'] }))
             .on('error', reject)
             .pipe(gulp.dest('ts-out/'))
             .on('end', resolve);
