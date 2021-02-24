@@ -1,6 +1,6 @@
 import { Client } from 'discord-rpc';
 import { ElectronWindow, capitalize, getUrl } from '../common';
-import { displayNameToIcon } from './languages';
+import { displayNameToIcon, languages } from './languages';
 import Timeout = NodeJS.Timeout;
 const startTimestamp = Date.now();
 class DiscordHandler {
@@ -29,7 +29,7 @@ class DiscordHandler {
                 this.setPlayingDiscord().catch((e: string) =>
                     console.error(`Failed to update Discord status. ${e}`)
                 );
-            }, 15e3);
+            }, 10e3);
         });
     }
 
@@ -177,7 +177,8 @@ class DiscordHandler {
         largeImageKey: string;
         largeImageText: string;
     }> {
-        const {
+        let {
+            Personal,
             activeFile,
             largeImageText,
             replType
@@ -187,19 +188,38 @@ class DiscordHandler {
             `
             (
                 () => {
-                    return window.store && document.querySelector('img.jsx-2652062152') ? {
-                        "activeFile": window.store.getState().activeFile,
-                        "largeImageText": window.store.getState().plugins.fs.state.repl.language,
-                        "replType": document.querySelector('img.jsx-2652062152').title,
-                    } : {
-                        "activeFile": window.location.pathname,
-                        "largeImageText": 'Someone Elses Post Probably Coder100s',
-                        "replType": document.querySelector('.jsx-3298514671.heading').innerText,
-                    };
+                    try {
+                        return window.store && document.querySelector('img.jsx-2652062152') ? {
+                            "Personal": 'true',
+                            "activeFile": window.store.getState().activeFile,
+                            "largeImageText": window.store.getState().plugins.fs.state.repl.language,
+                            "replType": document.querySelector('img.jsx-2652062152').title,
+                        } : {
+                            "Personal": 'false',
+                            "activeFile": window.location.pathname,
+                            "largeImageText": 'Someone Elses Post Probably Coder100s',
+                            "replType": document.querySelector('.jsx-3298514671.heading').innerText,
+                        };
+                    } catch (err) {
+                        return {
+                            "Personal": 'unknown',
+                            "activeFile": 'unknown',
+                            "largeImageText": 'unknown',
+                            "replType": 'text',
+                        };
+                    }
                 }
             )();
             `
         );
+        if (Personal == 'true') {
+            for (const [key, value] of Object.entries(languages)) {
+                if (value.test(activeFile) && displayNameToIcon[key]) {
+                    replType = key;
+                    break;
+                }
+            }
+        }
         return {
             fileName: activeFile,
             largeImageKey: displayNameToIcon[replType],
