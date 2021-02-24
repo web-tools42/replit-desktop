@@ -202,12 +202,11 @@ const languages: { [key: string]: RegExp } = {
     'text': /\.(text|txt|rtf|info|msg)$/i,
     // 'toml': /\.toml$/i,
     // 'travis': /\.travis\.yml$/i,
-    'TypeScript': /\.(ts|tsx)$/i,
+    'TypeScript': /\.(ts|tsx)$/i
     // 'vue': /\.vuw/i,
     // 'wasm': /\.(wasm|wat|wast)$/i
 };
 // the above is highlighted because i do not have time to match everything. if you want a language make sure the
 // name is the discord applciation as a picture and is also in the other object then uncomment and be off to the races
-
 
 export { languages, displayNameToIcon };
