@@ -40,6 +40,23 @@ class App extends EventEmitter {
             this.settingsHandler,
             this.popoutHandler
         );
+        
+        if(this.settingsHandler.has('window-size')){
+            var windowSize = this.settingsHandler.get(`window-size`);
+
+            this.mainWindow.setSize(windowSize.width, windowSize.height)
+        }
+
+        // Detect on resize and add to settings
+
+        this.mainWindow.on('resize', ()=>{
+            var size = this.mainWindow.getSize();
+
+            this.settingsHandler.set(`window-size`, {
+                width: size[0],
+                height: size[1]
+            });
+        });
 
         // Handle The Login
         this.mainWindow.webContents.on('new-window', (event, url) => {
