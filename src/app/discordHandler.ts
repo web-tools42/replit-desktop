@@ -200,7 +200,7 @@ class DiscordHandler {
                         } : {
                             "Personal": 'false',
                             "activeFile": window.location.pathname,
-                            "largeImageText": 'Someone Elses Post Probably Coder100s',
+                            "largeImageText": 'Viewing Another Users Repl.',
                             "replType": document.querySelector('.jsx-3298514671.heading').innerText,
                         };
                     } catch (err) {
