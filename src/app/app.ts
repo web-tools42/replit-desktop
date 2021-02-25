@@ -20,7 +20,7 @@ class App extends EventEmitter {
         super();
         this.mainWindow = new ElectronWindow(
             { height: 900, width: 1600 },
-            'Ace_Fix.js'
+            'aceFix.js'
         );
         this.settingsHandler = new SettingHandler();
         this.windowArray = new Map();
