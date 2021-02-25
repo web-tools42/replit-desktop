@@ -39,6 +39,8 @@ async function initUpdater() {
     updater = new Updater(launcher);
     if (process.execPath.includes('electron')) {
         updater.cleanUp(true);
+        initApp();
+        return;
     }
     launcher.updateStatus({ text: 'Checking Update' });
     const res = await updater.checkUpdate();
