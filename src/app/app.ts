@@ -77,7 +77,7 @@ class App extends EventEmitter {
                 this.settingsHandler.set('enable-ace', false);
                 userAgent = app.userAgentFallback;
             }
-        } else if (this.settingsHandler.get('enable-ace')) {
+        } else if (!this.settingsHandler.get('enable-ace')) {
             userAgent = app.userAgentFallback;
         }
         [...this.windowArray.values()].forEach((window) => {

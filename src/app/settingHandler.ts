@@ -8,34 +8,36 @@ type SettingsValue =
     | boolean
     | string
     | number
-    | SettingsObject
+    | {
+          [key: string]: SettingsValue;
+      }
     | SettingsValue[];
-
-interface SettingsObject {
-    [key: string]: SettingsValue;
-}
 
 class SettingHandler {
     public settingsFilePath: string;
 
-    public settings: SettingsObject;
+    public settings: Map<string, SettingsValue>;
 
     constructor() {
         this.settingsFilePath = `${path.dirname(app.getPath('userData'))}${
             path.sep
         }settings.json`;
-        this.ensureFileSync();
         // Load the settings
-        this.settings = {};
+        this.settings = new Map();
+        this.ensureFileSync();
         try {
-            this.settings = JSON.parse(
+            let Data = JSON.parse(
                 fs.readFileSync(this.settingsFilePath, 'utf-8')
             );
-        } catch {
+            if (!Data.Version) Data.Map = new Map();
+            this.settings = new Map(Data.Map);
+        } catch (err) {
             this.resetAll();
-            this.settings = JSON.parse(
+            let Data = JSON.parse(
                 fs.readFileSync(this.settingsFilePath, 'utf-8')
             );
+            if (!Data.Version) Data.Map = new Map();
+            this.settings = new Map(Data.Map);
         }
     }
 
@@ -52,21 +54,28 @@ class SettingHandler {
     private saveSettings(): void {
         writeFileAtomic.sync(
             this.settingsFilePath,
-            JSON.stringify(this.settings, null, 4)
+            JSON.stringify(
+                {
+                    Version: '2',
+                    Map: Array.from(this.settings.entries())
+                },
+                null,
+                4
+            )
         );
     }
     has(key: string): boolean {
-        return this.settings.hasOwnProperty(key);
+        return this.settings.has(key);
     }
     get(key: string): SettingsValue {
-        return this.has(key) ? this.settings[key] : null;
+        return this.settings.has(key) ? this.settings.get(key) : null;
     }
     set(key: string, value: SettingsValue): void {
-        this.settings[key] = value;
+        this.settings.set(key, value);
         this.saveSettings();
     }
     unset(key: string): void {
-        delete this.settings[key];
+        this.settings.delete(key);
         this.saveSettings();
     }
     resetAll(): void {
