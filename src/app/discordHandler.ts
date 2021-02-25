@@ -1,6 +1,6 @@
 import { Client } from 'discord-rpc';
 import { ElectronWindow, capitalize, getUrl } from '../common';
-import { displayNameToIcon } from './languages';
+import { displayNameToIcon, languages } from './languages';
 import Timeout = NodeJS.Timeout;
 const startTimestamp = Date.now();
 class DiscordHandler {
@@ -19,8 +19,11 @@ class DiscordHandler {
         this.client
             .login({ clientId: '498635999274991626' })
             .catch((error: string) => {
-                console.error(error);
-                this.disconnectDiscord();
+                // console.error(error);
+                console.debug(
+                    'RPC Error Make Sure Discord Client is Installed And You Are Connected To The Internet'
+                );
+                // this.disconnectDiscord();
             });
         this.client.on('ready', () => {
             console.debug('Discord Client ready');
@@ -29,7 +32,7 @@ class DiscordHandler {
                 this.setPlayingDiscord().catch((e: string) =>
                     console.error(`Failed to update Discord status. ${e}`)
                 );
-            }, 15e3);
+            }, 10e3);
         });
     }
 
@@ -45,7 +48,7 @@ class DiscordHandler {
         let spliturl: string[] = url.split('/');
         if (spliturl[0] === 'repls') {
             this.client.setActivity({
-                details: `Browsing Repls`,
+                details: 'Browsing Repls',
                 state: `repl.it/${url}`,
                 startTimestamp,
                 largeImageKey: 'logo-bg',
@@ -99,7 +102,7 @@ class DiscordHandler {
         } else if (spliturl[0] === 'talk') {
             this.client
                 .setActivity({
-                    details: `In Repl Talk`,
+                    details: 'In Repl Talk',
                     state: `repl.it/${url}`,
                     startTimestamp,
                     largeImageKey: 'talk-bg',
@@ -127,7 +130,7 @@ class DiscordHandler {
         } else if (spliturl[0] === 'account') {
             this.client
                 .setActivity({
-                    details: `Changing account settings`,
+                    details: 'Changing account settings',
                     state: `repl.it/${url}`,
                     startTimestamp,
                     largeImageKey: 'logo-bg',
@@ -140,7 +143,7 @@ class DiscordHandler {
         } else {
             this.client
                 .setActivity({
-                    details: `On Replit`,
+                    details: 'On Replit',
                     state: `repl.it/${url}`,
                     startTimestamp,
                     largeImageKey: 'logo-bg',
@@ -177,19 +180,53 @@ class DiscordHandler {
         largeImageKey: string;
         largeImageText: string;
     }> {
-        const { activeFile, plugins }: any = JSON.parse(
-            await windowObj.webContents.executeJavaScript(
-                'JSON.stringify(window.store.getState())'
-            )
+        let {
+            Personal,
+            activeFile,
+            largeImageText,
+            replType
+        }: {
+            [key: string]: string;
+        } = await windowObj.webContents.executeJavaScript(
+            `
+            (
+                () => {
+                    try {
+                        return window.store && document.querySelector('img.jsx-2652062152') ? {
+                            "Personal": 'true',
+                            "activeFile": window.store.getState().activeFile,
+                            "largeImageText": window.store.getState().plugins.fs.state.repl.language,
+                            "replType": document.querySelector('img.jsx-2652062152').title,
+                        } : {
+                            "Personal": 'false',
+                            "activeFile": window.location.pathname,
+                            "largeImageText": 'Viewing Another Users Repl.',
+                            "replType": document.querySelector('.jsx-3298514671.heading').innerText,
+                        };
+                    } catch (err) {
+                        return {
+                            "Personal": 'unknown',
+                            "activeFile": 'unknown',
+                            "largeImageText": 'unknown',
+                            "replType": 'text',
+                        };
+                    }
+                }
+            )();
+            `
         );
-        const replType: string = await windowObj.webContents.executeJavaScript(
-            'document.querySelector("img.jsx-2652062152").title'
-        ); //i could change this but i cant because the style in the other file is wrong
-        // Match file type
+        if (Personal == 'true') {
+            for (const [key, value] of Object.entries(languages)) {
+                if (value.test(activeFile) && displayNameToIcon[key]) {
+                    replType = key;
+                    break;
+                }
+            }
+        }
         return {
             fileName: activeFile,
             largeImageKey: displayNameToIcon[replType],
-            largeImageText: plugins.fs.state.repl.language
+            largeImageText: largeImageText
         };
     }
 }
