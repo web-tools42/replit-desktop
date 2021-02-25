@@ -43,9 +43,23 @@ class App extends EventEmitter {
         
         if(this.settingsHandler.has('window-size')){
             var windowSize = this.settingsHandler.get(`window-size`);
+            
+            if(typeof windowSize != 'object'){
+                try{
+                    windowSize = JSON.parse(windowSize)
+                }
+                catch(err){
+                    windowSize = null
+                }
+            }
 
-            if(windowSize.width && windowSize.height){
-                this.mainWindow.setSize(windowSize.width, windowSize.height)
+            if(windowSize == null){
+                console.log(`No window size detected.`)
+            } else {
+                if(windowSize.width && windowSize.height){
+                    this.mainWindow.setSize(windowSize.width, windowSize.height)
+                    console.log(windowSize)
+                }
             }
         }
 
