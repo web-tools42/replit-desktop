@@ -44,7 +44,9 @@ class App extends EventEmitter {
         if(this.settingsHandler.has('window-size')){
             var windowSize = this.settingsHandler.get(`window-size`);
 
-            this.mainWindow.setSize(windowSize.width, windowSize.height)
+            if(windowSize.width && windowSize.height){
+                this.mainWindow.setSize(windowSize.width, windowSize.height)
+            }
         }
 
         // Detect on resize and add to settings
