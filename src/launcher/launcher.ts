@@ -7,11 +7,11 @@ import {
     UpdateAssetsUrls,
     Version
 } from '../common';
-import fs = require('fs');
-import path = require('path');
+import fs from 'fs';
+import path from 'path';
 import fetch from 'node-fetch';
 import { EventEmitter } from 'events';
-import semver = require('semver');
+import semver from 'semver';
 
 class Updater extends EventEmitter {
     public downloadUrls: UpdateAssetsUrls = {
@@ -184,7 +184,7 @@ class Launcher {
     }
 
     init() {
-        this.window.loadFile('launcher/launcher.html').then();
+        this.window.loadFile('launcher/launcher.html');
     }
 
     updateStatus(status: LauncherStatus) {

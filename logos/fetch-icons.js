@@ -1,6 +1,5 @@
 let fetch = require('node-fetch');
 
-// ;(() => {
 let fetchIcon = (lang, fileEnding) => {
     return fetch(
         `https://repl.it/public/images/languages/${lang}.${fileEnding}`,
@@ -9,31 +8,21 @@ let fetchIcon = (lang, fileEnding) => {
         }
     )
         .then((response) => {
-            console.debug(response.url, response.status, fileEnding);
             return response;
         })
         .catch((e) => console.debug(e));
 };
 
-let downloadIcons = (icon) => {};
-
 let fetchIcons = (languages) => {
     // Fetch an svg icon from the website. It one does nto exist fetch a png, then a jpg if unsucessfile
     languages.forEach((lang) => {
-        fetchIcon(lang, 'svg')
-            .then(async (res) => {
-                if (res.statusCode !== 200) {
-                    let a = await fetchIcon(lang, 'png');
-                    return a;
-                }
-                return res;
-            })
-            .then(async (res) => {
-                if (res.statusCode !== 200) {
-                    let a = await fetchIcon(lang, 'jpg');
-                    return a;
-                }
-            });
+        fetchIcon(lang, 'svg').then(async (res) => {
+            if (res.statusCode !== 200) {
+                let a = await fetchIcon(lang, 'png');
+                return a;
+            }
+            return res;
+        });
     });
 };
 
@@ -69,4 +58,3 @@ let obtainListOfLanguages = () => {
 };
 
 obtainListOfLanguages();
-// })()
