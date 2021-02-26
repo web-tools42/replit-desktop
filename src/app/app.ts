@@ -52,7 +52,7 @@ class App extends EventEmitter {
                 'window-size'
             );
 
-            if (typeof(windowSize) != 'object') {
+            if (typeof windowSize != 'object') {
                 // Reset to Default
                 windowSize = {
                     width: 1600,
