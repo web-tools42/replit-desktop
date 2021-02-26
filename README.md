@@ -29,6 +29,7 @@ cd replit-desktop
 
 2. Install dependencies and run
 ```bash
+npm i -g npm #update npm to latest
 npm install
 npm start
 ```

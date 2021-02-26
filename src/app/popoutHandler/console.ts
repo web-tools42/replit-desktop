@@ -1,4 +1,4 @@
-declare var store: any;
+declare let store: any;
 window.onload = () => {
     let keepElem: string[] = [
         '.jsx-2759849619', // the console
