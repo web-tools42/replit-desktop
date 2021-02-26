@@ -3,11 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <title>Launcher</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans&display=swap" rel="stylesheet">
     <style>
         :root {
             --logo-size: 100px;
         }
-        
+
         body {
             background-color: #393c42;
             margin: auto;
@@ -27,14 +29,12 @@
         }
 
         @keyframes rotateRight {
-            100% {
-                transform: rotate(360deg);
-            }
+            to { transform: rotate(360deg); }
         }
 
         #status {
             color: #FFFFFF;
-            font-family: IBM Plex Sans, sans-serif;
+            font-family: 'IBM Plex Sans', sans-serif;
             font-size: 17px;
             user-select: none;
             width: max-content;
