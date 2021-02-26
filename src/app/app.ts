@@ -59,12 +59,17 @@ class App extends EventEmitter {
                     height: 900
                 };
             }
-            
+
             let size = screen.getPrimaryDisplay().size;
 
             if (windowSize == null) {
                 console.log('No window size detected.');
-            } else if (windowSize.width && windowSize.height && size.width > windowSize.width && size.height > windowSize.height  ) {
+            } else if (
+                windowSize.width &&
+                windowSize.height &&
+                size.width > windowSize.width &&
+                size.height > windowSize.height
+            ) {
                 this.mainWindow.setSize(windowSize.width, windowSize.height);
             }
         }
