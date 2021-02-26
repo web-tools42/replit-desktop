@@ -10,7 +10,9 @@
   </head>
   <body>
     <div class="Color">
-      <div id="Gen" style="background: #1e2536;"><div style="color:#fff;">Generate Theme</div></div>
+      <div id="Gen" style="background: #1e2536;">
+        <div style="color: #fff;">Generate Theme</div>
+      </div>
       <div id="Current"></div>
       <fieldset class="color-picker">
         <select class="format">
@@ -25,11 +27,11 @@
         </div>
         <input class="lightness" type="range" min="0" max="100" />
       </fieldset>
-      <div class="Colors">
-      </div>
+      <div class="Colors"></div>
     </div>
+
     <div>
-      <webview src="https://www.repl.it/~" preload="./Collector.js"></webview>
+      <webview src="https://www.repl.it/~" preload="./collector.js"></webview>
     </div>
   </body>
 </html>

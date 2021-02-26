@@ -35,7 +35,7 @@ class ThemeHandler {
             true
         );
         this.theme_market.setBackgroundColor('#393c42');
-        this.theme_market.loadURL(`file://${__dirname}/Editor/Editor.html`);
+        this.theme_market.loadURL(`file://${__dirname}/editor/editor.html`);
     }
 
     setTheme(window: ElectronWindow, code: string) {
