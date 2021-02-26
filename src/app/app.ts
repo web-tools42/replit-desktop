@@ -1,5 +1,5 @@
 import { ElectronWindow, handleExternalLink, promptYesNoSync } from '../common';
-import { app, Cookie, ipcMain, session, MenuItem } from 'electron';
+import { app, Cookie, ipcMain, session, MenuItem, screen } from 'electron';
 import { PopoutHandler } from './popoutHandler/popoutHandler';
 import { ThemeHandler } from './themeHandler/themeHandler';
 import { DiscordHandler } from './discordHandler';
@@ -59,10 +59,12 @@ class App extends EventEmitter {
                     height: 900
                 };
             }
+            
+            let size = screen.getPrimaryDisplay().size;
 
             if (windowSize == null) {
                 console.log('No window size detected.');
-            } else if (windowSize.width && windowSize.height) {
+            } else if (windowSize.width && windowSize.height && !windowSize.width > size.width && !windowSize.height > size.height ) {
                 this.mainWindow.setSize(windowSize.width, windowSize.height);
             }
         }
