@@ -64,7 +64,7 @@ class App extends EventEmitter {
 
             if (windowSize == null) {
                 console.log('No window size detected.');
-            } else if (windowSize.width && windowSize.height && !windowSize.width > size.width && !windowSize.height > size.height ) {
+            } else if (windowSize.width && windowSize.height && size.width > windowSize.width && size.height > windowSize.height  ) {
                 this.mainWindow.setSize(windowSize.width, windowSize.height);
             }
         }
