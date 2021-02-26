@@ -8,7 +8,6 @@ import {
     Version
 } from '../common';
 import fs = require('fs');
-import path = require('path');
 import fetch from 'node-fetch';
 import { EventEmitter } from 'events';
 import semver = require('semver');
@@ -19,18 +18,8 @@ class Updater extends EventEmitter {
         macOSUrl: '',
         linuxUrl: ''
     };
-    private pathSep: string = path.sep;
-    private appPath: string = `${app.getAppPath()}${this.pathSep}`;
-    private upperAppPath: string = `${path.dirname(this.appPath)}${
-        this.pathSep
-    }`;
-    private userDesktop: string = app.getPath('desktop');
-    private logFilePath: string = `${this.userDesktop}updater-log.txt`;
     private appVersion: Version;
-    private logArray: [string] = [''];
-    private downloadPath: string = `${app.getPath('appData')}updaterDownload${
-        this.pathSep
-    }`;
+    private downloadPath: string = `${app.getPath('appData')}updaterDownload/`;
     private downloadFilePath: string;
     private launcher: Launcher;
 
