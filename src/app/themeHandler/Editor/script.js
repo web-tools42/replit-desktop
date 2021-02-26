@@ -50,9 +50,9 @@ function isColor(strColor) {
 }
 
 function setColor(name, value, update) {
-    let Current = $('#Current');
+    let Current = $('#current');
     let picker = $('.color-picker');
-    let colorInput = $('.color', { root: picker });
+    let colorInput = $('.color-type', { root: picker });
     if (currentColor) {
         colorMap.set(currentColor, isColor(colorInput.value));
         $('webview').send('Update', colorMap);
@@ -123,7 +123,7 @@ let currentColor;
 window.onload = () => {
     $('webview').addEventListener('dom-ready', () => {
         // Deal with generating a theme
-        $('#Gen').onclick = () => {
+        $('#gen').onclick = () => {
             let Css =
                 '.replit-ui-theme-root.light,.replit-ui-theme-root.dark {';
             colorMap.forEach((value, name) => {
@@ -134,7 +134,7 @@ window.onload = () => {
             ipcRenderer.send('Theme', out);
         };
         // Set the vars
-        const colors = $('.Colors');
+        const colors = $('.colors');
         // Deal with the webview
         colors.innerHTML = '';
         colorMap.forEach((value, name) => {
@@ -237,7 +237,7 @@ window.onload = () => {
 
         $('.color-picker', { all: true }).forEach((picker) => {
             let formatInput = $('.format', { root: picker }),
-                colorInput = $('.color', { root: picker }),
+                colorInput = $('.color-type', { root: picker }),
                 lightnessInput = $('input[type=range]', { root: picker }),
                 spectrum = $('.spectrum', { root: picker }),
                 lightnessFilter = $('.lightness-filter', { root: picker }),
