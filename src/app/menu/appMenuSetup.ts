@@ -245,7 +245,9 @@ function appMenuSetup(
                 {
                     label: 'Go to Github Page',
                     click() {
-                        shell.openExternal('https://github.com/repl-it-discord/repl-it-electron');
+                        shell.openExternal(
+                            'https://github.com/repl-it-discord/repl-it-electron'
+                        );
                     }
                 },
                 {
@@ -254,7 +256,7 @@ function appMenuSetup(
                         shell.openExternal(
                             'https://github.com/replit-discord/replit-desktop/projects'
                         );
-                    } 
+                    }
                 }
             ]
         }
