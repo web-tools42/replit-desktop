@@ -6,28 +6,34 @@ body, html {
   padding: 0;
   border: 0;
 }
+
 body {
   display: grid;
   grid-template-columns: 20% auto;
   grid-template-rows: 100%;
   font-family: Arial, Helvetica, sans-serif;
 }
+
 div, webview {
   width: 100%;
   height:100%;
 }
+
 /* Color Area */
 .Color {
   display: grid;
   grid-template-columns: 100%;
   grid-template-rows: 3rem 3rem max-content auto;
 }
+
 .Color > div:not(.color-picker) > div:hover {
 	filter: invert(180);
 }
+
 .Color > div {
   background: #1D2333;
 }
+
 /* Color > Picker */
 .color-picker {
   margin: 0;
@@ -35,16 +41,19 @@ div, webview {
 	border: 0;
 	background-color: #0e1525;
 }
+
 .color-picker .format {
 	display: block;
 	margin: 0 auto 10px;
 }
+
 .color-picker .color,
 .color-picker .lightness {
 	display: block;
 	box-sizing: border-box;
 	width: 100%;
 }
+
 .color-picker .color {
 	-webkit-appearance: none;
 	padding: 10px;
@@ -59,12 +68,15 @@ div, webview {
 	-webkit-transition: color .2s;
 	transition: color .2s;
 }
+
 .color-picker .color.dark {
 	color: rgba(255, 255, 255, .7);
 }
+
 .color-picker .lightness {
 	margin: 0;
 }
+
 .color-picker .spectrum {
 	position: relative;
 	padding-top: 30%;
@@ -76,10 +88,12 @@ div, webview {
 	margin: 10px 0;
 	border-radius: 2px;
 }
+
 .color-picker .spectrum.active,
 .color-picker .spectrum.active .pin {
 	cursor: none;
 }
+
 .color-picker .lightness-filter {
 	position: absolute;
 	left: 0;
@@ -88,6 +102,7 @@ div, webview {
 	bottom: 0;
 	box-shadow: inset 0 1px 3px rgba(0, 0, 0, .2);
 }
+
 .color-picker .pin {
 	position: absolute;
 	cursor: move;
@@ -99,6 +114,7 @@ div, webview {
 	border-radius: 50%;
 	box-shadow: 0 1px 1px rgba(0, 0, 0, .4);
 }
+
 /* Varibles */
 .Colors {
   display: grid;
@@ -107,11 +123,13 @@ div, webview {
   height: 100%;
 	overflow-y: auto;
 }
+
 .Colors > div, #Current, #Gen {
   display: flex;
   width: 100%;
   height: 100%;
 }
+
 .Colors > div > div , #Current > div, #Gen > div {
   width: max-content;
   height: max-content;
