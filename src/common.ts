@@ -7,7 +7,6 @@ import {
 } from 'electron';
 import { Endpoints } from '@octokit/types';
 import { platform } from 'os';
-import path = require('path');
 
 class ElectronWindow extends BrowserWindow {
     constructor(
@@ -21,7 +20,7 @@ class ElectronWindow extends BrowserWindow {
             !preload.includes(__dirname) &&
             !preload.startsWith('./')
         ) {
-            preload = path.join(__dirname, 'preload', preload);
+            preload = `${__dirname}/preload/${preload}`;
         }
         super({
             ...options,
@@ -120,7 +119,7 @@ function capitalize(str: string) {
 
 function selectInput(focusedWindow: ElectronWindow) {
     focusedWindow.webContents.executeJavaScript(
-        `document.getElementsByTagName('input')[0].focus().select()`,
+        'document.getElementsByTagName("input")[0].focus().select()',
         false
     );
 }
@@ -154,7 +153,7 @@ function handleExternalLink(
             .then((resp: MessageBoxReturnValue) => {
                 const index = resp.response;
                 if (index === 1) {
-                    shell.openExternal(url).then();
+                    shell.openExternal(url);
                 }
             });
     }

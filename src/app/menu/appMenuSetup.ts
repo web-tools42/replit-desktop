@@ -153,9 +153,7 @@ function appMenuSetup(
                 {
                     label: 'Open in Browser',
                     click(item: any, focusedWindow: BrowserWindow) {
-                        shell
-                            .openExternal(focusedWindow.webContents.getURL())
-                            .then((r) => {});
+                        shell.openExternal(focusedWindow.webContents.getURL());
                     }
                 },
                 {
