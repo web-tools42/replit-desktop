@@ -178,7 +178,7 @@ class Launcher {
                 width: 250,
                 frame: false
             },
-            ``,
+            '',
             true
         );
     }
