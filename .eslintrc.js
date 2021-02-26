@@ -15,6 +15,8 @@ module.exports = {
     },
     rules: {
         'no-var': 'error',
+        'no-useless-concat': 'error',
+        'prefer-template': 'error',
         'prettier/prettier': 'error',
         '@typescript-eslint/naming-convention': [
             'error',
