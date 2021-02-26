@@ -14,6 +14,7 @@ module.exports = {
         include: ['src/**/*.ts']
     },
     rules: {
+        'no-var': 'error',
         'prettier/prettier': 'error',
         '@typescript-eslint/naming-convention': [
             'error',
