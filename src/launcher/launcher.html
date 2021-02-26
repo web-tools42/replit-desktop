@@ -3,10 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <title>Launcher</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans&display=swap" rel="stylesheet">
     <style>
         :root {
             --logo-size: 100px;
         }
+
         body {
             background-color: #393c42;
             margin: auto;
@@ -14,6 +17,7 @@
             height: 100%;
             display: flex;
         }
+        
         #logo {
             display: flex;
             align-items: center;
@@ -23,19 +27,20 @@
             transform-origin: center;
             animation: 3s rotateRight infinite linear;
         }
+
         @keyframes rotateRight {
-            100% {
-                transform: rotate(360deg);
-            }
+            to { transform: rotate(360deg); }
         }
+
         #status {
             color: #FFFFFF;
-            font-family: IBM Plex Sans, sans-serif;
+            font-family: 'IBM Plex Sans', Arial, Helvetica, sans-serif;
             font-size: 17px;
             user-select: none;
             width: max-content;
             margin: 22px auto;;
         }
+
         .box {
             padding-top: 34px;
             flex-direction: column;
@@ -45,6 +50,7 @@
             display: flex;
             align-items: center;
         }
+
         #bar-bg {
             height: 16px;
             border-radius: 20px;
@@ -57,15 +63,17 @@
             flex-direction: column;
             position: relative;
         }
+
         #bar {
             background-color: #EEEEEE;
             height: 100%;
             border-radius: 20px;
         }
+
         #bar-content {
             color: #000000;
             width: 100%;
-            font-family: IBM Plex Sans, sans-serif;
+            font-family: IBM Plex Sans, Arial, Helvetica, sans-serif;
             font-size: 15px;
             position: absolute;
             left: 0;

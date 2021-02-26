@@ -46,5 +46,5 @@ Also, before opening a Pull Request or Issue, please take a look at our project 
 
 | Board           | Link                                                               |
 |:----------------|:------------------------------------------------------------------:|
-|GitHub Projects  |[🔗](https://github.com/repl-it-discord/replit-desktop/projects)  |
+|GitHub Projects  |[🔗](https://github.com/repl-it-discord/replit-desktop/projects)    |
 |Trello Board     |[🔗](https://trello.com/b/tLDD8fnB/replit-electron)                 |
