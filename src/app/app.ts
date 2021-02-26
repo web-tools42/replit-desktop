@@ -52,7 +52,7 @@ class App extends EventEmitter {
                 'window-size'
             );
 
-            if (typeof windowSize != 'object') {
+            if (typeof(windowSize) != 'object') {
                 // Reset to Default
                 windowSize = {
                     width: 1600,
@@ -61,7 +61,7 @@ class App extends EventEmitter {
             }
 
             if (windowSize == null) {
-                console.log(`No window size detected.`);
+                console.log('No window size detected.');
             } else if (windowSize.width && windowSize.height) {
                 this.mainWindow.setSize(windowSize.width, windowSize.height);
             }
@@ -70,7 +70,7 @@ class App extends EventEmitter {
         // Detect on resize and add to settings
         this.mainWindow.on('resize', () => {
             let size = this.mainWindow.getSize();
-            this.settingsHandler.set(`window-size`, {
+            this.settingsHandler.set('window-size', {
                 width: size[0],
                 height: size[1]
             });
