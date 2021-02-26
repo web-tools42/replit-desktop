@@ -151,7 +151,7 @@ function appMenuSetup(
                     type: 'separator'
                 },
                 {
-                    label: 'Open Current Link in Default Browser',
+                    label: 'Open in Browser',
                     click(item: any, focusedWindow: BrowserWindow) {
                         shell.openExternal(focusedWindow.webContents.getURL());
                     }
@@ -164,7 +164,7 @@ function appMenuSetup(
                 },
                 {
                     accelerator: 'CmdOrCtrl+f',
-                    label: 'Select Input',
+                    label: 'Find in...',
                     click(item: any, focusedWindow: BrowserWindow) {
                         selectInput(<ElectronWindow>focusedWindow);
                     }

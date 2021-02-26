@@ -41,16 +41,14 @@ class ThemeHandler {
     setTheme(window: ElectronWindow, code: string) {
         if (!code) return;
         window.webContents.executeJavaScript(
-            `
-            {
+            `{
                 let p1 = document.getElementById("reflux-theme"),
                     p2 = document.getElementById("reflux-display");
                 if (p1 && p2) {
                     p1.remove();
                     p2.remove();
                 }
-            }
-            `,
+            }`,
             true
         );
         window.webContents.executeJavaScript(this.themeProcessor(code), true);
