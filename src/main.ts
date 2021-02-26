@@ -1,10 +1,11 @@
 import { Launcher, Updater } from './launcher/launcher';
 import { app } from 'electron';
+import path = require('path');
 import { PLATFORM, promptYesNoSync } from './common';
 import { App } from './app/app';
 
-app.setPath('appData', `${app.getPath('home')}/.repl.it/appData`);
-app.setPath('userData', `${app.getPath('home')}/.repl.it/userData`);
+app.setPath('appData', path.join(app.getPath('home'), '.repl.it', 'appData'));
+app.setPath('userData', path.join(app.getPath('home'), '.repl.it', 'userData'));
 app.disableHardwareAcceleration();
 
 process.on('unhandledRejection', (rejection: any) => {
@@ -20,7 +21,7 @@ function initLauncher() {
     launcher.init();
     launcher.window.webContents.once('did-finish-load', () => {
         launcher.window.show();
-        initUpdater().then(() => {});
+        initUpdater();
     });
 }
 

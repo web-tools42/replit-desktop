@@ -31,21 +31,18 @@ let obtainListOfLanguages = () => {
         fetch('https://repl.it/languages', {
             method: 'GET'
         })
-            .then((res) => res.text())
-            .then((response) => {
+            .then(async (res) => {
+                let response = await res.text();
                 let languages = response.match(/href="\/languages(.*?)">/gi);
                 languages = languages.filter(
                     (lang) => !lang.includes(`href="/languages"`)
                 );
                 languages = languages
-                    .map((lang) => {
-                        if (lang.includes(`class="`)) {
-                            lang = lang.slice(0, -24);
-                        } else {
-                            lang = lang.slice(0, -2);
-                        }
-                        return lang;
-                    })
+                    .map((lang) =>
+                        lang.includes('class="')
+                            ? lang.slice(0, -24)
+                            : lang.slice(0, -2)
+                    )
                     .map((lang) => lang.slice(17));
                 fetchIcons(languages);
                 resolve();

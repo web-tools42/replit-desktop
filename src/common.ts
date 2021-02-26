@@ -153,7 +153,7 @@ function handleExternalLink(
             .then((resp: MessageBoxReturnValue) => {
                 const index = resp.response;
                 if (index === 1) {
-                    shell.openExternal(url).then();
+                    shell.openExternal(url);
                 }
             });
     }

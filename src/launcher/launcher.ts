@@ -7,11 +7,11 @@ import {
     UpdateAssetsUrls,
     Version
 } from '../common';
-import fs from 'fs';
-import path from 'path';
+import fs = require('fs');
+import path = require('path');
 import fetch from 'node-fetch';
 import { EventEmitter } from 'events';
-import semver from 'semver';
+import semver = require('semver');
 
 class Updater extends EventEmitter {
     public downloadUrls: UpdateAssetsUrls = {
