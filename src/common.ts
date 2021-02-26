@@ -7,6 +7,7 @@ import {
 } from 'electron';
 import { Endpoints } from '@octokit/types';
 import { platform } from 'os';
+import path = require('path');
 
 class ElectronWindow extends BrowserWindow {
     constructor(
@@ -20,7 +21,7 @@ class ElectronWindow extends BrowserWindow {
             !preload.includes(__dirname) &&
             !preload.startsWith('./')
         ) {
-            preload = `${__dirname}/preload/${preload}`;
+            preload = path.join(__dirname, 'preload', preload);
         }
         super({
             ...options,
