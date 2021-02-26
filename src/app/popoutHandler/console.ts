@@ -10,32 +10,33 @@ window.onload = () => {
         'script',
         'style'
     ];
+
     let style = document.createElement('style');
     style.appendChild(
         document.createTextNode(`
-        .jsx-2759849619:not(.console, .controls, .xterm-container) { 
-            top: 60px !important; 
-            left: 0px !important; 
-            width: 100% !important; 
-            height: calc(100vh - 60px) !important;
-            position: absolute !important;
-        }
-    `)
+            .jsx-2759849619:not(.console, .controls, .xterm-container) { 
+                top: 60px !important; 
+                left: 0px !important; 
+                width: 100% !important; 
+                height: calc(100vh - 60px) !important;
+                position: absolute !important;
+            }
+        `)
     );
+
     document.head.appendChild(style);
     // Options for the observer (which mutations to observe)
     const config = { attributes: true, childList: true, subtree: true };
     // Callback function to execute when mutations are observed
 
-    const observer: MutationObserver = new MutationObserver(
-        (mutationsList, observer) => {
-            elemWalker(document.body);
-            // store.dispatch({ type: 'OPEN_SHELL' });
-        }
-    );
-    let Remove = (E: Element) => {
+    const observer: MutationObserver = new MutationObserver(() => {
+        elemWalker(document.body);
+    });
+
+    function remove(E: Element) {
         E.setAttribute('style', 'display: none;');
-    };
+    }
+
     function elemWalker(parent: Element, level: boolean = false) {
         if (
             keepElem.some((A: string) =>
@@ -46,10 +47,10 @@ window.onload = () => {
             )
         )
             return true;
-        let Keep = false;
-        if (observer && observer.disconnect) {
-            observer.disconnect();
-        }
+
+        let keep = false;
+        if (observer && observer.disconnect) observer.disconnect();
+
         [...parent.children].forEach((elm) => {
             // Basic Deletion Test
             if (
@@ -60,9 +61,9 @@ window.onload = () => {
                         : (elm as HTMLElement).innerText ==
                           A.replace('text:', '')
                 )
-            ) {
-                Remove(elm);
-            } else if (
+            )
+                remove(elm);
+            else if (
                 !keepElem.some((A: string) =>
                     !A.startsWith('text:')
                         ? elm.matches(A)
@@ -71,7 +72,7 @@ window.onload = () => {
                 )
             ) {
                 let Important = elemWalker(elm, true);
-                if (Important) Keep = true;
+                if (Important) keep = true;
             }
             if (
                 keepElem.some((A: string) =>
@@ -82,14 +83,16 @@ window.onload = () => {
                 )
             ) {
                 elm.setAttribute('style', '');
-                Keep = true;
+                keep = true;
             }
         });
-        if (!Keep) Remove(parent);
+
+        if (!keep) remove(parent);
         else parent.setAttribute('style', '');
+
         if (!level) observer.observe(document.body, config);
-        return Keep;
+        return keep;
     }
+
     elemWalker(document.body);
-    // store.dispatch({ type: 'OPEN_SHELL' });
 };

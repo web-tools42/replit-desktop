@@ -294,7 +294,7 @@ function appMenuSetup(
                     }
                 },
                 {
-                    label: 'What is upcoming',
+                    label: 'Milestones',
                     click() {
                         shell.openExternal(
                             'https://github.com/replit-discord/replit-desktop/projects'
