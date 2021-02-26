@@ -245,13 +245,11 @@ function appMenuSetup(
                 {
                     label: 'Go to Github Page',
                     click() {
-                        shell.openExternal(
-                            'https://github.com/repl-it-discord/repl-it-electron'
-                        );
+                        shell.openExternal('https://github.com/repl-it-discord/repl-it-electron');
                     }
                 },
                 {
-                    label: 'What is upcoming?',
+                    label: 'What is upcoming',
                     click() {
                         shell.openExternal(
                             'https://github.com/replit-discord/replit-desktop/projects'
