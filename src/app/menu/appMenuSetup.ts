@@ -208,13 +208,14 @@ function appMenuSetup(
                         win.loadURL('https://repl.it/~').catch();
                     }
                 },
+                /*
                 {
                     accelerator: 'CmdOrCtrl+f',
-                    label: 'Find in...',
+                    label: 'Select input',
                     click(i: MenuItem, win: BrowserWindow) {
                         selectInput(<ElectronWindow>win);
                     }
-                },
+                },*/
                 {
                     type: 'separator'
                 },
@@ -264,7 +265,6 @@ function appMenuSetup(
         {
             role: 'help',
             submenu: [
-                { role: 'about' },
                 {
                     label: 'Replit discord',
                     click() {
@@ -272,13 +272,7 @@ function appMenuSetup(
                     }
                 },
                 {
-                    label: 'What is Replit?',
-                    click() {
-                        shell.openExternal('https://repl.it/site/about');
-                    }
-                },
-                {
-                    label: 'Github Feedback',
+                    label: 'Report an issue',
                     click() {
                         shell.openExternal(
                             'https://github.com/repl-it-discord/repl-it-electron/issues/new/choose'
@@ -293,14 +287,7 @@ function appMenuSetup(
                         );
                     }
                 },
-                {
-                    label: 'Milestones',
-                    click() {
-                        shell.openExternal(
-                            'https://github.com/replit-discord/replit-desktop/projects'
-                        );
-                    }
-                }
+                { label: 'Version', role: 'about' }
             ]
         }
     ];
