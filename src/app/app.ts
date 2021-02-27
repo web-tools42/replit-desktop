@@ -105,7 +105,7 @@ class App extends EventEmitter {
             );
             win.loadURL(url, { userAgent: 'chrome' });
             event.newGuest = win;
-            this.addWindow(win);
+            this.addWindow(win, false);
         });
     }
 
@@ -166,7 +166,7 @@ class App extends EventEmitter {
         }
     }
 
-    addWindow(window: ElectronWindow) {
+    addWindow(window: ElectronWindow, handleExt?: boolean) {
         contextMenu({ window: window });
         this.windowArray.set(window.id, window);
         this.toggleAce();
@@ -175,7 +175,9 @@ class App extends EventEmitter {
             if (url == 'https://repl.it/logout') {
                 this.clearCookies(false, false);
             }
-            handleExternalLink(e, window, url);
+            if (handleExt) {
+                handleExternalLink(e, window, url);
+            }
             if (this.settingsHandler.get('enable-ace')) this.toggleAce();
         });
         this.themeHandler.addTheme(window);
