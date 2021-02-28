@@ -179,7 +179,7 @@ function appMenuSetup(
             submenu: [
                 {
                     label: 'Go Back',
-                    click(i: MenuItem, win: BrowserWindow) {
+                    click: (i: MenuItem, win: BrowserWindow) => {
                         if (win.webContents.canGoBack()) {
                             win.webContents.goBack();
                         }
@@ -187,7 +187,7 @@ function appMenuSetup(
                 },
                 {
                     label: 'Go Forward',
-                    click(i: MenuItem, win: BrowserWindow) {
+                    click: (i: MenuItem, win: BrowserWindow) => {
                         if (win.webContents.canGoForward()) {
                             win.webContents.goForward();
                         }
@@ -198,13 +198,13 @@ function appMenuSetup(
                 },
                 {
                     label: 'Open in Browser',
-                    click(i: MenuItem, win: BrowserWindow) {
+                    click: (i: MenuItem, win: BrowserWindow) => {
                         shell.openExternal(win.webContents.getURL());
                     }
                 },
                 {
                     label: 'Go to Home',
-                    click(i: MenuItem, win: BrowserWindow) {
+                    click: (i: MenuItem, win: BrowserWindow) => {
                         win.loadURL('https://repl.it/~').catch();
                     }
                 },
@@ -221,10 +221,10 @@ function appMenuSetup(
                 },
                 {
                     accelerator: 'CmdOrCtrl+R',
-                    click(i: any, win: ElectronWindow) {
+                    label: 'Reload',
+                    click: (i: MenuItem, win: BrowserWindow) => {
                         if (win) win.reload();
-                    },
-                    label: 'Reload'
+                    }
                 },
                 {
                     label: 'Toggle Developer Tools',
@@ -232,7 +232,7 @@ function appMenuSetup(
                         process.platform === 'darwin'
                             ? 'Alt+Command+I'
                             : 'Ctrl+Shift+I',
-                    click(i: any, win: ElectronWindow) {
+                    click: (i: MenuItem, win: BrowserWindow) => {
                         if (win) win.webContents.toggleDevTools();
                     }
                 },
