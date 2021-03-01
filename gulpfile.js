@@ -154,13 +154,12 @@ async function copyFilesDevNoCache() {
 }
 
 async function watchDev() {
-    gulp.series(buildDev, copyFilesDev)();
+    gulp.series(buildDev, copyFilesDev, runElectron)();
     gulp.watch(
         'src/**/*',
         { delay: 10 * 100 }, // Poll every 10 seconds
         gulp.series(buildDev, copyFilesDev, runElectron)
     );
-    runElectron();
 }
 
 async function buildDev() {

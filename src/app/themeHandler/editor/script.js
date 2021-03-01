@@ -1,12 +1,15 @@
 const { ipcRenderer } = require('electron');
-const $ = (E, { root: R = document, all: A } = {}) =>
-    A ? R.querySelectorAll(E) : R.querySelector(E);
-const padZero = (str, len) => {
+function $(E, { root: R = document, all: A } = {}) {
+    return A ? R.querySelectorAll(E) : R.querySelector(E);
+}
+
+function padZero(str, len) {
     len = len || 2;
     let zeros = new Array(len).join('0');
     return (zeros + str).slice(-len);
-};
-const invertColor = (hex, bw) => {
+}
+
+function invertColor(hex, bw) {
     if (hex.indexOf('#') === 0) hex = hex.slice(1);
     if (hex.length === 3) {
         hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
@@ -24,33 +27,35 @@ const invertColor = (hex, bw) => {
     g = (255 - g).toString(16);
     b = (255 - b).toString(16);
     return `#${padZero(r)}${padZero(g)}${padZero(b)}${hex.slice(6, 8)}`;
-};
-let rgb2hex = (rgb) => {
+}
+
+function rgb2hex(rgb) {
     rgb = rgb.match(
         /^rgba?[\s+]?\([\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?/i
     );
-    if (rgb && rgb.length === 4) {
+    if (rgb && rgb.length === 4)
         return `#${`0${parseInt(rgb[1], 10).toString(16)}`.slice(
             -2
         )}${`0${parseInt(rgb[2], 10).toString(16)}`.slice(-2)}${`0${parseInt(
             rgb[3],
             10
         ).toString(16)}`.slice(-2)}`;
-    }
     return '';
-};
-let isColor = (strColor) => {
+}
+
+function isColor(strColor) {
     let s = new Option().style;
     s.color = strColor;
     return rgb2hex(s.color);
-};
-const setColor = (name, value, update) => {
-    let Current = $('#Current');
+}
+
+function setColor(name, value, update) {
+    let Current = $('#current');
     let picker = $('.color-picker');
-    let colorInput = $('.color', { root: picker });
+    let colorInput = $('.color-type', { root: picker });
     if (currentColor) {
-        Colors.set(currentColor, isColor(colorInput.value));
-        $('webview').send('Update', Colors);
+        colorMap.set(currentColor, isColor(colorInput.value));
+        $('webview').send('Update', colorMap);
         let Color = $(`#${currentColor}`);
         Color.style.backgroundColor = isColor(colorInput.value);
         Color.style.color = invertColor(isColor(colorInput.value), true);
@@ -67,9 +72,9 @@ const setColor = (name, value, update) => {
         colorInput.value = value;
         picker.dispatchEvent(new Event('change'));
     }
-};
+}
 
-let Colors = new Map([
+const colorMap = new Map([
     ['--color-background-1', '#1d2333'],
     ['--color-background-2', '#171d2d'],
     ['--color-background-3', '#0e1525'],
@@ -113,61 +118,65 @@ let Colors = new Map([
     ['--color-positive-transparent-2', '#18cc513d'],
     ['--color-positive-transparent-3', '#18cc511e']
 ]);
+
 let currentColor;
 window.onload = () => {
     $('webview').addEventListener('dom-ready', () => {
         // Deal with generating a theme
-        $('#Gen').onclick = () => {
+        $('#gen').onclick = () => {
             let Css =
                 '.replit-ui-theme-root.light,.replit-ui-theme-root.dark {';
-            Colors.forEach((value, name) => {
+            colorMap.forEach((value, name) => {
                 Css += `${name}: ${value} !important;`;
             });
             Css += '}';
-            let out = `javascript:(function() {let p1=document.getElementById("reflux-theme");let p2=document.getElementById("reflux-display");if (p1 && p2) {var go=confirm("There is a Reflux theme already running. Would you like to stop it?");if (go) {p1.remove();p2.remove();alert("This theme has been stopped.");} else {alert("This theme will continue running.");}} else {var go=confirm("Run this Reflux Theme?\\n\\nName: Custom\\nAuthor: Custom\\nDescription: Custom");if (go) {var style=document.createElement("style");var head=document.getElementsByTagName("head")[0];var target=document.getElementsByClassName("jsx-2607100739")[0];style.setAttribute("id", "reflux-theme");style.appendChild(document.createTextNode(\`${Css}.line-numbers{color:var(--color-primary-1)!important}.jsx-3971054001.content,p,.jsx-4279741890{background-color:var(--color-background-2)!important;color:#fff!important}.jsx-3414412928{background-color:var(--color-background-1)!important}.toggle-bar{background-color:var(--color-foreground-2)!important}.jsx-467725132{background-color:var(--color-background-3)!important}.jsx-2906438576,.jsx-986859180,.jsx-918008940{background-color:var(--color-background-3)!important}.interactive.jsx-2106077415:hover{border-color:var(--color-background-4)!important}.jsx-3414412928.sidebar-layout-header-toggle-alert{background-color:var(--color-primary-1)!important}\`));if (target) {target.insertAdjacentHTML("afterend", \`<a id="reflux-display" class="jsx-2607100739" target="_blank" href="//github.com/frissyn/Reflux"><span class="jsx-2607100739 sidebar-layout-nav-item-icon"><img src="https://img.icons8.com/material-outlined/24/00D1B2/code.png"/></span><div class="jsx-2607100739">Reflux</div><div class="jsx-2607100739 beta-label"><div style="background-color: #6262ff;" class="jsx-4210545632 beta-tag">ON</div></div></a>\`);} else {alert("Reflux badge could not be applied. This theme will run silently.");}head.appendChild(style);alert("Reflux is now running!");} else {alert("Reflux operation cancelled.");}}})();`;
+            let out = `javascript:(function(){let p1=document.getElementById("reflux-theme");let p2=document.getElementById("reflux-display");if(p1&&p2){let go=confirm("There is a Reflux theme already running. Would you like to stop it?");if(go){p1.remove();p2.remove();alert("This theme has been stopped.");}else{alert("This theme will continue running.");}}else{let go=confirm("Run this Reflux Theme?\\n\\nName: Custom\\nAuthor: Custom\\nDescription: Custom");if(go){var style=document.createElement("style");let head=document.getElementsByTagName("head")[0];let target=document.getElementsByClassName("jsx-2607100739")[0];style.setAttribute("id", "reflux-theme");style.appendChild(document.createTextNode(\`${Css}.line-numbers{color:var(--color-primary-1)!important}.jsx-3971054001.content,p,.jsx-4279741890{background-color:var(--color-background-2)!important;color:#fff!important}.jsx-3414412928{background-color:var(--color-background-1)!important}.toggle-bar{background-color:var(--color-foreground-2)!important}.jsx-467725132{background-color:var(--color-background-3)!important}.jsx-2906438576,.jsx-986859180,.jsx-918008940{background-color:var(--color-background-3)!important}.interactive.jsx-2106077415:hover{border-color:var(--color-background-4)!important}.jsx-3414412928.sidebar-layout-header-toggle-alert{background-color:var(--color-primary-1)!important}\`));if(target){target.insertAdjacentHTML("afterend",\`<a id="reflux-display" class="jsx-2607100739" target="_blank" href="//github.com/frissyn/Reflux"><span class="jsx-2607100739 sidebar-layout-nav-item-icon"><img src="https://img.icons8.com/material-outlined/24/00D1B2/code.png"/></span><div class="jsx-2607100739">Reflux</div><div class="jsx-2607100739 beta-label"><div style="background-color: #6262ff;" class="jsx-4210545632 beta-tag">ON</div></div></a>\`);} else {alert("Reflux badge could not be applied. This theme will run silently.");}head.appendChild(style);alert("Reflux is now running!");}else{alert("Reflux operation cancelled.");}}})();`;
             ipcRenderer.send('Theme', out);
         };
         // Set the vars
-        const colors = $('.Colors');
+        const colors = $('.colors');
         // Deal with the webview
         colors.innerHTML = '';
-        Colors.forEach((value, name) => {
+        colorMap.forEach((value, name) => {
             colors.innerHTML += `<div id="${name}" onclick="setColor('${name}', '${value}')" style="background: ${value}; color: ${invertColor(
                 value,
                 true
             )};"><div>${name}</div></div>`;
             if (!currentColor) setColor(name, value);
         });
+
         // Deal With the color picker
-        let hsltorgb = (h, s, l) => {
+        function hsltorgb(h, s, l) {
             h /= 360;
             s /= 100;
             l /= 100;
             let r, g, b;
-            if (s == 0) {
-                r = g = b = l;
-            } else {
-                let hueToRGB = (p, q, t) => {
+            if (s == 0) r = g = b = l;
+            else {
+                function hueToRGB(p, q, t) {
                     if (t < 0) t += 1;
                     if (t > 1) t -= 1;
                     if (t < 1 / 6) return p + (q - p) * 6 * t;
                     if (t < 1 / 2) return q;
                     if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
                     return p;
-                };
+                }
+
                 let q = l < 0.5 ? l * (1 + s) : l + s - l * s,
                     p = 2 * l - q;
                 r = hueToRGB(p, q, h + 1 / 3);
                 g = hueToRGB(p, q, h);
                 b = hueToRGB(p, q, h - 1 / 3);
             }
+
             return {
                 red: Math.round(r * 255),
                 green: Math.round(g * 255),
                 blue: Math.round(b * 255)
             };
-        };
-        let rgbtohsl = (r, g, b) => {
+        }
+
+        function rgbtohsl(r, g, b) {
             r /= 255;
             g /= 255;
             b /= 255;
@@ -199,33 +208,42 @@ window.onload = () => {
                 saturation: Math.round(s * 100),
                 lightness: Math.round(l * 100)
             };
-        };
-        let rgbtohex = (r, g, b) =>
-            `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`;
-        let hexToRGB = (hex) => {
+        }
+
+        function rgbtohex(r, g, b) {
+            return `#${((1 << 24) + (r << 16) + (g << 8) + b)
+                .toString(16)
+                .slice(1)}`;
+        }
+
+        function hexToRGB(hex) {
             let bigInt = parseInt(hex.replace('#', ''), 16);
             return {
                 red: (bigInt >> 16) & 255,
                 green: (bigInt >> 8) & 255,
                 blue: bigInt & 255
             };
-        };
-        let hexToHSL = (hex) => {
+        }
+
+        function hexToHSL(hex) {
             let RGB = hexToRGB(hex);
             return rgbtohsl(RGB.red, RGB.green, RGB.blue);
-        };
-        let hsltohex = (h, s, l) => {
+        }
+
+        function hsltohex(h, s, l) {
             let RGB = hsltorgb(h, s, l);
             return rgbtohex(RGB.red, RGB.green, RGB.blue);
-        };
+        }
+
         $('.color-picker', { all: true }).forEach((picker) => {
             let formatInput = $('.format', { root: picker }),
-                colorInput = $('.color', { root: picker }),
+                colorInput = $('.color-type', { root: picker }),
                 lightnessInput = $('input[type=range]', { root: picker }),
                 spectrum = $('.spectrum', { root: picker }),
                 lightnessFilter = $('.lightness-filter', { root: picker }),
                 pin = $('.pin', { root: picker });
-            let getHSL = () => {
+
+            function getHSL() {
                 return {
                     hue: Math.round(
                         ((pin.offsetLeft + pin.clientWidth) /
@@ -239,8 +257,9 @@ window.onload = () => {
                     ),
                     lightness: lightnessInput.value
                 };
-            };
-            let updateColorInput = () => {
+            }
+
+            function updateColorInput() {
                 let HSL = getHSL();
                 switch (formatInput.value) {
                     case 'HSL':
@@ -263,7 +282,8 @@ window.onload = () => {
                         break;
                 }
                 picker.dispatchEvent(new Event('change'));
-            };
+            }
+
             formatInput.onchange = updateColorInput;
             colorInput.onchange = () => {
                 let HSL, values;
@@ -290,7 +310,8 @@ window.onload = () => {
                 pin.style.top = `${HSL.saturation}%`;
                 picker.dispatchEvent(new Event('change'));
             };
-            let setLightness = (lightness) => {
+
+            function setLightness(lightness) {
                 let color, alpha;
                 if (lightness <= 50) {
                     color = '0, 0, 0';
@@ -300,12 +321,14 @@ window.onload = () => {
                     alpha = (lightness / 100) * 2 - 1;
                 }
                 lightnessFilter.style.backgroundColor = `rgba(${color}, ${alpha})`;
-            };
+            }
+
             lightnessInput.onchange = () => {
                 setLightness(lightnessInput.value);
                 updateColorInput();
             };
-            let movePin = (event) => {
+
+            function movePin(event) {
                 let bounds = spectrum.getBoundingClientRect(),
                     x = event.clientX - bounds.left,
                     y = event.clientY - bounds.top;
@@ -316,17 +339,20 @@ window.onload = () => {
                 pin.style.left = `${(x / bounds.width) * 100}%`;
                 pin.style.top = `${(y / bounds.height) * 100}%`;
                 updateColorInput();
-            };
+            }
+
             spectrum.onmousedown = (event) => {
                 event.preventDefault();
                 movePin(event);
                 spectrum.classList.add('active');
                 document.addEventListener('mousemove', movePin);
             };
+
             document.onmouseup = () => {
                 spectrum.classList.remove('active');
                 document.removeEventListener('mousemove', movePin);
             };
+
             spectrum.ontouchmove = movePin;
             spectrum.ontouchstart = movePin;
             picker.onchange = () => {
@@ -334,6 +360,7 @@ window.onload = () => {
                 colorInput.style.backgroundColor = colorInput.value;
                 colorInput.classList.toggle('dark', lightnessInput.value <= 50);
             };
+
             colorInput.dispatchEvent(new Event('change'));
         });
     });

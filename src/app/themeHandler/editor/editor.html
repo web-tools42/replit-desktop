@@ -9,27 +9,29 @@
     <script src="./script.js"></script>
   </head>
   <body>
-    <div class="Color">
-      <div id="Gen" style="background: #1e2536;"><div style="color:#fff;">Generate Theme</div></div>
-      <div id="Current"></div>
+    <div class="color">
+      <div id="gen" style="background: #1e2536;">
+        <div style="color: #fff;">Generate Theme</div>
+      </div>
+      <div id="current"></div>
       <fieldset class="color-picker">
         <select class="format">
           <option selected>Hex</option>
           <option>RGB</option>
           <option>HSL</option>
         </select>
-        <input class="color" type="text" value="#41bebe" />
+        <input class="color-type" type="text" value="#41bebe" />
         <div class="spectrum">
           <div class="lightness-filter"></div>
           <div class="pin"></div>
         </div>
         <input class="lightness" type="range" min="0" max="100" />
       </fieldset>
-      <div class="Colors">
-      </div>
+      <div class="colors"></div>
     </div>
+
     <div>
-      <webview src="https://www.repl.it/~" preload="./Collector.js"></webview>
+      <webview src="https://www.repl.it/~" preload="./collector.js"></webview>
     </div>
   </body>
 </html>
