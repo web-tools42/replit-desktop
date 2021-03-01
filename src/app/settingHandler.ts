@@ -19,16 +19,10 @@ class SettingHandler {
     public settings: Map<string, SettingsValue>;
 
     constructor() {
-<<<<<<< HEAD
-        this.settingsFilePath = `${path.dirname(
-            app.getPath('userData')
-        )}/settings.json`;
-=======
         this.settingsFilePath = path.join(
             path.dirname(app.getPath('userData')),
             'settings.json'
         );
->>>>>>> dev
         // Load the settings
         this.settings = new Map();
         this.ensureFileSync();
