@@ -53,7 +53,7 @@ class SettingHandler {
         }
     }
 
-    private saveSettings(): void {
+    private saveSettings() {
         writeFileAtomic.sync(
             this.settingsFilePath,
             JSON.stringify(
@@ -67,25 +67,31 @@ class SettingHandler {
         );
     }
 
-    has(key: string): boolean {
+    has(key: string) {
         return this.settings.has(key);
     }
 
-    get(key: string): SettingsValue {
+    get(key: string) {
         return this.settings.has(key) ? this.settings.get(key) : null;
     }
 
-    set(key: string, value: SettingsValue): void {
+    set(key: string, value: SettingsValue) {
         this.settings.set(key, value);
         this.saveSettings();
     }
 
-    unset(key: string): void {
+    unset(key: string) {
         this.settings.delete(key);
         this.saveSettings();
     }
 
-    resetAll(): void {
+    // suggestion: rename this
+    resetAll() {
+        this.saveSettings();
+    }
+
+    clearAll() {
+        this.settings.clear();
         this.saveSettings();
     }
 }

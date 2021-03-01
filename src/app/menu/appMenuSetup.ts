@@ -6,7 +6,7 @@ import {
     shell,
     BrowserWindow
 } from 'electron';
-import { ElectronWindow, selectInput } from '../../common';
+import { ElectronWindow, promptYesNoSync, selectInput } from '../../common';
 import { ThemeHandler } from '../themeHandler/themeHandler';
 import { App } from '../app';
 import { SettingHandler } from '../settingHandler';
@@ -100,6 +100,12 @@ function appMenuSetup(
                         mainApp.clearCookies(false);
                     }
                 },
+                {
+                    label: 'Reset Settings',
+                    click() {
+                        mainApp.resetPreferences();
+                    }
+                },
                 { type: 'separator' },
                 {
                     role: 'quit'
@@ -126,6 +132,7 @@ function appMenuSetup(
                 {
                     label: 'Crosis Logs',
                     click(i: MenuItem, win: ElectronWindow) {
+                        // suggestion: check if the page is on a repl, and if so, just add ?debug=1
                         win.webContents.executeJavaScript(
                             "if(!window.store){alert('You need to be on a repl to use this feature.')};window.store.dispatch({type: 'LOAD_PLUGIN',pluginPud: 'adminpanel',pluginType: 'adminpanel',title: 'adminpanel'});window.store.dispatch({type: 'ADD_SIDE_NAV_ITEM',navItem: {pud: 'adminpanel',pluginType: 'adminpanel',tooltip: 'Crosis Logs',svg: 'Alien'}});"
                         );
