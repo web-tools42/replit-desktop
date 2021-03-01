@@ -20,17 +20,17 @@ div, webview {
 }
 
 /* Color Area */
-.Color {
+.color {
   display: grid;
   grid-template-columns: 100%;
   grid-template-rows: 3rem 3rem max-content auto;
 }
 
-.Color > div:not(.color-picker) > div:hover {
+.color > div:not(.color-picker) > div:hover {
 	filter: invert(180);
 }
 
-.Color > div {
+.color > div {
   background: #1D2333;
 }
 
@@ -47,14 +47,14 @@ div, webview {
 	margin: 0 auto 10px;
 }
 
-.color-picker .color,
+.color-picker .color-type,
 .color-picker .lightness {
 	display: block;
 	box-sizing: border-box;
 	width: 100%;
 }
 
-.color-picker .color {
+.color-picker .color-type {
 	-webkit-appearance: none;
 	padding: 10px;
 	border: 0;
@@ -69,7 +69,7 @@ div, webview {
 	transition: color .2s;
 }
 
-.color-picker .color.dark {
+.color-picker .color-type.dark {
 	color: rgba(255, 255, 255, .7);
 }
 
@@ -116,7 +116,7 @@ div, webview {
 }
 
 /* Varibles */
-.Colors {
+.colors {
   display: grid;
   grid-template-rows: repeat(auto, 3rem);
 	width: 100%;
@@ -124,13 +124,13 @@ div, webview {
 	overflow-y: auto;
 }
 
-.Colors > div, #Current, #Gen {
+.colors > div, #current, #gen {
   display: flex;
   width: 100%;
   height: 100%;
 }
 
-.Colors > div > div , #Current > div, #Gen > div {
+.colors > div > div , #current > div, #gen > div {
   width: max-content;
   height: max-content;
   margin: auto;

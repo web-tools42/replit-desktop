@@ -12,6 +12,7 @@ interface WindowSize {
     width: number;
     height: number;
 }
+
 class App extends EventEmitter {
     public readonly mainWindow: ElectronWindow;
     public readonly themeHandler: ThemeHandler;
@@ -105,7 +106,7 @@ class App extends EventEmitter {
             );
             win.loadURL(url, { userAgent: 'chrome' });
             event.newGuest = win;
-            this.addWindow(win);
+            this.addWindow(win, false);
         });
     }
 
@@ -166,19 +167,78 @@ class App extends EventEmitter {
         }
     }
 
-    addWindow(window: ElectronWindow) {
-        contextMenu({ window: window });
+    resetPreferences() {
+        if (
+            promptYesNoSync(
+                `Are you sure?`,
+                'Reset Settings',
+                `This will reset your theme preferences.
+This action is NOT reversible!`
+            )
+        ) {
+            this.settingsHandler.clearAll();
+            [...this.windowArray.values()].forEach((win) => {
+                win.reload();
+            });
+        }
+    }
+
+    addWindow(window: ElectronWindow, handleExt?: boolean) {
+        contextMenu({
+            window,
+            prepend: () => [
+                {
+                    role: 'reload'
+                },
+                {
+                    type: 'separator'
+                },
+                {
+                    role: 'undo'
+                },
+                {
+                    role: 'redo'
+                },
+                {
+                    type: 'separator'
+                },
+                {
+                    role: 'cut'
+                },
+                {
+                    role: 'copy'
+                },
+                {
+                    role: 'paste'
+                },
+                {
+                    role: 'selectAll'
+                },
+                {
+                    type: 'separator'
+                },
+                {
+                    role: 'zoomIn'
+                },
+                {
+                    role: 'zoomOut'
+                }
+            ]
+        });
+
         this.windowArray.set(window.id, window);
         this.toggleAce();
+
         window.webContents.on('will-navigate', (e, url) => {
             // Deal with the logout
-            if (url == 'https://repl.it/logout') {
+            if (url == 'https://repl.it/logout')
                 this.clearCookies(false, false);
-            }
-            handleExternalLink(e, window, url);
+            if (handleExt) handleExternalLink(e, window, url);
             if (this.settingsHandler.get('enable-ace')) this.toggleAce();
         });
+
         this.themeHandler.addTheme(window);
+
         window.webContents.on('did-finish-load', () =>
             this.themeHandler.addTheme(window)
         );

@@ -19,9 +19,16 @@ class SettingHandler {
     public settings: Map<string, SettingsValue>;
 
     constructor() {
+<<<<<<< HEAD
         this.settingsFilePath = `${path.dirname(
             app.getPath('userData')
         )}/settings.json`;
+=======
+        this.settingsFilePath = path.join(
+            path.dirname(app.getPath('userData')),
+            'settings.json'
+        );
+>>>>>>> dev
         // Load the settings
         this.settings = new Map();
         this.ensureFileSync();
@@ -45,13 +52,14 @@ class SettingHandler {
         try {
             fs.statSync(this.settingsFilePath);
         } catch (err) {
-            if (err.code === 'ENOENT') {
+            if (err.code == 'ENOENT') {
                 console.debug('creating file');
                 this.saveSettings();
             } else throw err;
         }
     }
-    private saveSettings(): void {
+
+    private saveSettings() {
         writeFileAtomic.sync(
             this.settingsFilePath,
             JSON.stringify(
@@ -64,21 +72,32 @@ class SettingHandler {
             )
         );
     }
-    has(key: string): boolean {
+
+    has(key: string) {
         return this.settings.has(key);
     }
-    get(key: string): SettingsValue {
+
+    get(key: string) {
         return this.settings.has(key) ? this.settings.get(key) : null;
     }
-    set(key: string, value: SettingsValue): void {
+
+    set(key: string, value: SettingsValue) {
         this.settings.set(key, value);
         this.saveSettings();
     }
-    unset(key: string): void {
+
+    unset(key: string) {
         this.settings.delete(key);
         this.saveSettings();
     }
-    resetAll(): void {
+
+    // suggestion: rename this
+    resetAll() {
+        this.saveSettings();
+    }
+
+    clearAll() {
+        this.settings.clear();
         this.saveSettings();
     }
 }

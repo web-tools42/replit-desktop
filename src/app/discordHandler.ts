@@ -21,7 +21,7 @@ class DiscordHandler {
             .catch((error: string) => {
                 // console.error(error);
                 console.debug(
-                    'RPC Error Make Sure Discord Client is Installed And You Are Connected To The Internet'
+                    '[RPC] Error: Make sure Discord client is available and you are connected to the Internet'
                 );
                 // this.disconnectDiscord();
             });
@@ -138,7 +138,7 @@ class DiscordHandler {
                     instance: false
                 })
                 .catch((reason) => {
-                    console.debug(`error@acount ${reason}`);
+                    console.debug(`error@account ${reason}`);
                 });
         } else {
             this.client

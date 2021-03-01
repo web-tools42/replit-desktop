@@ -1,4 +1,5 @@
 import { ElectronWindow, getUrl } from '../../common';
+import path from 'path';
 
 class PopoutHandler {
     constructor() {}
@@ -12,7 +13,7 @@ class PopoutHandler {
                     width: 600,
                     height: 600
                 },
-                `${__dirname}/console.js`
+                path.join(__dirname, 'console.js')
             );
 
             Terminal.loadURL(

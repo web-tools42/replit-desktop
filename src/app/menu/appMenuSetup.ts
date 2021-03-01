@@ -6,7 +6,7 @@ import {
     shell,
     BrowserWindow
 } from 'electron';
-import { ElectronWindow, selectInput } from '../../common';
+import { ElectronWindow, promptYesNoSync, selectInput } from '../../common';
 import { ThemeHandler } from '../themeHandler/themeHandler';
 import { App } from '../app';
 import { SettingHandler } from '../settingHandler';
@@ -40,13 +40,89 @@ function appMenuSetup(
                     ]
                 },
                 {
-                    label: 'Popup',
+                    label: 'Links',
+                    submenu: [
+                        {
+                            label: 'CLI',
+                            click(i: MenuItem, win: BrowserWindow) {
+                                win.loadURL('https://repl.it/~/cli').catch();
+                            }
+                        },
+                        {
+                            label: 'Replit Bugs',
+                            click(i: MenuItem, win: BrowserWindow) {
+                                win.loadURL('https://repl.it/bugs').catch();
+                            }
+                        },
+                        {
+                            label: 'Replit Feedback',
+                            click(i: MenuItem, win: BrowserWindow) {
+                                win.loadURL('https://repl.it/feedback').catch();
+                            }
+                        },
+                        {
+                            label: 'Docs',
+                            click() {
+                                let win = new ElectronWindow(
+                                    {
+                                        height: 900,
+                                        width: 1600
+                                    },
+                                    '',
+                                    true
+                                );
+                                win.loadURL('https://docs.repl.it');
+                            }
+                        }
+                    ]
+                },
+                {
+                    label: 'Discord',
+                    submenu: [
+                        {
+                            label: 'Reconnect to Discord',
+                            click() {
+                                mainApp.discordHandler.connectDiscord();
+                            }
+                        },
+                        {
+                            label: 'Disconnect from Discord',
+                            click() {
+                                mainApp.discordHandler.disconnectDiscord();
+                            }
+                        }
+                    ]
+                },
+                { type: 'separator' },
+                {
+                    label: 'Clear Cookies',
+                    click() {
+                        mainApp.clearCookies(false);
+                    }
+                },
+                {
+                    label: 'Reset Settings',
+                    click() {
+                        mainApp.resetPreferences();
+                    }
+                },
+                { type: 'separator' },
+                {
+                    role: 'quit'
+                }
+            ]
+        },
+        {
+            label: 'View',
+            submenu: [
+                {
+                    label: 'Popout Terminal',
                     click(i: MenuItem, win: BrowserWindow) {
                         popoutHandler.launch(<ElectronWindow>win);
                     }
                 },
                 {
-                    label: 'Use Ace Editor',
+                    label: 'Mobile View',
                     type: 'checkbox',
                     checked: <boolean>settings.get('enable-ace'),
                     click(item: MenuItem) {
@@ -56,34 +132,11 @@ function appMenuSetup(
                 {
                     label: 'Crosis Logs',
                     click(i: MenuItem, win: ElectronWindow) {
+                        // suggestion: check if the page is on a repl, and if so, just add ?debug=1
                         win.webContents.executeJavaScript(
-                            "if(!window.store){alert('You need to be on a repl to use this feature.')}; window.store.dispatch({type: 'LOAD_PLUGIN',pluginPud: 'adminpanel',pluginType: 'adminpanel',title: 'adminpanel'});window.store.dispatch({type: 'ADD_SIDE_NAV_ITEM',navItem: {pud: 'adminpanel',pluginType: 'adminpanel',tooltip: 'Crosis Logs',svg: 'Alien'}});"
+                            "if(!window.store){alert('You need to be on a repl to use this feature.')};window.store.dispatch({type: 'LOAD_PLUGIN',pluginPud: 'adminpanel',pluginType: 'adminpanel',title: 'adminpanel'});window.store.dispatch({type: 'ADD_SIDE_NAV_ITEM',navItem: {pud: 'adminpanel',pluginType: 'adminpanel',tooltip: 'Crosis Logs',svg: 'Alien'}});"
                         );
                     }
-                },
-                { type: 'separator' },
-                {
-                    label: 'Re-connect to Discord',
-                    click() {
-                        mainApp.discordHandler.connectDiscord();
-                    }
-                },
-                {
-                    label: 'Disconnect from Discord',
-                    click() {
-                        mainApp.discordHandler.disconnectDiscord();
-                    }
-                },
-                {
-                    label: 'Clear All Cookies',
-                    click() {
-                        mainApp.clearCookies(false);
-                    }
-                },
-
-                { type: 'separator' },
-                {
-                    role: 'quit'
                 }
             ]
         },
@@ -122,8 +175,8 @@ function appMenuSetup(
                 },
                 {
                     label: 'Copy URL to clipboard',
-                    click(item: MenuItem, focusedWindow: BrowserWindow) {
-                        clipboard.writeText(focusedWindow.webContents.getURL());
+                    click(i: MenuItem, win: BrowserWindow) {
+                        clipboard.writeText(win.webContents.getURL());
                     }
                 }
             ]
@@ -133,17 +186,17 @@ function appMenuSetup(
             submenu: [
                 {
                     label: 'Go Back',
-                    click(item: any, focusedWindow: BrowserWindow) {
-                        if (focusedWindow.webContents.canGoBack()) {
-                            focusedWindow.webContents.goBack();
+                    click: (i: MenuItem, win: BrowserWindow) => {
+                        if (win.webContents.canGoBack()) {
+                            win.webContents.goBack();
                         }
                     }
                 },
                 {
                     label: 'Go Forward',
-                    click(item: any, focusedWindow: BrowserWindow) {
-                        if (focusedWindow.webContents.canGoForward()) {
-                            focusedWindow.webContents.goForward();
+                    click: (i: MenuItem, win: BrowserWindow) => {
+                        if (win.webContents.canGoForward()) {
+                            win.webContents.goForward();
                         }
                     }
                 },
@@ -152,32 +205,38 @@ function appMenuSetup(
                 },
                 {
                     label: 'Open in Browser',
+<<<<<<< HEAD
                     click(item: any, focusedWindow: BrowserWindow) {
                         shell.openExternal(focusedWindow.webContents.getURL());
+=======
+                    click: (i: MenuItem, win: BrowserWindow) => {
+                        shell.openExternal(win.webContents.getURL());
+>>>>>>> dev
                     }
                 },
                 {
                     label: 'Go to Home',
-                    click(item: any, focusedWindow: BrowserWindow) {
-                        focusedWindow.loadURL('https://repl.it/~').catch();
+                    click: (i: MenuItem, win: BrowserWindow) => {
+                        win.loadURL('https://repl.it/~').catch();
                     }
                 },
+                /*
                 {
                     accelerator: 'CmdOrCtrl+f',
-                    label: 'Find in...',
-                    click(item: any, focusedWindow: BrowserWindow) {
-                        selectInput(<ElectronWindow>focusedWindow);
+                    label: 'Select input',
+                    click(i: MenuItem, win: BrowserWindow) {
+                        selectInput(<ElectronWindow>win);
                     }
-                },
+                },*/
                 {
                     type: 'separator'
                 },
                 {
                     accelerator: 'CmdOrCtrl+R',
-                    click(item: any, focusedWindow: ElectronWindow) {
-                        if (focusedWindow) focusedWindow.reload();
-                    },
-                    label: 'Reload'
+                    label: 'Reload',
+                    click: (i: MenuItem, win: BrowserWindow) => {
+                        if (win) win.reload();
+                    }
                 },
                 {
                     label: 'Toggle Developer Tools',
@@ -185,9 +244,8 @@ function appMenuSetup(
                         process.platform === 'darwin'
                             ? 'Alt+Command+I'
                             : 'Ctrl+Shift+I',
-                    click(item: any, focusedWindow: ElectronWindow) {
-                        if (focusedWindow)
-                            focusedWindow.webContents.toggleDevTools();
+                    click: (i: MenuItem, win: BrowserWindow) => {
+                        if (win) win.webContents.toggleDevTools();
                     }
                 },
                 {
@@ -219,21 +277,14 @@ function appMenuSetup(
         {
             role: 'help',
             submenu: [
-                { role: 'about' },
                 {
-                    label: 'Join the Replit discord',
+                    label: 'Replit discord',
                     click() {
                         shell.openExternal('https://repl.it/discord');
                     }
                 },
                 {
-                    label: 'Learn More about Replit',
-                    click() {
-                        shell.openExternal('https://repl.it/site/about');
-                    }
-                },
-                {
-                    label: 'Report a Bug, or Request a Feature',
+                    label: 'Report an issue',
                     click() {
                         shell.openExternal(
                             'https://github.com/repl-it-discord/repl-it-electron/issues/new/choose'
@@ -241,13 +292,14 @@ function appMenuSetup(
                     }
                 },
                 {
-                    label: 'Go to Github Page',
+                    label: 'Github Repo',
                     click() {
                         shell.openExternal(
                             'https://github.com/repl-it-discord/repl-it-electron'
                         );
                     }
-                }
+                },
+                { label: 'Version', role: 'about' }
             ]
         }
     ];
