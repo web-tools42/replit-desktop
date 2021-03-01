@@ -27,70 +27,6 @@
                 z-index: 1;
             }
 
-<<<<<<< HEAD
-      // Load all of the themes
-      let card = ({ name, user: author, img }) => {
-          return `
-          <div class="Gallery" id="${name}" onclick="theme(this)">
-            <img src="${img}">
-            <h1 title="${author}">${name}</h1>
-          </div>
-          `;
-      };
-      //
-      let themes = new Map([
-        ['None', {name: 'None', user: 'None', 'code-jswa': ''}]
-      ]);
-      // Load the cards
-      let start = async () => {
-          let html = '';
-          // Get all the cards
-          let data = await fetch(
-              'https://reflux-marketplace.coolcodersj.repl.co/apiv1'
-          );
-          let { theme } = await data.json();
-          theme.map((elm) => {
-              themes.set(elm.name, elm);
-              html += card(elm);
-          });
-          let content = document.querySelector('body > section');
-          content.innerHTML = html;
-      };
-      let search = (key) => {
-          const fuse = new Fuse([...themes.values()], {
-              includeScore: true,
-              keys: [
-                  {
-                      name: 'name',
-                      weight: 0.9
-                  },
-                  {
-                      name: 'user',
-                      weight: 0.2
-                  }
-              ]
-          });
-          const result = key
-              ? fuse.search(key).map((e) => e.item.name)
-              : [...themes.keys()];
-          let html = '';
-          [...themes.values()].forEach((elm) => {
-              if (result.includes(elm.name)) {
-                  themes.set(elm.name, elm);
-                  html += card(elm);
-              }
-          });
-          document.querySelector('body > section')
-            .innerHTML = html;
-      };
-      // When the user clicks on the button, send a message over ipc
-      let theme = (c) => {
-          ipcRenderer.send('Theme', themes.get(c.id)['code-jswa']);
-      };
-      window.onload = () => start();
-    </script>
-  </body>
-=======
             *::-webkit-scrollbar {
                 width: 10px;
                 height: 5px;
@@ -244,5 +180,4 @@
             window.onload = () => start();
         </script>
     </body>
->>>>>>> dev
 </html>
