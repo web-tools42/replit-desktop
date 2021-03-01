@@ -6,7 +6,7 @@ import {
     shell,
     BrowserWindow
 } from 'electron';
-import { ElectronWindow, selectInput } from '../../common';
+import { ElectronWindow, promptYesNoSync, selectInput } from '../../common';
 import { ThemeHandler } from '../themeHandler/themeHandler';
 import { App } from '../app';
 import { SettingHandler } from '../settingHandler';
@@ -98,6 +98,12 @@ function appMenuSetup(
                     label: 'Clear Cookies',
                     click() {
                         mainApp.clearCookies(false);
+                    }
+                },
+                {
+                    label: 'Reset Settings',
+                    click() {
+                        mainApp.resetPreferences();
                     }
                 },
                 { type: 'separator' },

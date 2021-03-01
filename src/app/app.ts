@@ -167,6 +167,22 @@ class App extends EventEmitter {
         }
     }
 
+    resetPreferences() {
+        if (
+            promptYesNoSync(
+                `Are you sure?`,
+                'Reset Settings',
+                `This will reset your theme preferences.
+This action is NOT reversible!`
+            )
+        ) {
+            this.settingsHandler.clearAll();
+            [...this.windowArray.values()].forEach((win) => {
+                win.reload();
+            });
+        }
+    }
+
     addWindow(window: ElectronWindow, handleExt?: boolean) {
         contextMenu({
             window,

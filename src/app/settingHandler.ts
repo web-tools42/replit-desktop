@@ -85,7 +85,13 @@ class SettingHandler {
         this.saveSettings();
     }
 
+    // suggestion: rename this
     resetAll() {
+        this.saveSettings();
+    }
+
+    clearAll() {
+        this.settings.clear();
         this.saveSettings();
     }
 }
