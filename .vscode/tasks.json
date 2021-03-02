@@ -1,0 +1,26 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "type": "gulp",
+            "task": "buildDev",
+            "group": "build",
+            "problemMatcher": [],
+            "label": "gulp: buildDev"
+        },
+        {
+            "type": "gulp",
+            "task": "buildAndRun",
+            "group": { "kind": "build", "isDefault": true },
+            "problemMatcher": [],
+            "label": "gulp: buildAndRun"
+        },
+        {
+            "type": "npm",
+            "script": "lint",
+            "problemMatcher": [],
+            "label": "npm: lint",
+            "detail": "eslint \"**/*.{js,ts,json}\" --fix"
+        }
+    ]
+}

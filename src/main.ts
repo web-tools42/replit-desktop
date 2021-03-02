@@ -2,9 +2,13 @@ import { Launcher, Updater } from './launcher/launcher';
 import { app } from 'electron';
 import { PLATFORM, promptYesNoSync } from './common';
 import { App } from './app/app';
+import path = require('path');
 
-app.setPath('appData', `${app.getPath('home')}/.repl.it/appData`);
-app.setPath('appData', `${app.getPath('home')}/.repl.it/userData`);
+app.setPath('appData', path.join(app.getPath('home'), '.replit', 'appData'));
+app.setPath('userData', path.join(app.getPath('home'), '.replit', 'userData'));
+app.commandLine.appendArgument('disable-http-cache');
+app.commandLine.appendArgument('no-sandbox');
+app.commandLine.appendSwitch('disk-cache-size', '0');
 app.disableHardwareAcceleration();
 
 process.on('unhandledRejection', (rejection: any) => {

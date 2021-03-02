@@ -24,7 +24,7 @@ async function runElectron() {
 
     child = child_process.spawn(
         electron,
-        ['--no-sandbox', '--trace-warnings', '.'],
+        ['--no-sandbox', '--trace-warnings', '--inspect=5858', '.'],
         {
             cwd: './ts-out'
         }

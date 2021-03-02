@@ -124,7 +124,11 @@ class App extends EventEmitter {
             userAgent = app.userAgentFallback;
         }
         [...this.windowArray.values()].forEach((window) => {
-            if (window.webContents) {
+            // log in fix
+            if (
+                window.webContents &&
+                /repl.it\/@(.*)\//i.test(window.webContents.getURL())
+            ) {
                 window.webContents.userAgent = userAgent;
                 window.reload();
             }
@@ -183,7 +187,7 @@ This action is NOT reversible!`
         }
     }
 
-    addWindow(window: ElectronWindow, handleExt?: boolean) {
+    addWindow(window: ElectronWindow, handleExt: boolean = true) {
         contextMenu({
             window,
             prepend: () => [
