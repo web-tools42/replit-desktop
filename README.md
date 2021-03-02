@@ -1,12 +1,12 @@
-# replit-desktop [![Discord](https://img.shields.io/discord/437048931827056642.svg?logo=discord)](https://discord.gg/5gcPC6B) [![Codacy Badge](https://app.codacy.com/project/badge/Grade/3bce49c376cf4c2bb1d2813d6b12dd6a)](https://www.codacy.com/manual/leon332157/replit-desktop?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=repl-it-discord/replit-desktop&amp;utm_campaign=Badge_Grade) [![Run on Replit](https://repl.it/badge/github/leon332157/replit-desktop)](https://repl.it/@leon332157/replit-desktop)
+# replit-desktop [![Discord](https://img.shields.io/discord/437048931827056642.svg?logo=discord)](https://discord.gg/5gcPC6B) [![Codacy Badge](https://app.codacy.com/project/badge/Grade/3bce49c376cf4c2bb1d2813d6b12dd6a)](https://www.codacy.com/manual/leon332157/replit-desktop?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=repl-it-discord/replit-desktop&amp;utm_campaign=Badge_Grade) [![Run on Replit](https://replit.com/badge/github/leon332157/replit-desktop)](https://replit.com/@leon332157/replit-desktop)
 
 
-### Join the [Replit discord](https://repl.it/discord) for quicker communication with our community and ask questions about the app.
+### Join the [Replit discord](https://replit.com/discord) for quicker communication with our community and ask questions about the app.
 
 #### Before you make an issue, come in the discord and ask us as the issue could be fixed on another branch, which isn't always up-to-date with `dev`.
 ## Summary
 
-[Replit](https://repl.it) is an online coding platform that provides a browser-based IDE. `Replit-electron` is an unofficial desktop application that interfaces with Replit. It intends to improve the developer experience and boost efficiency.
+[Replit](https://replit.com) is an online coding platform that provides a browser-based IDE. `Replit-electron` is an unofficial desktop application that interfaces with Replit. It intends to improve the developer experience and boost efficiency.
 
 ## Features
 

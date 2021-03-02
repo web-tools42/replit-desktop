@@ -10,7 +10,7 @@ We recommend using the following tools:
 + Git Bash or GitHub Desktop as your **Version Control**.
 + TypeScript, Eslint and Prettier as your VSC **extensions**.
 
-You can also write code in [Replit](https://repl.it/@leon332157/repl-it-electron) however it is not recommended since it's not optimal for electron.
+You can also write code in [Replit](https://replit.com/@leon332157/repl-it-electron) however it is not recommended since it's not optimal for electron.
 
 We have a strict linting policy be sure to run `npm lint:check` before pushing or making a pull request and that it does not give you any issues.
 

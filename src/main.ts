@@ -27,7 +27,7 @@ function initLauncher() {
 
 async function initApp() {
     mainApp = new App();
-    mainApp.mainWindow.loadURL('https://repl.it/~').catch(console.debug);
+    mainApp.mainWindow.loadURL('https://replit.com/~').catch(console.debug);
     await mainApp.clearCookies(true);
     mainApp.mainWindow.webContents.once('did-finish-load', () => {
         launcher.window.close();

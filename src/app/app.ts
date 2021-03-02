@@ -87,14 +87,14 @@ class App extends EventEmitter {
         // Handle The Login
         this.mainWindow.webContents.on('new-window', (event, url) => {
             let oauth =
-                url == 'https://repl.it/auth/google/get?close=1' ||
-                url == 'https://repl.it/auth/github/get?close=1';
+                url == 'https://replit.com/auth/google/get?close=1' ||
+                url == 'https://replit.com/auth/github/get?close=1';
 
             event.preventDefault();
             if (oauth) {
                 this.clearCookies(true);
                 ipcMain.once('authDone', () =>
-                    this.mainWindow.loadURL('https://repl.it/~')
+                    this.mainWindow.loadURL('https://replit.com/~')
                 );
             }
             const win = new ElectronWindow(
@@ -148,7 +148,7 @@ class App extends EventEmitter {
         for (let x = 0; x < allCookies.length; x++) {
             const cookie: Cookie = allCookies[x];
             if (
-                (oauthOnly && !cookie.domain.includes('repl.it')) ||
+                (oauthOnly && !cookie.domain.includes('replit.com')) ||
                 !oauthOnly
             ) {
                 await session.defaultSession.cookies.remove(
@@ -231,7 +231,7 @@ This action is NOT reversible!`
 
         window.webContents.on('will-navigate', (e, url) => {
             // Deal with the logout
-            if (url == 'https://repl.it/logout')
+            if (url == 'https://replit.com/logout')
                 this.clearCookies(false, false);
             if (handleExt) handleExternalLink(e, window, url);
             if (this.settingsHandler.get('enable-ace')) this.toggleAce();
