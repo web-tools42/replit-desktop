@@ -504,16 +504,27 @@
                 <div class="jsx-2785083293 content-wrapper">
                   <div class="jsx-2785083293 header">Introducing</div>
                   <div class="jsx-2785083293 sub-header">Replit Offline</div>
+                  <script>
+                  function updateError(str, url){
+                       const err = document.getElementById('error');
+                       err.innerText = str;
+                       const but = document.getElementById('reload')
+                       but.onclick = ()=>{window.location=url}
+                  }
+                  </script>
                   <div class="jsx-2785083293 content">
                     Replit's most requested feature has finally come: an offline, local-first IDE.
                   </div>
+                  <div id="error" class="jsx-2785083293 content">
+                  </div>
                   <div class="jsx-2785083293 button-wrapper">
                     <a style="color:white">
-                      <button type="button" class="jsx-3084412261 ">
+                      <button id="reload" type="button" class="jsx-3084412261 ">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="18px" height="18px">
                           <path d="M0 0h24v24H0z" fill="none"/>
                           <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
                         </svg>
+                        <span class="jsx-3084412261 content"></span>
                         <span class="jsx-3084412261 content">Get Back Online</span>
                         <!-- Conect to A script to check if online and reload repl -->
                       </button>
