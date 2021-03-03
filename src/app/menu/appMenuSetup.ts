@@ -45,19 +45,21 @@ function appMenuSetup(
                         {
                             label: 'CLI',
                             click(i: MenuItem, win: BrowserWindow) {
-                                win.loadURL('https://repl.it/~/cli').catch();
+                                win.loadURL('https://replit.com/~/cli').catch();
                             }
                         },
                         {
                             label: 'Replit Bugs',
                             click(i: MenuItem, win: BrowserWindow) {
-                                win.loadURL('https://repl.it/bugs').catch();
+                                win.loadURL('https://replit.com/bugs').catch();
                             }
                         },
                         {
                             label: 'Replit Feedback',
                             click(i: MenuItem, win: BrowserWindow) {
-                                win.loadURL('https://repl.it/feedback').catch();
+                                win.loadURL(
+                                    'https://replit.com/feedback'
+                                ).catch();
                             }
                         },
                         {
@@ -71,7 +73,7 @@ function appMenuSetup(
                                     '',
                                     true
                                 );
-                                win.loadURL('https://docs.repl.it');
+                                win.loadURL('https://docs.replit.com');
                             }
                         }
                     ]
@@ -212,7 +214,7 @@ function appMenuSetup(
                 {
                     label: 'Go to Home',
                     click: (i: MenuItem, win: BrowserWindow) => {
-                        win.loadURL('https://repl.it/~').catch();
+                        win.loadURL('https://replit.com/~').catch();
                     }
                 },
                 /*
@@ -275,7 +277,7 @@ function appMenuSetup(
                 {
                     label: 'Replit discord',
                     click() {
-                        shell.openExternal('https://repl.it/discord');
+                        shell.openExternal('https://replit.com/discord');
                     }
                 },
                 {

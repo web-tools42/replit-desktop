@@ -2,7 +2,7 @@ let fetch = require('node-fetch');
 
 let fetchIcon = (lang, fileEnding) => {
     return fetch(
-        `https://repl.it/public/images/languages/${lang}.${fileEnding}`,
+        `https://replit.com/public/images/languages/${lang}.${fileEnding}`,
         {
             method: 'GET'
         }
@@ -28,7 +28,7 @@ let fetchIcons = (languages) => {
 
 let obtainListOfLanguages = () => {
     new Promise((resolve, reject) => {
-        fetch('https://repl.it/languages', {
+        fetch('https://replit.com/languages', {
             method: 'GET'
         })
             .then(async (res) => {

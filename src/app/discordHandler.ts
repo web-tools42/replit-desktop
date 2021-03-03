@@ -49,7 +49,7 @@ class DiscordHandler {
         if (spliturl[0] === 'repls') {
             this.client.setActivity({
                 details: 'Browsing Repls',
-                state: `repl.it/${url}`,
+                state: `replit.com/${url}`,
                 startTimestamp,
                 largeImageKey: 'logo-bg',
                 largeImageText: 'Replit',
@@ -103,7 +103,7 @@ class DiscordHandler {
             this.client
                 .setActivity({
                     details: 'In Repl Talk',
-                    state: `repl.it/${url}`,
+                    state: `replit.com/${url}`,
                     startTimestamp,
                     largeImageKey: 'talk-bg',
                     largeImageText: 'Repl Talk',
@@ -118,7 +118,7 @@ class DiscordHandler {
             this.client
                 .setActivity({
                     details: `Looking at ${spliturl[0]}'s profile`,
-                    state: `repl.it/${url}`,
+                    state: `replit.com/${url}`,
                     startTimestamp,
                     largeImageKey: 'logo-bg',
                     largeImageText: 'Replit',
@@ -131,7 +131,7 @@ class DiscordHandler {
             this.client
                 .setActivity({
                     details: 'Changing account settings',
-                    state: `repl.it/${url}`,
+                    state: `replit.com/${url}`,
                     startTimestamp,
                     largeImageKey: 'logo-bg',
                     largeImageText: 'Replit',
@@ -144,7 +144,7 @@ class DiscordHandler {
             this.client
                 .setActivity({
                     details: 'On Replit',
-                    state: `repl.it/${url}`,
+                    state: `replit.com/${url}`,
                     startTimestamp,
                     largeImageKey: 'logo-bg',
                     largeImageText: 'Replit',

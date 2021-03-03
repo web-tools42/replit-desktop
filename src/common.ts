@@ -131,15 +131,8 @@ function handleExternalLink(
 ) {
     if (!url) return;
     if (url.toString().startsWith('about')) {
-        windowObj.loadURL('https://repl.it/~').catch();
-    } else if (
-        !(
-            url.includes('repl.it') ||
-            url.includes('repl.co') ||
-            url.includes('google.com') ||
-            url.includes('repl.run')
-        )
-    ) {
+        windowObj.loadURL('https://replit.com/~').catch();
+    } else if (!(url.includes('replit.com') || url.includes('repl.co'))) {
         console.debug(`External URL: ${url}`);
         event.preventDefault();
         dialog

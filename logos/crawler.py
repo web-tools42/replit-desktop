@@ -6,12 +6,12 @@ ses = requests.Session()
 ses.headers.update({
     "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:64.0) Gecko/20100101 Firefox/64.0 "
 })
-known = ses.get('https://eval.repl.it/languages').json()
+known = ses.get('https://eval.replit.com/languages').json()
 
 for each in known:
     #print(each)
     link = each["icon"]
-    link = "https://repl.it" + link if link.startswith("/") else link
+    link = "https://replit.com" + link if link.startswith("/") else link
 
     content = ses.get(f"{link}").content
     # print(content)

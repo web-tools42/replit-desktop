@@ -17,7 +17,7 @@ class PopoutHandler {
             );
 
             Terminal.loadURL(
-                `https://repl.it/${repl_url.split('#')[0]}?outputonly=1`
+                `https://replit.com/${repl_url.split('#')[0]}?outputonly=1`
             );
         }
     }
