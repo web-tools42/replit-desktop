@@ -1,6 +1,8 @@
 import { Client } from 'discord-rpc';
-import { ElectronWindow, capitalize, getUrl } from '../common';
+
+import { capitalize, ElectronWindow, getUrl } from '../common';
 import { displayNameToIcon, languages } from './languages';
+
 import Timeout = NodeJS.Timeout;
 const startTimestamp = Date.now();
 class DiscordHandler {

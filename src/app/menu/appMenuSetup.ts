@@ -1,16 +1,17 @@
 import {
+    BrowserWindow,
     clipboard,
     Menu,
-    MenuItemConstructorOptions,
     MenuItem,
-    shell,
-    BrowserWindow
+    MenuItemConstructorOptions,
+    shell
 } from 'electron';
+
 import { ElectronWindow, promptYesNoSync, selectInput } from '../../common';
-import { ThemeHandler } from '../themeHandler/themeHandler';
 import { App } from '../app';
-import { SettingHandler } from '../settingHandler';
 import { PopoutHandler } from '../popoutHandler/popoutHandler';
+import { SettingHandler } from '../settingHandler';
+import { ThemeHandler } from '../themeHandler/themeHandler';
 
 function appMenuSetup(
     mainApp: App,

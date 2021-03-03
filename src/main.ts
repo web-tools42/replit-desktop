@@ -1,7 +1,9 @@
-import { Launcher, Updater } from './launcher/launcher';
 import { app } from 'electron';
-import { PLATFORM, promptYesNoSync } from './common';
+
 import { App } from './app/app';
+import { PLATFORM, promptYesNoSync } from './common';
+import { Launcher, Updater } from './launcher/launcher';
+
 import path = require('path');
 
 app.setPath('appData', path.join(app.getPath('home'), '.replit', 'appData'));

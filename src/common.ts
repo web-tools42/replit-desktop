@@ -5,8 +5,9 @@ import {
     MessageBoxReturnValue,
     shell
 } from 'electron';
-import { Endpoints } from '@octokit/types';
 import { platform } from 'os';
+
+import { Endpoints } from '@octokit/types';
 
 class ElectronWindow extends BrowserWindow {
     constructor(

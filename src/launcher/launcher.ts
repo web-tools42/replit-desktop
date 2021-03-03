@@ -1,4 +1,7 @@
 import { app, shell } from 'electron';
+import { EventEmitter } from 'events';
+import fetch from 'node-fetch';
+
 import {
     CheckUpdateResult,
     ElectronWindow,
@@ -7,9 +10,8 @@ import {
     UpdateAssetsUrls,
     Version
 } from '../common';
+
 import fs = require('fs');
-import fetch from 'node-fetch';
-import { EventEmitter } from 'events';
 import semver = require('semver');
 
 class Updater extends EventEmitter {

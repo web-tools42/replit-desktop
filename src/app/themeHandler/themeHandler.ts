@@ -1,6 +1,7 @@
+import { ipcMain } from 'electron';
+
 import { ElectronWindow } from '../../common';
 import { SettingHandler } from '../settingHandler';
-import { ipcMain } from 'electron';
 
 class ThemeHandler {
     private readonly settings: SettingHandler;
