@@ -7,7 +7,8 @@ module.exports = {
         buildResources: __dirname
     },
     mac: {
-        target: 'zip',
+        target: 'tar.gz',
+        darkModeSupport: true,
         icon: 'logos/replit-logo/icns/512x512.icns'
     },
     win: {

@@ -8,6 +8,7 @@ module.exports = {
     },
     mac: {
         target: 'dmg',
+        darkModeSupport: true,
         icon: 'logos/replit-logo/icns/512x512.icns'
     },
     dmg: { writeUpdateInfo: false },
