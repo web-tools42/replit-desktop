@@ -15,6 +15,7 @@ class ElectronWindow extends BrowserWindow {
         nodeIntegration: boolean = false,
         webviewTag: boolean = false
     ) {
+        console.log(`preload: ${__dirname}/preload/${preload}`);
         if (
             preload.length > 0 &&
             !preload.includes(__dirname) &&

@@ -63,7 +63,7 @@ async function copyFilesProd() {
         )
         .pipe(gulp.dest('dist'));
 
-    gulp.src('src/**/*(.html||.css)')
+    gulp.src('src/**/@(*.html||*.css)')
         .pipe(
             htmlmin({
                 minifyCss: true,
@@ -134,17 +134,6 @@ async function buildApp() {
 }
 
 async function copyFilesDev() {
-    gulp.src('package.json').pipe(cache('copyDev')).pipe(gulp.dest('ts-out'));
-
-    gulp.src('src/**/*.html').pipe(cache('copyDev')).pipe(gulp.dest('ts-out'));
-    gulp.src('src/**/*.css').pipe(cache('copyDev')).pipe(gulp.dest('ts-out'));
-    gulp.src('src/**/*.js').pipe(cache('copyDev')).pipe(gulp.dest('ts-out'));
-    gulp.src('logos/replit-logo/512x512.png')
-        .pipe(cache('copyDev'))
-        .pipe(gulp.dest('ts-out'));
-}
-
-async function copyFilesDevNoCache() {
     gulp.src('package.json').pipe(gulp.dest('ts-out'));
 
     gulp.src('src/**/*.html').pipe(gulp.dest('ts-out'));
@@ -174,12 +163,12 @@ async function buildDev() {
 }
 
 module.exports.watchDev = watchDev;
-module.exports.buildAndRun = gulp.series(
-    buildDev,
-    copyFilesDevNoCache,
-    runElectron
-);
-module.exports.buildDev = gulp.series(buildDev, copyFilesDevNoCache);
+module.exports.buildAndRun = gulp.series(buildDev, copyFilesDev, runElectron);
+module.exports.buildDev = gulp.series(buildDev, copyFilesDev);
 module.exports.buildProd = gulp.series(buildProd, copyFilesProd);
-module.exports.buildApp = buildApp;
-module.exports.buildAppPreRelease = buildAppPreRelease;
+module.exports.buildApp = gulp.series(buildProd, copyFilesProd, buildApp);
+module.exports.buildAppPreRelease = gulp.series(
+    buildProd,
+    copyFilesProd,
+    buildAppPreRelease
+);

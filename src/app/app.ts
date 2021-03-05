@@ -87,9 +87,8 @@ class App extends EventEmitter {
         // Handle The Login
         this.mainWindow.webContents.on('new-window', (event, url) => {
             let oauth =
-                url == 'https://replit.com/auth/google/get?close=1' ||
-                url == 'https://replit.com/auth/github/get?close=1';
-
+                url.includes('/auth/google/get?close=1') ||
+                url.includes('/auth/github/get?close=1');
             event.preventDefault();
             if (oauth) {
                 this.clearCookies(true);

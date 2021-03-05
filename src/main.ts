@@ -4,6 +4,7 @@ import { PLATFORM, promptYesNoSync } from './common';
 import { App } from './app/app';
 import path = require('path');
 
+app.setName('Replit Desktop');
 app.setPath('appData', path.join(app.getPath('home'), '.replit', 'appData'));
 app.setPath('userData', path.join(app.getPath('home'), '.replit', 'userData'));
 app.commandLine.appendArgument('disable-http-cache');
