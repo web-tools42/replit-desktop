@@ -1,5 +1,5 @@
 import { Client } from 'discord-rpc';
-import { ElectronWindow, capitalize, getUrl } from '../common';
+import { ElectronWindow, capitalize } from '../common';
 import { displayNameToIcon, languages } from './languages';
 import Timeout = NodeJS.Timeout;
 const startTimestamp = Date.now();
@@ -23,7 +23,7 @@ class DiscordHandler {
                 console.debug(
                     '[RPC] Error: Make sure Discord client is available and you are connected to the Internet'
                 );
-                // this.disconnectDiscord();
+                this.disconnectDiscord();
             });
         this.client.on('ready', () => {
             console.debug('Discord Client ready');
@@ -44,12 +44,12 @@ class DiscordHandler {
     }
 
     async setPlayingDiscord() {
-        let url: string = getUrl(this.window);
+        let url: string = this.window.getReplUrl();
         let spliturl: string[] = url.split('/');
-        if (spliturl[0] === 'repls') {
+        if (spliturl[0] === 'repls' || spliturl[0] === '~') {
             this.client.setActivity({
                 details: 'Browsing Repls',
-                state: `replit.com/${url}`,
+                state: `replit.com/${spliturl[0]}`,
                 startTimestamp,
                 largeImageKey: 'logo-bg',
                 largeImageText: 'Replit',

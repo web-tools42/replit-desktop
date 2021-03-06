@@ -76,6 +76,17 @@ class ElectronWindow extends BrowserWindow {
             )
             .catch(console.debug);
     }
+
+    getReplUrl() {
+        try {
+            return this.webContents
+                .getURL()
+                .replace(/(^\w+:|^)\/\/replit\.com\//, '')
+                .split('?')[0];
+        } catch (e) {
+            return '';
+        }
+    }
 }
 
 interface Version {
@@ -150,16 +161,6 @@ function handleExternalLink(
                     shell.openExternal(url);
                 }
             });
-    }
-}
-function getUrl(windowObj: ElectronWindow) {
-    try {
-        return windowObj.webContents
-            .getURL()
-            .replace(/(^\w+:|^)\/\/repl\.it\//, '')
-            .split('?')[0];
-    } catch (e) {
-        return '';
     }
 }
 
