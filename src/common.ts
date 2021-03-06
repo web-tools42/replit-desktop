@@ -192,6 +192,5 @@ export {
     selectInput,
     PLATFORM,
     promptYesNoSync,
-    capitalize,
-    getUrl
+    capitalize
 };
