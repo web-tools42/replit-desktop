@@ -1,5 +1,5 @@
 import { Launcher, Updater } from './launcher/launcher';
-import { app } from 'electron';
+import { app, screen } from 'electron';
 import { PLATFORM, promptYesNoSync } from './common';
 import { App } from './app/app';
 import path = require('path');
@@ -22,7 +22,6 @@ let mainApp: App;
 
 function initLauncher() {
     launcher = new Launcher();
-
     launcher.init();
     launcher.window.webContents.once('did-finish-load', () => {
         launcher.window.show();
@@ -76,9 +75,7 @@ async function initUpdater() {
             updater.once('download-finished', updater.afterDownload);
             switch (PLATFORM) {
                 case 'win32':
-                    await updater.downloadUpdate(
-                        updater.downloadUrls.windowsUrl
-                    );
+                    await updater.downloadUpdate(updater.downloadUrls.windowsUrl);
                     break;
                 case 'darwin':
                     await updater.downloadUpdate(updater.downloadUrls.macOSUrl);

@@ -1,12 +1,9 @@
 let fetch = require('node-fetch');
 
 let fetchIcon = (lang, fileEnding) => {
-    return fetch(
-        `https://replit.com/public/images/languages/${lang}.${fileEnding}`,
-        {
-            method: 'GET'
-        }
-    )
+    return fetch(`https://replit.com/public/images/languages/${lang}.${fileEnding}`, {
+        method: 'GET'
+    })
         .then((response) => {
             return response;
         })
@@ -34,15 +31,9 @@ let obtainListOfLanguages = () => {
             .then(async (res) => {
                 let response = await res.text();
                 let languages = response.match(/href="\/languages(.*?)">/gi);
-                languages = languages.filter(
-                    (lang) => !lang.includes(`href="/languages"`)
-                );
+                languages = languages.filter((lang) => !lang.includes(`href="/languages"`));
                 languages = languages
-                    .map((lang) =>
-                        lang.includes('class="')
-                            ? lang.slice(0, -24)
-                            : lang.slice(0, -2)
-                    )
+                    .map((lang) => (lang.includes('class="') ? lang.slice(0, -24) : lang.slice(0, -2)))
                     .map((lang) => lang.slice(17));
                 fetchIcons(languages);
                 resolve();

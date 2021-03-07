@@ -16,9 +16,7 @@ class PopoutHandler {
                 path.join(__dirname, 'console.js')
             );
 
-            Terminal.loadURL(
-                `https://replit.com/${repl_url.split('#')[0]}?outputonly=1`
-            );
+            Terminal.loadURL(`https://replit.com/${repl_url.split('#')[0]}?outputonly=1`);
         }
     }
 }

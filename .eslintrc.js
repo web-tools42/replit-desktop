@@ -26,12 +26,7 @@ module.exports = {
             },
             {
                 selector: ['variable', 'parameter'],
-                format: [
-                    'camelCase',
-                    'snake_case',
-                    'UPPER_CASE',
-                    'StrictPascalCase'
-                ]
+                format: ['camelCase', 'snake_case', 'UPPER_CASE', 'StrictPascalCase']
             },
             {
                 selector: ['function', 'method'],

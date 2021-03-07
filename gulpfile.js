@@ -22,13 +22,9 @@ async function runElectron() {
         child.kill();
     }
 
-    child = child_process.spawn(
-        electron,
-        ['--no-sandbox', '--trace-warnings', '--inspect=5858', '.'],
-        {
-            cwd: './ts-out'
-        }
-    );
+    child = child_process.spawn(electron, ['--no-sandbox', '--trace-warnings', '--inspect=5858', '.'], {
+        cwd: './ts-out'
+    });
 
     child.on('error', function (err) {
         errored = true;
@@ -54,9 +50,7 @@ async function copyFilesProd() {
                 delete json.scripts;
                 for (const key in json.devDependencies) {
                     if (json.devDependencies.hasOwnProperty(key))
-                        json.devDependencies[key] = json.devDependencies[
-                            key
-                        ].replace('^', '');
+                        json.devDependencies[key] = json.devDependencies[key].replace('^', '');
                 }
                 return json;
             })
@@ -97,39 +91,21 @@ async function buildProd() {
 
 async function buildAppPreRelease() {
     if (platform() === 'darwin') {
-        child_process.execSync(
-            'electron-builder -c electron-builder.pre-release.conf.js -wml',
-            { stdio: 'inherit' }
-        );
+        child_process.execSync('electron-builder -c electron-builder.pre-release.conf.js -wml', { stdio: 'inherit' });
     } else if (platform() === 'win32') {
-        child_process.execSync(
-            'electron-builder -c electron-builder.pre-release.conf.js -w',
-            { stdio: 'inherit' }
-        );
+        child_process.execSync('electron-builder -c electron-builder.pre-release.conf.js -w', { stdio: 'inherit' });
     } else {
-        child_process.execSync(
-            'electron-builder -c electron-builder.pre-release.conf.js -l',
-            { stdio: 'inherit' }
-        );
+        child_process.execSync('electron-builder -c electron-builder.pre-release.conf.js -l', { stdio: 'inherit' });
     }
 }
 
 async function buildApp() {
     if (platform() === 'darwin') {
-        child_process.execSync(
-            'electron-builder -c electron-builder.conf.js -wml',
-            { stdio: 'inherit' }
-        );
+        child_process.execSync('electron-builder -c electron-builder.conf.js -wml', { stdio: 'inherit' });
     } else if (platform() === 'win32') {
-        child_process.execSync(
-            'electron-builder -c electron-builder.conf.js -w',
-            { stdio: 'inherit' }
-        );
+        child_process.execSync('electron-builder -c electron-builder.conf.js -w', { stdio: 'inherit' });
     } else {
-        child_process.execSync(
-            'electron-builder -c electron-builder.conf.js -l',
-            { stdio: 'inherit' }
-        );
+        child_process.execSync('electron-builder -c electron-builder.conf.js -l', { stdio: 'inherit' });
     }
 }
 
@@ -167,8 +143,4 @@ module.exports.buildAndRun = gulp.series(buildDev, copyFilesDev, runElectron);
 module.exports.buildDev = gulp.series(buildDev, copyFilesDev);
 module.exports.buildProd = gulp.series(buildProd, copyFilesProd);
 module.exports.buildApp = gulp.series(buildProd, copyFilesProd, buildApp);
-module.exports.buildAppPreRelease = gulp.series(
-    buildProd,
-    copyFilesProd,
-    buildAppPreRelease
-);
+module.exports.buildAppPreRelease = gulp.series(buildProd, copyFilesProd, buildAppPreRelease);

@@ -1,12 +1,10 @@
 import { ElectronWindow } from '../../common';
-import { SettingHandler } from '../settingHandler';
+import { settings } from '../settingHandler';
 import { ipcMain } from 'electron';
 
 class ThemeHandler {
-    private readonly settings: SettingHandler;
     private theme_market: ElectronWindow;
-    constructor(settings: SettingHandler, Main: ElectronWindow) {
-        this.settings = settings;
+    constructor(Main: ElectronWindow) {
         ipcMain.on('Theme', (event, code: string) => {
             this.addTheme(Main, code);
         });
@@ -56,12 +54,12 @@ class ThemeHandler {
 
     addTheme(parentWindow: ElectronWindow, code: string = 'default') {
         if (code == 'default') {
-            if (this.settings.has('theme')) {
+            if (settings.has('theme')) {
                 //@ts-ignore
                 code = <string>this.settings.get('theme').code;
             } else return;
         }
-        this.settings.set('theme', {
+        settings.set('theme', {
             code: code
         });
         this.setTheme(parentWindow, code);

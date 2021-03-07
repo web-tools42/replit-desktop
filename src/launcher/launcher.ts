@@ -47,25 +47,16 @@ class Updater extends EventEmitter {
 
         const i = Math.floor(Math.log(bytes) / Math.log(k));
 
-        return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${
-            sizes[i]
-        }`;
+        return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
     }
 
     async checkUpdate(): Promise<CheckUpdateResult> {
         try {
             const res: GithubReleaseResponse = this.decodeReleaseResponse(
-                await (
-                    await fetch(
-                        'https://api.github.com/repos/replit-discord/replit-desktop/releases/latest'
-                    )
-                ).json()
+                await (await fetch('https://api.github.com/repos/replit-discord/replit-desktop/releases/latest')).json()
             );
             if (!res.tag_name) return { hasUpdate: false };
-            if (
-                res.tag_name.includes('alpha') ||
-                res.tag_name.includes('beta')
-            ) {
+            if (res.tag_name.includes('alpha') || res.tag_name.includes('beta')) {
                 return { hasUpdate: false };
             }
             const tagNames = res.tag_name.split('.');
@@ -108,9 +99,7 @@ class Updater extends EventEmitter {
         try {
             const req = await fetch(url);
 
-            const contentLength: number = parseInt(
-                req.headers.get('content-length')
-            );
+            const contentLength: number = parseInt(req.headers.get('content-length'));
             const filename = url.split('/').pop();
             this.downloadFilePath = `${this.downloadPath}${filename}`;
             let downloaded: number = 0;
@@ -120,13 +109,9 @@ class Updater extends EventEmitter {
             req.body
                 .on('data', (chunk: Buffer) => {
                     downloaded += chunk.length;
-                    const percentage = Math.floor(
-                        (downloaded / contentLength) * 100
-                    );
+                    const percentage = Math.floor((downloaded / contentLength) * 100);
                     this.launcher.updateStatus({
-                        text: `${this.formatBytes(
-                            downloaded
-                        )}/${this.formatBytes(contentLength)}`,
+                        text: `${this.formatBytes(downloaded)}/${this.formatBytes(contentLength)}`,
                         percentage: `${percentage.toString()}%`
                     });
                 })

@@ -16,22 +16,16 @@ class DiscordHandler {
 
     connectDiscord() {
         if (!this.client) this.client = new Client({ transport: 'ipc' });
-        this.client
-            .login({ clientId: '498635999274991626' })
-            .catch((error: string) => {
-                // console.error(error);
-                console.debug(
-                    '[RPC] Error: Make sure Discord client is available and you are connected to the Internet'
-                );
-                this.disconnectDiscord();
-            });
+        this.client.login({ clientId: '498635999274991626' }).catch((error: string) => {
+            // console.error(error);
+            console.debug('[RPC] Error: Make sure Discord client is available and you are connected to the Internet');
+            this.disconnectDiscord();
+        });
         this.client.on('ready', () => {
             console.debug('Discord Client ready');
             this.setPlayingDiscord();
             this.discordTimer = setInterval(() => {
-                this.setPlayingDiscord().catch((e: string) =>
-                    console.error(`Failed to update Discord status. ${e}`)
-                );
+                this.setPlayingDiscord().catch((e: string) => console.error(`Failed to update Discord status. ${e}`));
             }, 10e3);
         });
     }
@@ -156,19 +150,14 @@ class DiscordHandler {
         }
     }
 
-    async setTalkBoard(
-        spliturl: string[],
-        windowObj: ElectronWindow
-    ): Promise<{ viewing: string; talkBoard: string }> {
+    async setTalkBoard(spliturl: string[], windowObj: ElectronWindow): Promise<{ viewing: string; talkBoard: string }> {
         let viewing: string = 'Viewing ';
         if (spliturl[3] !== undefined) {
             viewing += await windowObj.webContents.executeJavaScript(
                 "document.getElementsByClassName('board-post-detail-title')[0].textContent"
             ); // gets the repl talk post name
         } else {
-            viewing = `Viewing ${
-                spliturl[2] !== undefined ? spliturl[2] : spliturl[1]
-            }`;
+            viewing = `Viewing ${spliturl[2] !== undefined ? spliturl[2] : spliturl[1]}`;
         }
         return { viewing: viewing, talkBoard: capitalize(spliturl[1]) };
     }

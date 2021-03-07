@@ -30,16 +30,11 @@ function invertColor(hex, bw) {
 }
 
 function rgb2hex(rgb) {
-    rgb = rgb.match(
-        /^rgba?[\s+]?\([\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?/i
-    );
+    rgb = rgb.match(/^rgba?[\s+]?\([\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?/i);
     if (rgb && rgb.length === 4)
-        return `#${`0${parseInt(rgb[1], 10).toString(16)}`.slice(
+        return `#${`0${parseInt(rgb[1], 10).toString(16)}`.slice(-2)}${`0${parseInt(rgb[2], 10).toString(16)}`.slice(
             -2
-        )}${`0${parseInt(rgb[2], 10).toString(16)}`.slice(-2)}${`0${parseInt(
-            rgb[3],
-            10
-        ).toString(16)}`.slice(-2)}`;
+        )}${`0${parseInt(rgb[3], 10).toString(16)}`.slice(-2)}`;
     return '';
 }
 
@@ -59,10 +54,7 @@ function setColor(name, value, update) {
         let Color = $(`#${currentColor}`);
         Color.style.backgroundColor = isColor(colorInput.value);
         Color.style.color = invertColor(isColor(colorInput.value), true);
-        Color.setAttribute(
-            'onclick',
-            `setColor('${currentColor}', '${isColor(colorInput.value)}')`
-        );
+        Color.setAttribute('onclick', `setColor('${currentColor}', '${isColor(colorInput.value)}')`);
     }
     currentColor = name;
     Current.innerHTML = $(`#${currentColor}`).innerHTML;
@@ -124,8 +116,7 @@ window.onload = () => {
     $('webview').addEventListener('dom-ready', () => {
         // Deal with generating a theme
         $('#gen').onclick = () => {
-            let Css =
-                '.replit-ui-theme-root.light,.replit-ui-theme-root.dark {';
+            let Css = '.replit-ui-theme-root.light,.replit-ui-theme-root.dark {';
             colorMap.forEach((value, name) => {
                 Css += `${name}: ${value} !important;`;
             });
@@ -211,9 +202,7 @@ window.onload = () => {
         }
 
         function rgbtohex(r, g, b) {
-            return `#${((1 << 24) + (r << 16) + (g << 8) + b)
-                .toString(16)
-                .slice(1)}`;
+            return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`;
         }
 
         function hexToRGB(hex) {
@@ -245,16 +234,8 @@ window.onload = () => {
 
             function getHSL() {
                 return {
-                    hue: Math.round(
-                        ((pin.offsetLeft + pin.clientWidth) /
-                            spectrum.clientWidth) *
-                            360
-                    ),
-                    saturation: Math.round(
-                        ((pin.offsetTop + pin.clientHeight) /
-                            spectrum.clientHeight) *
-                            100
-                    ),
+                    hue: Math.round(((pin.offsetLeft + pin.clientWidth) / spectrum.clientWidth) * 360),
+                    saturation: Math.round(((pin.offsetTop + pin.clientHeight) / spectrum.clientHeight) * 100),
                     lightness: lightnessInput.value
                 };
             }
@@ -266,19 +247,11 @@ window.onload = () => {
                         colorInput.value = `hsl(${HSL.hue}, ${HSL.saturation}%, ${HSL.lightness}%)`;
                         break;
                     case 'RGB':
-                        let RGB = hsltorgb(
-                            HSL.hue,
-                            HSL.saturation,
-                            HSL.lightness
-                        );
+                        let RGB = hsltorgb(HSL.hue, HSL.saturation, HSL.lightness);
                         colorInput.value = `rgb(${RGB.red}, ${RGB.green}, ${RGB.blue})`;
                         break;
                     case 'Hex':
-                        colorInput.value = hsltohex(
-                            HSL.hue,
-                            HSL.saturation,
-                            HSL.lightness
-                        );
+                        colorInput.value = hsltohex(HSL.hue, HSL.saturation, HSL.lightness);
                         break;
                 }
                 picker.dispatchEvent(new Event('change'));

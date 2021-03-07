@@ -40,10 +40,7 @@ window.onload = () => {
     function elemWalker(parent: Element, level: boolean = false) {
         if (
             keepElem.some((A: string) =>
-                !A.startsWith('text:')
-                    ? parent.matches(A)
-                    : (parent as HTMLElement).innerText ==
-                      A.replace('text:', '')
+                !A.startsWith('text:') ? parent.matches(A) : (parent as HTMLElement).innerText == A.replace('text:', '')
             )
         )
             return true;
@@ -56,19 +53,13 @@ window.onload = () => {
             if (
                 !elm.children.length &&
                 !keepElem.some((A: string) =>
-                    !A.startsWith('text:')
-                        ? elm.matches(A)
-                        : (elm as HTMLElement).innerText ==
-                          A.replace('text:', '')
+                    !A.startsWith('text:') ? elm.matches(A) : (elm as HTMLElement).innerText == A.replace('text:', '')
                 )
             )
                 remove(elm);
             else if (
                 !keepElem.some((A: string) =>
-                    !A.startsWith('text:')
-                        ? elm.matches(A)
-                        : (elm as HTMLElement).innerText ==
-                          A.replace('text:', '')
+                    !A.startsWith('text:') ? elm.matches(A) : (elm as HTMLElement).innerText == A.replace('text:', '')
                 )
             ) {
                 let Important = elemWalker(elm, true);
@@ -76,10 +67,7 @@ window.onload = () => {
             }
             if (
                 keepElem.some((A: string) =>
-                    !A.startsWith('text:')
-                        ? elm.matches(A)
-                        : (elm as HTMLElement).innerText ==
-                          A.replace('text:', '')
+                    !A.startsWith('text:') ? elm.matches(A) : (elm as HTMLElement).innerText == A.replace('text:', '')
                 )
             ) {
                 elm.setAttribute('style', '');

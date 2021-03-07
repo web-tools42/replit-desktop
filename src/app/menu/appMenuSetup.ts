@@ -1,23 +1,11 @@
-import {
-    clipboard,
-    Menu,
-    MenuItemConstructorOptions,
-    MenuItem,
-    shell,
-    BrowserWindow
-} from 'electron';
+import { clipboard, Menu, MenuItemConstructorOptions, MenuItem, shell, BrowserWindow } from 'electron';
 import { ElectronWindow, promptYesNoSync, selectInput } from '../../common';
 import { ThemeHandler } from '../themeHandler/themeHandler';
 import { App } from '../app';
-import { SettingHandler } from '../settingHandler';
+import { settings } from '../settingHandler';
 import { PopoutHandler } from '../popoutHandler/popoutHandler';
 
-function appMenuSetup(
-    mainApp: App,
-    themeHandler: ThemeHandler,
-    settings: SettingHandler,
-    popoutHandler: PopoutHandler
-): Menu {
+function appMenuSetup(mainApp: App, themeHandler: ThemeHandler, popoutHandler: PopoutHandler): Menu {
     const template: MenuItemConstructorOptions[] = [
         {
             label: 'App',
@@ -57,9 +45,7 @@ function appMenuSetup(
                         {
                             label: 'Replit Feedback',
                             click(i: MenuItem, win: BrowserWindow) {
-                                win.loadURL(
-                                    'https://replit.com/feedback'
-                                ).catch();
+                                win.loadURL('https://replit.com/feedback').catch();
                             }
                         },
                         {
@@ -237,10 +223,7 @@ function appMenuSetup(
                 },
                 {
                     label: 'Toggle Developer Tools',
-                    accelerator:
-                        process.platform === 'darwin'
-                            ? 'Alt+Command+I'
-                            : 'Ctrl+Shift+I',
+                    accelerator: process.platform === 'darwin' ? 'Alt+Command+I' : 'Ctrl+Shift+I',
                     click: (i: MenuItem, win: BrowserWindow) => {
                         if (win) win.webContents.toggleDevTools();
                     }
@@ -283,17 +266,13 @@ function appMenuSetup(
                 {
                     label: 'Report an issue',
                     click() {
-                        shell.openExternal(
-                            'https://github.com/repl-it-discord/repl-it-electron/issues/new/choose'
-                        );
+                        shell.openExternal('https://github.com/repl-it-discord/repl-it-electron/issues/new/choose');
                     }
                 },
                 {
                     label: 'Github Repo',
                     click() {
-                        shell.openExternal(
-                            'https://github.com/repl-it-discord/repl-it-electron'
-                        );
+                        shell.openExternal('https://github.com/repl-it-discord/repl-it-electron');
                     }
                 },
                 { label: 'Version', role: 'about' }
