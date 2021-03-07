@@ -3,40 +3,23 @@ import fs from 'fs';
 import path from 'path';
 import writeFileAtomic from 'write-file-atomic';
 
-type SettingsValue =
-    | null
-    | boolean
-    | string
-    | number
-    | {
-          [key: string]: SettingsValue;
-      }
-    | SettingsValue[];
-
 class SettingHandler {
     public settingsFilePath: string;
 
-    public settings: Map<string, SettingsValue>;
+    public settings: Map<string, any>;
 
     constructor() {
-        this.settingsFilePath = path.join(
-            path.dirname(app.getPath('userData')),
-            'settings.json'
-        );
+        this.settingsFilePath = path.join(app.getPath('home'), '.replit', 'settings.json');
         // Load the settings
         this.settings = new Map();
         this.ensureFileSync();
         try {
-            let Data = JSON.parse(
-                fs.readFileSync(this.settingsFilePath, 'utf-8')
-            );
+            let Data = JSON.parse(fs.readFileSync(this.settingsFilePath, 'utf-8'));
             if (!Data.Version) Data.Map = new Map();
             this.settings = new Map(Data.Map);
         } catch (err) {
             this.resetAll();
-            let Data = JSON.parse(
-                fs.readFileSync(this.settingsFilePath, 'utf-8')
-            );
+            let Data = JSON.parse(fs.readFileSync(this.settingsFilePath, 'utf-8'));
             if (!Data.Version) Data.Map = new Map();
             this.settings = new Map(Data.Map);
         }
@@ -75,7 +58,7 @@ class SettingHandler {
         return this.settings.has(key) ? this.settings.get(key) : null;
     }
 
-    set(key: string, value: SettingsValue) {
+    set(key: string, value: any) {
         this.settings.set(key, value);
         this.saveSettings();
     }
@@ -85,7 +68,6 @@ class SettingHandler {
         this.saveSettings();
     }
 
-    // suggestion: rename this
     resetAll() {
         this.saveSettings();
     }
@@ -96,4 +78,5 @@ class SettingHandler {
     }
 }
 
-export { SettingHandler };
+const settings = new SettingHandler();
+export { settings };

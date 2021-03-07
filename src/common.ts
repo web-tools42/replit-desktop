@@ -3,11 +3,20 @@ import {
     BrowserWindowConstructorOptions,
     dialog,
     MessageBoxReturnValue,
-    shell
+    shell,
+    screen,
+    Size
 } from 'electron';
 import { Endpoints } from '@octokit/types';
 import { platform } from 'os';
+import { settings } from './app/settingHandler';
 
+interface WindowSize {
+    width: number;
+    height: number;
+}
+
+interface WindowPosition {}
 class ElectronWindow extends BrowserWindow {
     constructor(
         options: BrowserWindowConstructorOptions,
@@ -16,18 +25,47 @@ class ElectronWindow extends BrowserWindow {
         webviewTag: boolean = false
     ) {
         console.log(`preload: ${__dirname}/preload/${preload}`);
-        if (
-            preload.length > 0 &&
-            !preload.includes(__dirname) &&
-            !preload.startsWith('./')
-        ) {
+        if (preload.length > 0 && !preload.includes(__dirname) && !preload.startsWith('./')) {
             preload = `${__dirname}/preload/${preload}`;
         }
+        const displaySize = screen.getPrimaryDisplay().workAreaSize;
+        let windowSize: WindowSize = {
+            // default to display size / 3
+            width: Math.floor(displaySize.width / 3),
+            height: Math.floor(displaySize.height / 3)
+        };
+
+        let skipCheck = false;
+        // If window size exist in options, keep it
+        if (options.width && options.height) {
+            windowSize.width = options.width;
+            windowSize.height = options.height;
+            skipCheck = true;
+        }
+        if (skipCheck == false) {
+            // check if window size settings exist
+            if (settings.has('window-size')) {
+                windowSize = settings.get('window-size');
+
+                if (typeof windowSize != 'object') {
+                    // Reset to Default
+                    windowSize = {
+                        'width': 1600,
+                        'height': 900
+                    };
+                }
+            } else {
+                settings.set('window-size', windowSize);
+            }
+        }
+
         super({
             ...options,
             show: false,
-            minHeight: 300, // TODO: Store window infos
+            minHeight: 300,
             minWidth: 400,
+            width: windowSize.width,
+            height: windowSize.height,
             webPreferences: {
                 devTools: true,
                 enableRemoteModule: false,
@@ -45,18 +83,21 @@ class ElectronWindow extends BrowserWindow {
 
         this.once('ready-to-show', () => this.show());
 
-        this.webContents.on(
-            'did-fail-load',
-            (e, code, description, validateUrl) => {
-                this.handleLoadingError(
-                    e,
-                    this,
-                    code,
-                    description,
-                    validateUrl
-                );
-            }
-        );
+        // Detect on resize and add to settings
+        this.on('resize', () => {
+            let size = this.getSize();
+            settings.set('window-size', {
+                width: size[0],
+                height: size[1]
+            });
+        });
+        this.on('moved', () => {
+            let position = this.getPosition();
+            settings.set('window-position', {});
+        });
+        this.webContents.on('did-fail-load', (e, code, description, validateUrl) => {
+            this.handleLoadingError(e, this, code, description, validateUrl);
+        });
     }
 
     async handleLoadingError(
@@ -71,9 +112,7 @@ class ElectronWindow extends BrowserWindow {
         }
         await windowObject.loadFile('app/offline.html');
         windowObject.webContents
-            .executeJavaScript(
-                `updateError("${errorCode} ${errorDescription}","${validateUrl}")`
-            )
+            .executeJavaScript(`updateError("${errorCode} ${errorDescription}","${validateUrl}")`)
             .catch(console.debug);
     }
 
@@ -130,17 +169,10 @@ function capitalize(str: string) {
 }
 
 function selectInput(focusedWindow: ElectronWindow) {
-    focusedWindow.webContents.executeJavaScript(
-        'document.getElementsByTagName("input")[0].focus().select()',
-        false
-    );
+    focusedWindow.webContents.executeJavaScript('document.getElementsByTagName("input")[0].focus().select()', false);
 }
 
-function handleExternalLink(
-    event: Event,
-    windowObj: ElectronWindow,
-    url: string
-) {
+function handleExternalLink(event: Event, windowObj: ElectronWindow, url: string) {
     if (!url) return;
     if (url.toString().startsWith('about')) {
         windowObj.loadURL('https://replit.com/~').catch();
@@ -164,11 +196,7 @@ function handleExternalLink(
     }
 }
 
-function promptYesNoSync(
-    message: string,
-    title: string,
-    detail?: string
-): number {
+function promptYesNoSync(message: string, title: string, detail?: string): number {
     return dialog.showMessageBoxSync({
         type: 'info',
         message: message,
