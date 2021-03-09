@@ -37,17 +37,21 @@ class SettingHandler {
     }
 
     private saveSettings() {
-        writeFileAtomic.sync(
-            this.settingsFilePath,
-            JSON.stringify(
-                {
-                    Version: '2',
-                    Map: Array.from(this.settings.entries())
-                },
-                null,
-                4
-            )
-        );
+        try {
+            writeFileAtomic.sync(
+                this.settingsFilePath,
+                JSON.stringify(
+                    {
+                        Version: '2',
+                        Map: Array.from(this.settings.entries())
+                    },
+                    null,
+                    4
+                )
+            );
+        } catch (err) {
+            console.error(err);
+        }
     }
 
     has(key: string) {

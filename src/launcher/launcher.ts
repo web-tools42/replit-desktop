@@ -77,10 +77,7 @@ class Updater extends EventEmitter {
                     this.downloadUrls.linuxUrl = asset.browser_download_url;
                 }
             }
-            if (
-                semver.gt(version.versionString, this.appVersion.versionString)
-                // TODO: Maybe support pre-release versions
-            ) {
+            if (semver.gt(version.versionString, this.appVersion.versionString)) {
                 return {
                     hasUpdate: true,
                     changeLog: changeLog,
@@ -150,7 +147,8 @@ class Launcher {
                 resizable: false,
                 height: 300,
                 width: 250,
-                frame: false
+                frame: false,
+                center: true
             },
             '',
             true

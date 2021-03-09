@@ -14,9 +14,12 @@ import { settings } from './app/settingHandler';
 interface WindowSize {
     width: number;
     height: number;
+    maximized: boolean;
 }
-
-interface WindowPosition {}
+interface WindowPosition {
+    x: number;
+    y: number;
+}
 class ElectronWindow extends BrowserWindow {
     constructor(
         options: BrowserWindowConstructorOptions,
@@ -24,39 +27,54 @@ class ElectronWindow extends BrowserWindow {
         nodeIntegration: boolean = false,
         webviewTag: boolean = false
     ) {
-        console.log(`preload: ${__dirname}/preload/${preload}`);
-        if (preload.length > 0 && !preload.includes(__dirname) && !preload.startsWith('./')) {
-            preload = `${__dirname}/preload/${preload}`;
-        }
         const displaySize = screen.getPrimaryDisplay().workAreaSize;
         let windowSize: WindowSize = {
             // default to display size / 3
             width: Math.floor(displaySize.width / 3),
-            height: Math.floor(displaySize.height / 3)
+            height: Math.floor(displaySize.height / 3),
+            maximized: false
         };
 
-        let skipCheck = false;
+        let windowPosition: WindowPosition = {
+            x: null,
+            y: null
+        };
+
+        let restoreSize = true;
+        let restorePosition = true;
+
         // If window size exist in options, keep it
         if (options.width && options.height) {
             windowSize.width = options.width;
             windowSize.height = options.height;
-            skipCheck = true;
+            restoreSize = false;
         }
-        if (skipCheck == false) {
+
+        if (options.center) restorePosition = false;
+
+        if (restoreSize) {
             // check if window size settings exist
             if (settings.has('window-size')) {
                 windowSize = settings.get('window-size');
-
-                if (typeof windowSize != 'object') {
-                    // Reset to Default
-                    windowSize = {
-                        'width': 1600,
-                        'height': 900
-                    };
-                }
             } else {
+                // reset to default
                 settings.set('window-size', windowSize);
             }
+        }
+
+        if (restorePosition) {
+            // check if window position settings exist
+            if (settings.has('window-position')) {
+                windowPosition = settings.get('window-position');
+            } else {
+                // reset to default
+                settings.set('window-position', windowPosition);
+            }
+        }
+
+        console.log(`preload: ${__dirname}/preload/${preload}`);
+        if (preload.length > 0 && !preload.includes(__dirname) && !preload.startsWith('./')) {
+            preload = `${__dirname}/preload/${preload}`;
         }
 
         super({
@@ -64,6 +82,8 @@ class ElectronWindow extends BrowserWindow {
             show: false,
             minHeight: 300,
             minWidth: 400,
+            x: windowPosition.x,
+            y: windowPosition.y,
             width: windowSize.width,
             height: windowSize.height,
             webPreferences: {
@@ -83,17 +103,31 @@ class ElectronWindow extends BrowserWindow {
 
         this.once('ready-to-show', () => this.show());
 
+        // Restore if window was maximized
+        if (windowSize.maximized) {
+            this.maximize();
+        }
+
         // Detect on resize and add to settings
         this.on('resize', () => {
-            let size = this.getSize();
-            settings.set('window-size', {
-                width: size[0],
-                height: size[1]
-            });
+            const size = this.getSize();
+            const oldSize: WindowSize = settings.get('window-size');
+            if (this.isMaximized()) {
+                Object.assign(oldSize, { maximized: true });
+                settings.set('window-size', oldSize);
+            } else {
+                settings.set('window-size', {
+                    width: size[0],
+                    height: size[1],
+                    maximized: false
+                });
+            }
         });
+
+        // detect moved and add to settings
         this.on('moved', () => {
             let position = this.getPosition();
-            settings.set('window-position', {});
+            settings.set('window-position', { x: position[0], y: position[1] });
         });
         this.webContents.on('did-fail-load', (e, code, description, validateUrl) => {
             this.handleLoadingError(e, this, code, description, validateUrl);

@@ -10,28 +10,13 @@ class ThemeHandler {
         });
     }
     openWindow() {
-        this.theme_market = new ElectronWindow(
-            {
-                height: 900,
-                width: 1600
-            },
-            '',
-            true
-        );
+        this.theme_market = new ElectronWindow({ title: 'Themes' }, '', true);
         this.theme_market.setBackgroundColor('#393c42');
         this.theme_market.loadURL(`file://${__dirname}/themes.html`);
     }
 
     openMaker() {
-        this.theme_market = new ElectronWindow(
-            {
-                height: 900,
-                width: 1600
-            },
-            '',
-            true,
-            true
-        );
+        this.theme_market = new ElectronWindow({ title: 'Theme Maker' }, '', true, true);
         this.theme_market.setBackgroundColor('#393c42');
         this.theme_market.loadURL(`file://${__dirname}/editor/editor.html`);
     }
