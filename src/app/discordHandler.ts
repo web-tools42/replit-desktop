@@ -19,7 +19,7 @@ class DiscordHandler {
         this.client.login({ clientId: '498635999274991626' }).catch((error: string) => {
             // console.error(error);
             console.debug('[RPC] Error: Make sure Discord client is available and you are connected to the Internet');
-            this.disconnectDiscord();
+            delete this.client;
         });
         this.client.on('ready', () => {
             console.debug('Discord Client ready');
