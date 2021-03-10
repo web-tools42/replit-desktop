@@ -29,9 +29,9 @@ class ElectronWindow extends BrowserWindow {
     ) {
         const displaySize = screen.getPrimaryDisplay().workAreaSize;
         let windowSize: WindowSize = {
-            // default to display size / 3
-            width: Math.floor(displaySize.width / 3),
-            height: Math.floor(displaySize.height / 3),
+            // default to display size / 2
+            width: Math.floor(displaySize.width / 2),
+            height: Math.floor(displaySize.height / 2),
             maximized: false
         };
 
