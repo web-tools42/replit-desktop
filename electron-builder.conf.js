@@ -2,6 +2,7 @@ module.exports = {
     appId: 'replit-desktop.replit-discord',
     productName: 'Replit Desktop',
     generateUpdatesFilesForAllChannels: false,
+    npmRebuild: false,
     directories: {
         output: 'build/',
         app: 'dist/',

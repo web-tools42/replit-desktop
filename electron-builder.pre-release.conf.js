@@ -3,6 +3,7 @@ module.exports = {
     productName: 'Replit Desktop',
     asar: false,
     generateUpdatesFilesForAllChannels: false,
+    npmRebuild: false,
     directories: {
         output: 'build/',
         app: 'dist/',
