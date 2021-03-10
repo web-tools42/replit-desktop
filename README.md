@@ -23,7 +23,7 @@
 Install [git](https://git-scm.com)
 1. Clone the repository
 ```bash
-git clone https://github.com/repl-it-discord/replit-desktop.git
+git clone https://github.com/replit-discord/replit-desktop.git
 cd replit-desktop
 ```
 
