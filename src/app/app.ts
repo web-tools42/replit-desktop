@@ -46,6 +46,10 @@ class App extends EventEmitter {
             event.newGuest = win;
             this.addWindow(win, false);
         });
+
+        this.mainWindow.on('closed', () => {
+            app.quit();
+        });
     }
 
     toggleAce(menu?: MenuItem) {
@@ -63,10 +67,10 @@ class App extends EventEmitter {
         }
         [...this.windowArray.values()].forEach((window) => {
             // log in fix
-            if (window.webContents && /repl.it\/@(.*)\//i.test(window.webContents.getURL())) {
-                window.webContents.userAgent = userAgent;
-                window.reload();
-            }
+            //if (window.webContents && /repl.it\/@(.*)\//i.test(window.webContents.getURL())) {
+            window.webContents.userAgent = userAgent;
+            window.reload();
+            //}
         });
     }
 

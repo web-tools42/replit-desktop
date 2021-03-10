@@ -101,7 +101,7 @@ class ElectronWindow extends BrowserWindow {
         });
         this.setBackgroundColor('#393c42');
 
-        this.once('ready-to-show', () => this.show());
+        this.webContents.once('did-finish-load', () => this.show());
 
         // Restore if window was maximized
         if (windowSize.maximized) {
@@ -129,6 +129,7 @@ class ElectronWindow extends BrowserWindow {
             let position = this.getPosition();
             settings.set('window-position', { x: position[0], y: position[1] });
         });
+
         this.webContents.on('did-fail-load', (e, code, description, validateUrl) => {
             this.handleLoadingError(e, this, code, description, validateUrl);
         });
@@ -155,6 +156,7 @@ class ElectronWindow extends BrowserWindow {
             return this.webContents
                 .getURL()
                 .replace(/(^\w+:|^)\/\/replit\.com\//, '')
+                .replace(/(^\w+:|^)\/\/repl\.it\//, '')
                 .split('?')[0];
         } catch (e) {
             return '';
