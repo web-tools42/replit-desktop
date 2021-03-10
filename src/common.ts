@@ -212,7 +212,7 @@ function handleExternalLink(event: Event, windowObj: ElectronWindow, url: string
     if (!url) return;
     if (url.toString().startsWith('about')) {
         windowObj.loadURL('https://replit.com/~').catch();
-    } else if (!(url.includes('replit.com') || url.includes('repl.co'))) {
+    } else if (!(url.includes('replit') || url.includes('repl.co') || url.includes('repl.it'))) {
         console.debug(`External URL: ${url}`);
         event.preventDefault();
         dialog
