@@ -40,8 +40,7 @@ class ThemeHandler {
     addTheme(parentWindow: ElectronWindow, code: string = 'default') {
         if (code == 'default') {
             if (settings.has('theme')) {
-                //@ts-ignore
-                code = <string>this.settings.get('theme').code;
+                code = <string>settings.get('theme').code;
             } else return;
         }
         settings.set('theme', {
