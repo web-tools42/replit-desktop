@@ -20,12 +20,12 @@ process.on('unhandledRejection', (rejection: any) => {
 let launcher: Launcher;
 let updater: Updater;
 let mainApp: App;
+const instanceLock = app.requestSingleInstanceLock();
+if (!instanceLock) app.quit();
 
 function initLauncher() {
     launcher = new Launcher();
-    launcher.init();
     launcher.window.webContents.once('did-finish-load', () => {
-        launcher.window.show();
         initUpdater();
     });
 }
@@ -37,14 +37,20 @@ async function initApp() {
     mainApp.mainWindow.webContents.once('did-finish-load', () => {
         launcher.window.close();
     });
-    mainApp.mainWindow.on('close', () => app.quit());
 }
 
 async function initUpdater() {
     updater = new Updater(launcher);
+    updater.once('download-error', (e) => {
+        console.error(e);
+        updater.cleanUp();
+    });
+    updater.once('all-done', () => {
+        launcher.updateStatus({ text: 'Launching app' });
+        initApp();
+    });
     if (process.execPath.includes('electron')) {
         updater.cleanUp(true);
-        initApp();
         return;
     }
     launcher.updateStatus({ text: 'Checking Update' });
@@ -55,14 +61,6 @@ async function initUpdater() {
         });
         updater.cleanUp(true);
     }
-    updater.once('download-error', (e) => {
-        console.error(e);
-        updater.cleanUp();
-    });
-    updater.once('all-done', () => {
-        launcher.updateStatus({ text: 'Launching app' });
-        initApp();
-    });
     if (res['hasUpdate']) {
         launcher.updateStatus({ text: 'Update detected' });
         if (

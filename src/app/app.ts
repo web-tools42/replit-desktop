@@ -46,9 +46,18 @@ class App extends EventEmitter {
             event.newGuest = win;
             this.addWindow(win, false);
         });
-
         this.mainWindow.on('closed', () => {
             app.quit();
+        });
+        app.on('second-instance', (event, commandLine, workingDirectory) => {
+            // Someone tried to run a second instance, we should focus our window.
+            if (this.mainWindow) {
+                if (this.mainWindow.isMinimized())
+                    this.windowArray.forEach((win) => {
+                        win.restore();
+                    });
+                this.mainWindow.focus();
+            }
         });
     }
 

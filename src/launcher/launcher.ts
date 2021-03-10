@@ -153,9 +153,6 @@ class Launcher {
             '',
             true
         );
-    }
-
-    init() {
         this.window.loadFile('launcher/launcher.html');
     }
 

@@ -88,9 +88,6 @@ class ElectronWindow extends BrowserWindow {
             height: windowSize.height,
             webPreferences: {
                 devTools: true,
-                enableRemoteModule: false,
-                webSecurity: true,
-                allowRunningInsecureContent: false,
                 spellcheck: true,
                 contextIsolation: false, // Enforce false since we are using preload scripts
                 nodeIntegration: nodeIntegration,
@@ -101,12 +98,13 @@ class ElectronWindow extends BrowserWindow {
         });
         this.setBackgroundColor('#393c42');
 
-        this.webContents.once('did-finish-load', () => this.show());
-
-        // Restore if window was maximized
-        if (windowSize.maximized) {
-            this.maximize();
-        }
+        this.webContents.once('did-finish-load', () => {
+            this.show();
+            // Restore if window was maximized
+            if (windowSize.maximized) {
+                this.maximize();
+            }
+        });
 
         // Detect on resize and add to settings
         this.on('resize', () => {
