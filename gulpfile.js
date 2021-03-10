@@ -125,7 +125,7 @@ async function watchDev() {
     gulp.series(buildDev, runElectron)();
     gulp.watch(
         'src/**/*',
-        { delay: 5 * 1000 }, // Poll every 5 seconds
+        { delay: 3 * 1000 }, // Poll every 3 seconds
         gulp.series(buildDev, runElectron)
     );
 }
