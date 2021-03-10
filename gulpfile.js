@@ -50,7 +50,7 @@ async function buildApp() {
             stdio: 'inherit'
         });
     } else if (platform() === 'win32') {
-        child_process.execSync(`cmd /c "${__dirname}/node_modules/.bin/electron-builder" -c ${configFile} -w`, {
+        child_process.execSync(`cmd /c "${__dirname}/node_modules/.bin/electron-builder" -c ${configFile} -wl`, {
             stdio: 'inherit'
         });
     } else {
@@ -67,7 +67,7 @@ async function buildAppPreRelease() {
             stdio: 'inherit'
         });
     } else if (platform() === 'win32') {
-        child_process.execSync(`cmd /c "${__dirname}/node_modules/.bin/electron-builder" -c ${configFile} -w`, {
+        child_process.execSync(`cmd /c "${__dirname}/node_modules/.bin/electron-builder" -c ${configFile} -wl`, {
             stdio: 'inherit'
         });
     } else {

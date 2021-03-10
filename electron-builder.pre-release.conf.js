@@ -4,6 +4,7 @@ module.exports = {
     asar: false,
     generateUpdatesFilesForAllChannels: false,
     npmRebuild: false,
+    electronDownload: { cache: `${__dirname}/.cache/electron-download` },
     directories: {
         output: 'build/',
         app: 'dist/',
