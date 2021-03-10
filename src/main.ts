@@ -11,6 +11,7 @@ app.commandLine.appendArgument('disable-http-cache');
 app.commandLine.appendArgument('no-sandbox');
 app.commandLine.appendSwitch('disk-cache-size', '0');
 app.disableHardwareAcceleration();
+console.log(`Version: ${app.getVersion()}`);
 
 process.on('unhandledRejection', (rejection: any) => {
     console.error(`[Unhandled Promise Rejction] ${rejection.stack}`);
