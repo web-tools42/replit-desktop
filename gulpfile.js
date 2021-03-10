@@ -8,6 +8,7 @@ const htmlmin = require('gulp-htmlmin');
 const cache = require('gulp-cached');
 const electron = require('electron');
 const sucrase = require('@sucrase/gulp-plugin');
+const builder = require('electron-builder');
 
 const tsProject = ts.createProject('tsconfig.json');
 let child = null;
@@ -42,7 +43,47 @@ async function runElectron() {
     return child;
 }
 
-async function copyFilesProd() {
+async function buildApp() {
+    const configFile = 'electron-builder.conf.js';
+    if (platform() === 'darwin') {
+        child_process.execSync(`${__dirname}/node_modules/.bin/electron-builder -c ${configFile} -wml`, {
+            stdio: 'inherit'
+        });
+    } else if (platform() === 'win32') {
+        child_process.execSync(
+            `powershell -File ${__dirname}/node_modules/.bin/electron-builder.ps1 -c ${configFile} -w`,
+            {
+                stdio: 'inherit'
+            }
+        );
+    } else {
+        child_process.execSync(`${__dirname}/node_modules/.bin/electron-builder -c ${configFile} -l`, {
+            stdio: 'inherit'
+        });
+    }
+}
+
+async function buildAppPreRelease() {
+    const configFile = 'electron-builder.pre-release.conf.js';
+    if (platform() === 'darwin') {
+        child_process.execSync(`${__dirname}/node_modules/.bin/electron-builder -c ${configFile} -wml`, {
+            stdio: 'inherit'
+        });
+    } else if (platform() === 'win32') {
+        child_process.execSync(
+            `powershell -File ${__dirname}/node_modules/.bin/electron-builder.ps1 -c ${configFile} -w`,
+            {
+                stdio: 'inherit'
+            }
+        );
+    } else {
+        child_process.execSync(`${__dirname}/node_modules/.bin/electron-builder -c ${configFile} -l`, {
+            stdio: 'inherit'
+        });
+    }
+}
+
+async function buildProd() {
     gulp.src('package.json')
         .pipe(
             jeditor((json) => {
@@ -67,9 +108,6 @@ async function copyFilesProd() {
         )
         .pipe(gulp.dest('dist'));
     gulp.src('logos/replit-logo/512x512.png').pipe(gulp.dest('dist'));
-}
-
-async function buildProd() {
     return new Promise((resolve, reject) => {
         gulp.src('src/**/*.ts')
             .pipe(tsProject())
@@ -89,46 +127,22 @@ async function buildProd() {
     });
 }
 
-async function buildAppPreRelease() {
-    if (platform() === 'darwin') {
-        child_process.execSync('electron-builder -c electron-builder.pre-release.conf.js -wml', { stdio: 'inherit' });
-    } else if (platform() === 'win32') {
-        child_process.execSync('electron-builder -c electron-builder.pre-release.conf.js -w', { stdio: 'inherit' });
-    } else {
-        child_process.execSync('electron-builder -c electron-builder.pre-release.conf.js -l', { stdio: 'inherit' });
-    }
-}
-
-async function buildApp() {
-    if (platform() === 'darwin') {
-        child_process.execSync('electron-builder -c electron-builder.conf.js -wml', { stdio: 'inherit' });
-    } else if (platform() === 'win32') {
-        child_process.execSync('electron-builder -c electron-builder.conf.js -w', { stdio: 'inherit' });
-    } else {
-        child_process.execSync('electron-builder -c electron-builder.conf.js -l', { stdio: 'inherit' });
-    }
-}
-
-async function copyFilesDev() {
-    gulp.src('package.json').pipe(gulp.dest('ts-out'));
-
-    gulp.src('src/**/*.html').pipe(gulp.dest('ts-out'));
-    gulp.src('src/**/*.css').pipe(gulp.dest('ts-out'));
-    gulp.src('src/**/*.js').pipe(gulp.dest('ts-out'));
-    gulp.src('logos/replit-logo/512x512.png').pipe(gulp.dest('ts-out'));
-}
-
 async function watchDev() {
-    gulp.series(buildDev, copyFilesDev, runElectron)();
+    gulp.series(buildDev, runElectron)();
     gulp.watch(
         'src/**/*',
-        { delay: 10 * 100 }, // Poll every 10 seconds
-        gulp.series(buildDev, copyFilesDev, runElectron)
+        { delay: 5 * 1000 }, // Poll every 5 seconds
+        gulp.series(buildDev, runElectron)
     );
 }
 
 async function buildDev() {
     return new Promise((resolve, reject) => {
+        gulp.src('package.json').pipe(gulp.dest('ts-out'));
+        gulp.src('src/**/*.html').pipe(gulp.dest('ts-out'));
+        gulp.src('src/**/*.css').pipe(gulp.dest('ts-out'));
+        gulp.src('src/**/*.js').pipe(gulp.dest('ts-out'));
+        gulp.src('logos/replit-logo/512x512.png').pipe(gulp.dest('ts-out'));
         gulp.src('src/**/*.ts')
             .pipe(cache('buildDev'))
             .pipe(sucrase({ transforms: ['typescript', 'imports'] }))
@@ -139,8 +153,8 @@ async function buildDev() {
 }
 
 module.exports.watchDev = watchDev;
-module.exports.buildAndRun = gulp.series(buildDev, copyFilesDev, runElectron);
-module.exports.buildDev = gulp.series(buildDev, copyFilesDev);
-module.exports.buildProd = gulp.series(buildProd, copyFilesProd);
-module.exports.buildApp = gulp.series(buildProd, copyFilesProd, buildApp);
-module.exports.buildAppPreRelease = gulp.series(buildProd, copyFilesProd, buildAppPreRelease);
+module.exports.buildAndRun = gulp.series(buildDev, runElectron);
+module.exports.buildDev = gulp.task(buildDev);
+module.exports.buildProd = gulp.task(buildProd);
+module.exports.buildApp = gulp.series(buildProd, buildApp);
+module.exports.buildAppPreRelease = gulp.series(buildProd, buildAppPreRelease);
