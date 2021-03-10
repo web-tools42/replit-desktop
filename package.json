@@ -34,7 +34,7 @@
     "write-file-atomic": "^3.0.3"
   },
   "devDependencies": {
-    "@octokit/types": "^3.0.3",
+    "@octokit/types": "^6.12.2",
     "@sucrase/gulp-plugin": "^2.0.0",
     "@types/discord-rpc": "^3.0.4",
     "@types/gulp": "^4.0.8",
