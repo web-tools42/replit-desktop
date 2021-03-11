@@ -96,7 +96,8 @@ class ElectronWindow extends BrowserWindow {
                 webSecurity: true,
                 nodeIntegration: nodeIntegration,
                 preload: preload,
-                webviewTag: webviewTag
+                webviewTag: webviewTag,
+                backgroundThrottling: false
             },
             icon: `${__dirname}/512x512.png`
         });
