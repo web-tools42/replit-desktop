@@ -23,9 +23,21 @@ async function runElectron() {
         child.kill();
     }
 
-    child = child_process.spawn(electron, ['--no-sandbox', '--trace-warnings', '--inspect=5858', '.'], {
-        cwd: './ts-out'
-    });
+    child = child_process.spawn(
+        electron,
+        [
+            '--no-sandbox',
+            '--trace-warnings',
+            '--inspect=5858',
+            '--enable-logging',
+            '--disable-http-cache',
+            '-v=debug',
+            '.'
+        ],
+        {
+            cwd: './ts-out'
+        }
+    );
 
     child.on('error', function (err) {
         errored = true;
