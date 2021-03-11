@@ -35,16 +35,21 @@ class App extends EventEmitter {
                 this.clearCookies(true);
                 ipcMain.once('authDone', () => this.mainWindow.loadURL('https://replit.com/~'));
             }
-            const win = new ElectronWindow(
+            const loginWin = new ElectronWindow(
                 {
                     height: 900,
                     width: 1600
                 },
                 oauth ? 'auth.js' : ''
             );
-            win.loadURL(url, { userAgent: 'chrome' });
-            event.newGuest = win;
-            this.addWindow(win, false);
+            loginWin.loadURL(url, {
+                userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:87.0) Gecko/20100101 Firefox/87.0'
+            });
+            loginWin.webContents.setUserAgent(
+                'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:87.0) Gecko/20100101 Firefox/87.0'
+            );
+            event.newGuest = loginWin;
+            this.addWindow(loginWin, false);
         });
         this.mainWindow.on('closed', () => {
             app.quit();
@@ -76,10 +81,11 @@ class App extends EventEmitter {
         }
         [...this.windowArray.values()].forEach((window) => {
             // log in fix
-            //if (window.webContents && /repl.it\/@(.*)\//i.test(window.webContents.getURL())) {
-            window.webContents.userAgent = userAgent;
-            window.reload();
-            //}
+            const winUrl = window.webContents.getURL();
+            if (winUrl.includes('replit') || winUrl.includes('repl.it')) {
+                window.webContents.userAgent = userAgent;
+                window.reload();
+            }
         });
     }
 

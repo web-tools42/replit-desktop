@@ -89,7 +89,9 @@ class ElectronWindow extends BrowserWindow {
             webPreferences: {
                 devTools: true,
                 spellcheck: true,
-                contextIsolation: false, // Enforce false since we are using preload scripts
+                contextIsolation: false, // Enforce false since we are using preload scripts,
+                enableRemoteModule: false,
+                webSecurity: true,
                 nodeIntegration: nodeIntegration,
                 preload: preload,
                 webviewTag: webviewTag
