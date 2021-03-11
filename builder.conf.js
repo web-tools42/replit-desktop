@@ -6,7 +6,7 @@ module.exports = {
     electronDownload: { cache: `${__dirname}/.cache/electron-download` },
     directories: {
         output: 'build/',
-        app: 'dist/',
+        app: 'ts-out-prod/',
         buildResources: __dirname
     },
     mac: {

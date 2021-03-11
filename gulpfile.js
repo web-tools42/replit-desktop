@@ -110,7 +110,7 @@ async function buildProd() {
                 return json;
             })
         )
-        .pipe(gulp.dest('dist'));
+        .pipe(gulp.dest('ts-out-prod'));
 
     gulp.src('src/**/@(*.html||*.css)')
         .pipe(
@@ -120,8 +120,8 @@ async function buildProd() {
                 collapseWhitespace: true
             })
         )
-        .pipe(gulp.dest('dist'));
-    gulp.src('logos/replit-logo/512x512.png').pipe(gulp.dest('dist'));
+        .pipe(gulp.dest('ts-out-prod'));
+    gulp.src('logos/replit-logo/512x512.png').pipe(gulp.dest('ts-out-prod'));
     return new Promise((resolve, reject) => {
         gulp.src('src/**/*.ts')
             .pipe(tsProject())
@@ -136,7 +136,7 @@ async function buildProd() {
             .on('error', (e) => {
                 reject;
             })
-            .pipe(gulp.dest('dist'))
+            .pipe(gulp.dest('ts-out-prod'))
             .on('end', resolve);
     });
 }
@@ -145,7 +145,7 @@ async function watchDev() {
     gulp.series(buildDev, runElectron)();
     gulp.watch(
         'src/**/*',
-        { delay: 3 * 1000 }, // Poll every 3 seconds
+        { delay: 5 * 1000 }, // Poll every 5 seconds
         gulp.series(buildDev, runElectron)
     );
 }

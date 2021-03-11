@@ -8,8 +8,8 @@
 Thumbs.db
 
 # dist
-dist
 ts-out
+ts-out-prod
 build
 
 # logos
