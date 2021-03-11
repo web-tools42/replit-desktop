@@ -72,12 +72,12 @@ class DiscordHandler {
                 }
             );
         } else if (spliturl[0][0] === '@' && spliturl[1] !== undefined) {
-            this.setEditing(this.window).then(
+            this.setEditing(this.window, spliturl).then(
                 (res) => {
                     this.client
                         .setActivity({
                             details: `Editing: ${res.fileName}`,
-                            state: `${url} `,
+                            state: `Repl: ${res.state}`,
                             startTimestamp,
                             smallImageKey: 'logo-bg',
                             smallImageText: 'Replit',
@@ -163,14 +163,16 @@ class DiscordHandler {
     }
 
     async setEditing(
-        windowObj: ElectronWindow
+        windowObj: ElectronWindow,
+        spliturl: string[]
     ): Promise<{
         fileName: string;
         largeImageKey: string;
         largeImageText: string;
+        state: string;
     }> {
         let {
-            Personal,
+            personal,
             activeFile,
             largeImageText,
             replType
@@ -182,19 +184,19 @@ class DiscordHandler {
                 () => {
                     try {
                         return window.store && document.querySelector('img.jsx-2652062152') ? {
-                            "Personal": 'true',
+                            "personal": 'true',
                             "activeFile": window.store.getState().activeFile,
                             "largeImageText": window.store.getState().plugins.fs.state.repl.language,
                             "replType": document.querySelector('img.jsx-2652062152').title,
                         } : {
-                            "Personal": 'false',
+                            "personal": 'false',
                             "activeFile": window.location.pathname,
                             "largeImageText": 'Viewing Another Users Repl.',
                             "replType": document.querySelector('.jsx-3298514671.heading').innerText,
                         };
                     } catch (err) {
                         return {
-                            "Personal": 'unknown',
+                            "personal": 'unknown',
                             "activeFile": 'unknown',
                             "largeImageText": 'unknown',
                             "replType": 'text',
@@ -204,7 +206,7 @@ class DiscordHandler {
             )();
             `
         );
-        if (Personal == 'true') {
+        if (personal == 'true') {
             for (const [key, value] of Object.entries(languages)) {
                 if (value.test(activeFile) && displayNameToIcon[key]) {
                     replType = key;
@@ -212,10 +214,13 @@ class DiscordHandler {
                 }
             }
         }
+        if (activeFile == undefined) activeFile = 'unknown';
+        const url = spliturl[1].replace(/(#)\w+.*/, '');
         return {
             fileName: activeFile,
             largeImageKey: displayNameToIcon[replType],
-            largeImageText: largeImageText
+            largeImageText: largeImageText,
+            state: url
         };
     }
 }
