@@ -1,5 +1,5 @@
 import { ElectronWindow, handleExternalLink, promptYesNoSync } from '../common';
-import { app, Cookie, ipcMain, session, MenuItem, screen } from 'electron';
+import { app, Cookie, ipcMain, session, MenuItem } from 'electron';
 import { PopoutHandler } from './popoutHandler/popoutHandler';
 import { ThemeHandler } from './themeHandler/themeHandler';
 import { DiscordHandler } from './discordHandler';

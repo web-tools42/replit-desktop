@@ -50,7 +50,8 @@ class ElectronWindow extends BrowserWindow {
             restoreSize = false;
         }
 
-        if (options.center) restorePosition = false;
+        // If position exist in options, keep it
+        if (options.center || options.x || options.y) restorePosition = false;
 
         if (restoreSize) {
             // check if window size settings exist
