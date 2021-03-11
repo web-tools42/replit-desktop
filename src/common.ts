@@ -194,7 +194,7 @@ interface LauncherStatus {
     percentage?: string;
 }
 
-type GithubReleaseResponse = Endpoints['GET /repos/:owner/:repo/releases/latest']['response']['data'];
+type GithubReleaseResponse = Endpoints['GET /repos/{owner}/{repo}/releases/latest']['response']['data'];
 
 function capitalize(str: string) {
     return str.replace(/(^|\s)([a-z])/g, (p1: String, p2: String) => {
