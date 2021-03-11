@@ -1,5 +1,5 @@
 node_modules/
-ts-out/
+ts-out*
 dist/
 build/
 tsconfig.json
