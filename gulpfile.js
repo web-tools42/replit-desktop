@@ -44,7 +44,7 @@ async function runElectron() {
 }
 
 async function buildApp() {
-    const configFile = 'electron-builder.conf.js';
+    const configFile = 'builder.conf.js';
     if (platform() === 'darwin') {
         child_process.execSync(`${__dirname}/node_modules/.bin/electron-builder -c ${configFile} -wml`, {
             stdio: 'inherit'
@@ -61,7 +61,7 @@ async function buildApp() {
 }
 
 async function buildAppPreRelease() {
-    const configFile = 'electron-builder.pre-release.conf.js';
+    const configFile = 'builder-pre.conf.js';
     if (platform() === 'darwin') {
         child_process.execSync(`${__dirname}/node_modules/.bin/electron-builder -c ${configFile} -wml`, {
             stdio: 'inherit'
@@ -72,6 +72,26 @@ async function buildAppPreRelease() {
         });
     } else {
         child_process.execSync(`${__dirname}/node_modules/.bin/electron-builder -c ${configFile} -l`, {
+            stdio: 'inherit'
+        });
+    }
+}
+
+async function buildAppDir() {
+    const configFile = 'builder-pre.conf.js';
+    if (platform() === 'darwin') {
+        child_process.execSync(`${__dirname}/node_modules/.bin/electron-builder -c ${configFile} -wml --dir`, {
+            stdio: 'inherit'
+        });
+    } else if (platform() === 'win32') {
+        child_process.execSync(
+            `cmd /c "${__dirname}/node_modules/.bin/electron-builder.cmd" -c ${configFile} -w --dir`,
+            {
+                stdio: 'inherit'
+            }
+        );
+    } else {
+        child_process.execSync(`${__dirname}/node_modules/.bin/electron-builder -c ${configFile} -l --dir`, {
             stdio: 'inherit'
         });
     }
@@ -152,3 +172,4 @@ module.exports.buildDev = gulp.task(buildDev);
 module.exports.buildProd = gulp.task(buildProd);
 module.exports.buildApp = gulp.series(buildProd, buildApp);
 module.exports.buildAppPreRelease = gulp.series(buildProd, buildAppPreRelease);
+module.exports.buildAppDir = gulp.series(buildProd, buildAppDir);
