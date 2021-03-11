@@ -28,11 +28,17 @@ class SettingHandler {
     private ensureFileSync() {
         try {
             fs.statSync(path.dirname(this.settingsFilePath));
+        } catch (err) {
+            if (err.code == 'ENOENT') {
+                console.debug('Creating folder');
+                fs.mkdirSync(path.dirname(this.settingsFilePath));
+            }
+        }
+        try {
             fs.statSync(this.settingsFilePath);
         } catch (err) {
             if (err.code == 'ENOENT') {
                 console.debug('Creating settings file');
-                fs.mkdirSync(path.dirname(this.settingsFilePath));
                 this.saveSettings();
             } else throw err;
         }
