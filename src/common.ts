@@ -5,7 +5,7 @@ import {
     MessageBoxReturnValue,
     shell,
     screen,
-    Size
+    session
 } from 'electron';
 import { Endpoints } from '@octokit/types';
 import { platform } from 'os';
@@ -88,6 +88,7 @@ class ElectronWindow extends BrowserWindow {
             width: windowSize.width,
             height: windowSize.height,
             webPreferences: {
+                session: session.fromPartition('default', { cache: false }),
                 devTools: true,
                 spellcheck: true,
                 contextIsolation: false, // Enforce false since we are using preload scripts,
