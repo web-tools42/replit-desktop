@@ -16,7 +16,7 @@ module.exports = {
         icon: 'logos/replit-logo/icns/512x512.icns'
     },
     win: {
-        target: 'zip',
+        target: [{ target: 'zip' }, { target: 'portable' }],
         icon: 'logos/replit-logo/logo-clear.png'
     },
     linux: {
