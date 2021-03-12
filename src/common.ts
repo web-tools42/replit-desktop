@@ -88,7 +88,7 @@ class ElectronWindow extends BrowserWindow {
             width: windowSize.width,
             height: windowSize.height,
             webPreferences: {
-                session: session.fromPartition('default', { cache: false }),
+                session: session.fromPartition('persist:default', { cache: false }),
                 devTools: true,
                 spellcheck: true,
                 contextIsolation: false, // Enforce false since we are using preload scripts,
