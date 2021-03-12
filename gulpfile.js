@@ -29,7 +29,7 @@ async function runElectron() {
             '--no-sandbox',
             '--trace-warnings',
             '--inspect=5858',
-            '--enable-logging',
+            //'--enable-logging',
             '--disable-http-cache',
             '-v=debug',
             '.'
