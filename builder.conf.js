@@ -10,13 +10,16 @@ module.exports = {
         buildResources: __dirname
     },
     mac: {
-        target: 'dmg',
+        target: [
+            { target: 'dmg', arch: ['universal'] },
+            { target: 'zip', arch: ['universal'] }
+        ],
         darkModeSupport: true,
         icon: 'logos/replit-logo/icns/512x512.icns'
     },
     dmg: { writeUpdateInfo: false },
     win: {
-        target: 'nsis',
+        target: [{ target: 'nsis' }, { target: 'zip' }],
         icon: 'logos/replit-logo/logo-clear.png'
     },
     nsis: {
@@ -28,9 +31,10 @@ module.exports = {
         createDesktopShortcut: true
     },
     linux: {
-        target: {
-            target: 'deb'
-        },
+        target: [
+            { target: 'deb', arch: ['x64', 'armv7l', 'arm64'] },
+            { target: 'tar.gz', arch: ['x64', 'armv7l', 'arm64'] }
+        ],
         //icon: 'src/assets/replit-logo/256x256.png',
         maintainer: 'leon332157',
         category: 'Development'
