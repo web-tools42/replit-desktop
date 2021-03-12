@@ -179,9 +179,9 @@ This action is NOT reversible!`
             if (settings.get('enable-ace')) this.toggleAce();
         });
 
-        this.themeHandler.addTheme(window);
+        window.addTheme();
 
-        window.webContents.on('did-finish-load', () => this.themeHandler.addTheme(window));
+        window.webContents.on('did-finish-load', () => window.addTheme());
 
         window.on('close', () => {
             if (this.windowArray.has(window.id)) this.windowArray.delete(window.id);

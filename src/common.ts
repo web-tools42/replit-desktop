@@ -165,6 +165,39 @@ class ElectronWindow extends BrowserWindow {
             return '';
         }
     }
+
+    addTheme(code: string = 'default') {
+        if (code == 'default') {
+            if (settings.has('theme')) {
+                code = <string>settings.get('theme').code;
+            } else return;
+        }
+        settings.set('theme', {
+            code: code
+        });
+        if (!code) return;
+        this.webContents.executeJavaScript(
+            `{
+                let p1 = document.getElementById("reflux-theme"),
+                    p2 = document.getElementById("reflux-display");
+                if (p1 && p2) {
+                    p1.remove();
+                    p2.remove();
+                }
+            }`,
+            true
+        );
+        this.webContents.executeJavaScript(this.themeProcessor(code), true);
+    }
+
+    themeProcessor(theme: string) {
+        return theme
+            .replace('javascript:', '')
+            .replace(/\n/g, '\\n')
+            .replace(/alert/g, 'console.log')
+            .replace(/confirm\(([^)]+)\);/gim, '(() => true)();')
+            .replace(/target.insertAdjacentHTML\(([^)]+)\);/gim, '');
+    }
 }
 
 interface Version {
