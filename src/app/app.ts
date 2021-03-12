@@ -95,7 +95,10 @@ class App extends EventEmitter {
         const allCookies: Array<Cookie> = await session.defaultSession.cookies.get({});
         for (let x = 0; x < allCookies.length; x++) {
             const cookie: Cookie = allCookies[x];
-            if ((oauthOnly && !cookie.domain.includes('replit.com')) || !oauthOnly) {
+            if (
+                (oauthOnly && !cookie.domain.includes('replit.com') && !cookie.domain.includes('repl.it')) ||
+                !oauthOnly
+            ) {
                 await session.defaultSession.cookies.remove(
                     `https://${cookie.domain.charAt(0) === '.' ? 'www' : ''}${cookie.domain}${cookie.path}`,
                     cookie.name
