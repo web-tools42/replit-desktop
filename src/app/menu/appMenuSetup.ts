@@ -85,7 +85,7 @@ function appMenuSetup(mainApp: App, themeHandler: ThemeHandler, popoutHandler: P
                 {
                     label: 'Clear Cookies',
                     click() {
-                        mainApp.clearCookies(false);
+                        mainApp.clearCookies(false, false, true);
                     }
                 },
                 {

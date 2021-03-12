@@ -32,7 +32,7 @@ class App extends EventEmitter {
             let oauth = url.includes('/auth/google/get?close=1') || url.includes('/auth/github/get?close=1');
             event.preventDefault();
             if (oauth) {
-                this.clearCookies(true);
+                this.clearCookies(true, true);
                 ipcMain.once('authDone', () => this.mainWindow.loadURL('https://replit.com/~'));
             }
             const loginWin = new ElectronWindow(
@@ -89,24 +89,37 @@ class App extends EventEmitter {
         });
     }
 
-    async clearCookies(oauthOnly: boolean, Prompt: boolean = true) {
-        if (!oauthOnly && Prompt && !promptYesNoSync('Are you sure you want to clear all cookies?', 'Confirm')) return;
-
-        const allCookies: Array<Cookie> = await session.defaultSession.cookies.get({});
+    async clearCookies(oauthOnly: boolean, replitOnly: boolean, prompt: boolean = false) {
+        if (!oauthOnly && prompt && !promptYesNoSync('Are you sure you want to clear all cookies?', 'Confirm')) return;
+        const session = this.mainWindow.webContents.session;
+        const allCookies: Array<Cookie> = await session.cookies.get({});
         for (let x = 0; x < allCookies.length; x++) {
             const cookie: Cookie = allCookies[x];
-            if (
-                (oauthOnly && !cookie.domain.includes('replit.com') && !cookie.domain.includes('repl.it')) ||
-                !oauthOnly
-            ) {
-                await session.defaultSession.cookies.remove(
+            if (replitOnly) {
+                if (cookie.domain.includes('replit.com') || cookie.domain.includes('repl.it'))
+                    await session.cookies.remove(
+                        `https://${cookie.domain.charAt(0) === '.' ? 'www' : ''}${cookie.domain}${cookie.path}`,
+                        cookie.name
+                    );
+            } else if (oauthOnly) {
+                if (
+                    cookie.domain.includes('github') ||
+                    cookie.domain.includes('google') ||
+                    cookie.domain.includes('facebook')
+                )
+                    await session.cookies.remove(
+                        `https://${cookie.domain.charAt(0) === '.' ? 'www' : ''}${cookie.domain}${cookie.path}`,
+                        cookie.name
+                    );
+            } else {
+                await session.cookies.remove(
                     `https://${cookie.domain.charAt(0) === '.' ? 'www' : ''}${cookie.domain}${cookie.path}`,
                     cookie.name
                 );
-                session.defaultSession.flushStorageData();
             }
+            session.flushStorageData();
         }
-        if (!oauthOnly) {
+        if (prompt) {
             [...this.windowArray.values()].forEach((win) => {
                 win.reload();
             });
@@ -177,7 +190,7 @@ This action is NOT reversible!`
 
         window.webContents.on('will-navigate', (e, url) => {
             // Deal with the logout
-            if (url == 'https://replit.com/logout') this.clearCookies(false, false);
+            if (url == 'https://replit.com/logout') this.clearCookies(false, true, false);
             if (handleExt) handleExternalLink(e, window, url);
             if (settings.get('enable-ace')) this.toggleAce();
         });
