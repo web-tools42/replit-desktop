@@ -1,6 +1,6 @@
 {
   "name": "replit-desktop",
-  "version": "3.0.0-alpha8",
+  "version": "3.0.0-beta1",
   "description": "desktop version of replit",
   "keywords": [
     "electron",
