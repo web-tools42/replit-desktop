@@ -8,6 +8,7 @@ import {
     Version
 } from '../common';
 import fs = require('fs');
+import path = require('path');
 import fetch from 'node-fetch';
 import { EventEmitter } from 'events';
 import semver = require('semver');
@@ -19,7 +20,7 @@ class Updater extends EventEmitter {
         linuxUrl: ''
     };
     private appVersion: Version;
-    private downloadPath: string = `${app.getPath('appData')}updaterDownload/`;
+    private downloadPath: string = path.join(app.getPath('temp'), 'replit-desktop', 'updaterDownload/');
     private downloadFilePath: string;
     private launcher: Launcher;
 

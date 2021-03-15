@@ -5,12 +5,6 @@ import { App } from './app/app';
 import path = require('path');
 
 app.setName('Replit Desktop');
-app.setPath('appData', path.join(app.getPath('home'), '.replit', 'appData'));
-app.setPath('userData', path.join(app.getPath('home'), '.replit', 'userData'));
-//app.commandLine.appendArgument('disable-http-cache');
-//app.commandLine.appendSwitch('disk-cache-dir', 'null');
-//app.commandLine.appendSwitch('disk-cache-size', '0');
-
 app.disableHardwareAcceleration();
 console.log(`Version: ${app.getVersion()}`);
 
