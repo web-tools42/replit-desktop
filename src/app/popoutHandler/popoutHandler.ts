@@ -1,5 +1,6 @@
-import { ElectronWindow } from '../../common';
 import path from 'path';
+
+import { ElectronWindow } from '../../common';
 
 class PopoutHandler {
     constructor() {}

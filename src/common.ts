@@ -1,14 +1,11 @@
 import {
-    BrowserWindow,
-    BrowserWindowConstructorOptions,
-    dialog,
-    MessageBoxReturnValue,
-    shell,
-    screen,
-    session
+    BrowserWindow, BrowserWindowConstructorOptions, dialog, MessageBoxReturnValue, screen, session,
+    shell
 } from 'electron';
-import { Endpoints } from '@octokit/types';
 import { platform } from 'os';
+
+import { Endpoints } from '@octokit/types';
+
 import { settings } from './app/settingHandler';
 
 interface WindowSize {

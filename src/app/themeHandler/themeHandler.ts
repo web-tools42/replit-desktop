@@ -1,6 +1,7 @@
+import { ipcMain } from 'electron';
+
 import { ElectronWindow } from '../../common';
 import { settings } from '../settingHandler';
-import { ipcMain } from 'electron';
 
 class ThemeHandler {
     public themeWindow: ElectronWindow;

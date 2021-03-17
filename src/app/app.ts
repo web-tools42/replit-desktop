@@ -1,12 +1,13 @@
-import { ElectronWindow, handleExternalLink, promptYesNoSync } from '../common';
-import { app, Cookie, ipcMain, session, MenuItem } from 'electron';
-import { PopoutHandler } from './popoutHandler/popoutHandler';
-import { ThemeHandler } from './themeHandler/themeHandler';
-import { DiscordHandler } from './discordHandler';
-import { settings } from './settingHandler';
+import { app, Cookie, ipcMain, MenuItem, session } from 'electron';
 import contextMenu from 'electron-context-menu';
-import { appMenuSetup } from './menu/appMenuSetup';
 import { EventEmitter } from 'events';
+
+import { ElectronWindow, handleExternalLink, promptYesNoSync } from '../common';
+import { DiscordHandler } from './discordHandler';
+import { appMenuSetup } from './menu/appMenuSetup';
+import { PopoutHandler } from './popoutHandler/popoutHandler';
+import { settings } from './settingHandler';
+import { ThemeHandler } from './themeHandler/themeHandler';
 
 class App extends EventEmitter {
     public readonly mainWindow: ElectronWindow;

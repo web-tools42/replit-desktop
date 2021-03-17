@@ -1,7 +1,10 @@
-import { Launcher, Updater } from './launcher/launcher';
 import { app } from 'electron';
-import { PLATFORM, promptYesNoSync } from './common';
+
 import { App } from './app/app';
+import { PLATFORM, promptYesNoSync } from './common';
+import { Launcher } from './launcher/launcher';
+import { Updater } from './launcher/updater';
+
 import path = require('path');
 
 app.setName('Replit Desktop');

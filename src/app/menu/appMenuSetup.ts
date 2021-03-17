@@ -1,9 +1,12 @@
-import { clipboard, Menu, MenuItemConstructorOptions, MenuItem, shell, BrowserWindow } from 'electron';
+import {
+    BrowserWindow, clipboard, Menu, MenuItem, MenuItemConstructorOptions, shell
+} from 'electron';
+
 import { ElectronWindow, promptYesNoSync, selectInput } from '../../common';
-import { ThemeHandler } from '../themeHandler/themeHandler';
 import { App } from '../app';
-import { settings } from '../settingHandler';
 import { PopoutHandler } from '../popoutHandler/popoutHandler';
+import { settings } from '../settingHandler';
+import { ThemeHandler } from '../themeHandler/themeHandler';
 
 function appMenuSetup(mainApp: App, themeHandler: ThemeHandler, popoutHandler: PopoutHandler): Menu {
     const template: MenuItemConstructorOptions[] = [
