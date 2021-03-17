@@ -1,6 +1,4 @@
-import {
-    BrowserWindow, clipboard, Menu, MenuItem, MenuItemConstructorOptions, shell
-} from 'electron';
+import { BrowserWindow, clipboard, Menu, MenuItem, MenuItemConstructorOptions, shell } from 'electron';
 
 import { ElectronWindow, promptYesNoSync, selectInput } from '../../common';
 import { App } from '../app';
