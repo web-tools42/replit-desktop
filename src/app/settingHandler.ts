@@ -1,6 +1,6 @@
 import { app } from 'electron';
 import fs from 'fs';
-import path from 'path';
+import path = require('path');
 import writeFileAtomic from 'write-file-atomic';
 
 class SettingHandler {
@@ -9,7 +9,7 @@ class SettingHandler {
     public settings: Map<string, any>;
 
     constructor() {
-        this.settingsFilePath = path.join(app.getPath('home'), '.replit', 'settings.json');
+        this.settingsFilePath = path.join(app.getPath('userData'), 'settings.json');
         // Load the settings
         this.settings = new Map();
         this.ensureFileSync();
