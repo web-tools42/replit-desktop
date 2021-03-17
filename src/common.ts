@@ -1,5 +1,10 @@
 import {
-    BrowserWindow, BrowserWindowConstructorOptions, dialog, MessageBoxReturnValue, screen, session,
+    BrowserWindow,
+    BrowserWindowConstructorOptions,
+    dialog,
+    MessageBoxReturnValue,
+    screen,
+    session,
     shell
 } from 'electron';
 import { platform } from 'os';
