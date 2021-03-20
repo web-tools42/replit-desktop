@@ -15,7 +15,7 @@ class Updater extends EventEmitter {
         linuxUrl: ''
     };
     private appVersion: Version;
-    private downloadPath: string = `${app.getPath('appData')}updaterDownload/`;
+    private downloadPath: string = `${app.getPath('userData')}updaterDownload/`;
     private downloadFilePath: string;
     private launcher: Launcher;
 
