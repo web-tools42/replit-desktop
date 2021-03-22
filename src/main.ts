@@ -1,7 +1,7 @@
 import { app } from 'electron';
 
 import { App } from './app/app';
-import { PLATFORM, promptYesNoSync } from './common';
+import { promptYesNoSync } from './common';
 import { Launcher } from './launcher/launcher';
 import { Updater } from './launcher/updater';
 
@@ -69,7 +69,7 @@ async function initUpdater() {
         ) {
             launcher.updateStatus({ text: 'Downloading Update' });
             updater.once('download-finished', updater.afterDownload);
-            switch (PLATFORM) {
+            switch (process.platform) {
                 case 'win32':
                     await updater.downloadUpdate(updater.downloadUrls.windowsUrl);
                     break;

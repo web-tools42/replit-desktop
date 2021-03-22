@@ -7,7 +7,6 @@ import {
     session,
     shell
 } from 'electron';
-import { platform } from 'os';
 
 import { Endpoints } from '@octokit/types';
 
@@ -281,7 +280,6 @@ function promptYesNoSync(message: string, title: string, detail?: string): numbe
     });
 }
 
-const PLATFORM = platform();
 export {
     Version,
     CheckUpdateResult,
@@ -292,7 +290,6 @@ export {
     DownloadUpdateResult,
     handleExternalLink,
     selectInput,
-    PLATFORM,
     promptYesNoSync,
     capitalize
 };
