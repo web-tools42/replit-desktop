@@ -28,6 +28,7 @@
     "lint": "eslint \"**/*.{js,ts,json}\" --fix"
   },
   "dependencies": {
+    "@mdslab/wstun": "^1.0.11",
     "discord-rpc": "^3.2.0",
     "electron-context-menu": "^2.1.0",
     "node-fetch": "^2.6.1",
