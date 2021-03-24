@@ -87,8 +87,7 @@ async function initUpdater() {
 }
 
 app.on('window-all-closed', () => {
-    app.quit();
-    process.exit();
+    app.exit();
 });
 app.once('ready', () => {
     initLauncher();
