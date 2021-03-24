@@ -1,6 +1,6 @@
 {
   "name": "replit-desktop",
-  "productName":"Replit Desktop",
+  "productName": "Replit Desktop",
   "version": "3.0.0-beta2",
   "description": "Desktop version of replit",
   "keywords": [
@@ -31,23 +31,23 @@
     "discord-rpc": "^3.2.0",
     "electron-context-menu": "^2.1.0",
     "node-fetch": "^2.6.1",
-    "semver": "^7.3.4",
+    "semver": "^7.3.5",
     "write-file-atomic": "^3.0.3"
   },
   "devDependencies": {
     "@octokit/types": "^6.12.2",
     "@sucrase/gulp-plugin": "^2.0.0",
-    "@types/discord-rpc": "^3.0.4",
+    "@types/discord-rpc": "^3.0.5",
     "@types/gulp": "^4.0.8",
-    "@types/node": "^14.14.31",
+    "@types/node": "^14.14.35",
     "@types/node-fetch": "^2.5.8",
     "@types/semver": "^7.3.4",
     "@types/write-file-atomic": "^3.0.0",
-    "@typescript-eslint/eslint-plugin": "^4.15.1",
-    "@typescript-eslint/parser": "^4.15.1",
-    "electron": "^12.0.1",
+    "@typescript-eslint/eslint-plugin": "^4.19.0",
+    "@typescript-eslint/parser": "^4.19.0",
+    "electron": "^12.0.2",
     "electron-builder": "^22.10.5",
-    "eslint": "^7.20.0",
+    "eslint": "^7.22.0",
     "eslint-config-prettier": "^7.2.0",
     "eslint-plugin-json-format": "^2.0.1",
     "eslint-plugin-prettier": "^3.3.1",
@@ -59,7 +59,7 @@
     "gulp-typescript": "^6.0.0-alpha.1",
     "prettier": "^2.2.1",
     "sucrase": "^3.17.1",
-    "typescript": "^4.1.5",
+    "typescript": "^4.2.3",
     "zip-local": "^0.3.4"
   },
   "email": "leon331257@gmail.com"
