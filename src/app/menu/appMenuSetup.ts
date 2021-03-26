@@ -5,8 +5,14 @@ import { App } from '../app';
 import { PopoutHandler } from '../popoutHandler/popoutHandler';
 import { settings } from '../settingHandler';
 import { ThemeHandler } from '../themeHandler/themeHandler';
+import { TunnelHandler } from '../tunnelHandler/tunnelHandler';
 
-function appMenuSetup(mainApp: App, themeHandler: ThemeHandler, popoutHandler: PopoutHandler): Menu {
+function appMenuSetup(
+    mainApp: App,
+    themeHandler: ThemeHandler,
+    popoutHandler: PopoutHandler,
+    tunnelHandler: TunnelHandler
+): Menu {
     const template: MenuItemConstructorOptions[] = [
         {
             label: 'App',
@@ -27,6 +33,12 @@ function appMenuSetup(mainApp: App, themeHandler: ThemeHandler, popoutHandler: P
                             }
                         }
                     ]
+                },
+                {
+                    label: 'Open Tunnel Window',
+                    click() {
+                        tunnelHandler.openWindow();
+                    }
                 },
                 {
                     label: 'Links',

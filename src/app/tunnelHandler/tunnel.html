@@ -1,0 +1,45 @@
+<html>
+    <head>
+        <title>Connect to a repl</title>
+        <style>
+            body {
+                background-color: #393c42;
+            }
+            #content {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+            }
+            #url-input {
+                border-radius: 5px;
+                width: 50%;
+            }
+            #connect-btn {
+                margin: 10px;
+            }
+            .text {
+                color: #ffffff;
+                font-family:'Courier New', Courier, monospace;
+            }
+            .red {
+                color:#ff4040
+            }
+        </style>
+    </head>
+    <body>
+        <div id="content">
+            <h3 class="text">WS-Tunnel</h3>
+            <input type="text" id="url-input" placeholder="Input repl URL" />
+            <h4 class="text red" id="status">Not Connected</h4>
+            <button id="connect-btn" onclick="connect()">Connect</button>
+        </div>
+        <script>
+            console.log(ipcMain)
+            const status = document.getElementById('status');
+            function updateStatus() {
+                
+            }
+        </script>
+    </body>
+</html>

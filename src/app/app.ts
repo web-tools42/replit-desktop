@@ -8,12 +8,14 @@ import { appMenuSetup } from './menu/appMenuSetup';
 import { PopoutHandler } from './popoutHandler/popoutHandler';
 import { settings } from './settingHandler';
 import { ThemeHandler } from './themeHandler/themeHandler';
+import { TunnelHandler } from './tunnelHandler/tunnelHandler';
 
 class App extends EventEmitter {
     public readonly mainWindow: ElectronWindow;
     public readonly themeHandler: ThemeHandler;
     public readonly popoutHandler: PopoutHandler;
     public readonly discordHandler: DiscordHandler;
+    public readonly tunnelHandler: TunnelHandler;
     protected windowArray: Map<number, ElectronWindow>;
 
     constructor() {
@@ -23,10 +25,11 @@ class App extends EventEmitter {
         this.discordHandler = new DiscordHandler(this.mainWindow);
         this.themeHandler = new ThemeHandler(this.mainWindow);
         this.popoutHandler = new PopoutHandler();
+        this.tunnelHandler = new TunnelHandler();
 
         this.addWindow(this.mainWindow);
         if (!settings.has('enable-ace')) settings.set('enable-ace', false);
-        app.applicationMenu = appMenuSetup(this, this.themeHandler, this.popoutHandler);
+        app.applicationMenu = appMenuSetup(this, this.themeHandler, this.popoutHandler, this.tunnelHandler);
 
         // Handle The Login
         this.mainWindow.webContents.on('new-window', (event, url) => {

@@ -75,6 +75,9 @@ class ElectronWindow extends BrowserWindow {
         }
 
         console.log(`preload: ${__dirname}/preload/${preload}`);
+        if (!preload.includes('.')) {
+            preload = `${preload}.js`;
+        }
         if (preload.length > 0 && !preload.includes(__dirname) && !preload.startsWith('./')) {
             preload = `${__dirname}/preload/${preload}`;
         }
