@@ -7,14 +7,17 @@ class TunnelHandler extends EventEmitter {
     public tunWindow: ElectronWindow;
     constructor() {
         super();
-        ipcMain.handle('connect', this.connectWs);
+        ipcMain.handle('tun-connect', this.connectWs);
     }
     connectWs(e: IpcMainInvokeEvent, url: string, remotePort: number, localPort: number) {
         startClient(url, `127.0.0.1:${remotePort}`, localPort);
     }
     openWindow() {
-        this.tunWindow = new ElectronWindow({}, 'tunnel');
+        this.tunWindow = new ElectronWindow({}, '', true);
         this.tunWindow.loadFile(`${__dirname}/tunnel.html`);
+    }
+    sendStatus(status: string) {
+        ipcMain.emit('tun-status-update', status);
     }
 }
 export { TunnelHandler };

@@ -73,14 +73,13 @@ class ElectronWindow extends BrowserWindow {
                 settings.set('window-position', windowPosition);
             }
         }
-
-        console.log(`preload: ${__dirname}/preload/${preload}`);
-        if (!preload.includes('.')) {
+        if (!preload.includes('.') && preload !== '') {
             preload = `${preload}.js`;
         }
         if (preload.length > 0 && !preload.includes(__dirname) && !preload.startsWith('./')) {
             preload = `${__dirname}/preload/${preload}`;
         }
+        console.log(`preload: ${__dirname}/preload/${preload}`);
 
         super({
             ...options,
