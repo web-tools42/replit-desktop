@@ -3,20 +3,23 @@ import { ElectronWindow } from '../../common';
 import { EventEmitter } from 'events';
 // @ts-ignore
 const startClient = require('tcp-over-websockets/client');
-class TunnelHandler extends EventEmitter {
+class TunnelHandler {
     public tunWindow: ElectronWindow;
     constructor() {
-        super();
-        ipcMain.handle('tun-connect', this.connectWs);
+        ipcMain.handle('tun-connect', this.connectWs.bind(this));
     }
     connectWs(e: IpcMainInvokeEvent, url: string, remotePort: number, localPort: number) {
-        startClient(url, `127.0.0.1:${remotePort}`, localPort, this.connCb);
+        startClient(url, `127.0.0.1:${remotePort}`, localPort, this.connCb.bind(this));
     }
     openWindow() {
-        this.tunWindow = new ElectronWindow({}, '', true);
+        if (!this.tunWindow) this.tunWindow = new ElectronWindow({}, '', true, true);
         this.tunWindow.loadFile(`${__dirname}/tunnel.html`);
+        this.tunWindow.once('close', () => {
+            delete this.tunWindow;
+        });
     }
-    connCb(err) {
+    connCb(err: any) {
+        console.log(err);
         if (err) {
             this.sendStatus(`Error: ${err}`);
         } else {
@@ -24,7 +27,8 @@ class TunnelHandler extends EventEmitter {
         }
     }
     sendStatus(status: string) {
-        ipcMain.emit('tun-status-update', status);
+        console.log(`Sent Status ${status}`);
+        if (this.tunWindow) this.tunWindow.webContents.send('tun-status-update', status);
     }
 }
 export { TunnelHandler };

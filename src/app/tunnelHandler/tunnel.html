@@ -32,21 +32,21 @@
             <h3 class="text">WS-Tunnel</h3>
             <input type="text" id="url-input" placeholder="Input repl.co URL" />
             <h4 class="text red" id="status">Not Connected</h4>
-            a
             <button id="connect-btn" onclick="connect()">Connect</button>
         </div>
         <script>
             const { ipcRenderer } = require('electron');
-            const status = document.getElementById('status');
+            const statusText = document.getElementById('status');
             ipcRenderer.on('tun-status-update', updateStatus);
-            function updateStatus(status) {
-                status.innterText = status;
+            function updateStatus(e, status) {
+                console.log(status);
+                statusText.innerText = status;
                 if (status === 'Connected') {
-                    status.style.color = 'green';
+                    statusText.style.color = 'green';
                 } else if (status.includes('error') || status.includes('not')) {
-                    status.style.color = 'red';
+                    statusText.style.color = 'red';
                 } else {
-                    status.style.color = 'white';
+                    statusText.style.color = 'white';
                 }
             }
             function connect() {
