@@ -26,7 +26,8 @@ class ElectronWindow extends BrowserWindow {
         options: BrowserWindowConstructorOptions,
         preload: string = '',
         nodeIntegration: boolean = false,
-        webviewTag: boolean = false
+        offset: boolean = false,
+        isMain = false
     ) {
         const displaySize = screen.getPrimaryDisplay().workAreaSize;
         let windowSize: WindowSize = {
@@ -73,6 +74,11 @@ class ElectronWindow extends BrowserWindow {
                 settings.set('window-position', windowPosition);
             }
         }
+        // Add offset to window position for sub windows
+        if (offset) {
+            windowPosition.x += 30;
+            windowPosition.y += 30;
+        }
         if (!preload.includes('.') && preload !== '') {
             preload = `${preload}.js`;
         }
@@ -99,7 +105,7 @@ class ElectronWindow extends BrowserWindow {
                 webSecurity: true,
                 nodeIntegration: nodeIntegration,
                 preload: preload,
-                webviewTag: webviewTag,
+                webviewTag: nodeIntegration, // If the window uses nodeIntegration, assume it uses webview
                 backgroundThrottling: false
             },
             icon: `${__dirname}/512x512.png`
@@ -113,28 +119,29 @@ class ElectronWindow extends BrowserWindow {
                 this.maximize();
             }
         });
+        if (isMain) {
+            // Detect on resize and add to settings
+            this.on('resize', () => {
+                const size = this.getSize();
+                const oldSize: WindowSize = settings.get('window-size');
+                if (this.isMaximized()) {
+                    Object.assign(oldSize, { maximized: true });
+                    settings.set('window-size', oldSize);
+                } else {
+                    settings.set('window-size', {
+                        width: size[0],
+                        height: size[1],
+                        maximized: false
+                    });
+                }
+            });
 
-        // Detect on resize and add to settings
-        this.on('resize', () => {
-            const size = this.getSize();
-            const oldSize: WindowSize = settings.get('window-size');
-            if (this.isMaximized()) {
-                Object.assign(oldSize, { maximized: true });
-                settings.set('window-size', oldSize);
-            } else {
-                settings.set('window-size', {
-                    width: size[0],
-                    height: size[1],
-                    maximized: false
-                });
-            }
-        });
-
-        // detect moved and add to settings
-        this.on('moved', () => {
-            let position = this.getPosition();
-            settings.set('window-position', { x: position[0], y: position[1] });
-        });
+            // detect moved and add to settings
+            this.on('moved', () => {
+                let position = this.getPosition();
+                settings.set('window-position', { x: position[0], y: position[1] });
+            });
+        }
 
         this.webContents.on('did-fail-load', (e, code, description, validateUrl) => {
             this.handleLoadingError(e, this, code, description, validateUrl);

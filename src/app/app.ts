@@ -20,7 +20,7 @@ class App extends EventEmitter {
 
     constructor() {
         super();
-        this.mainWindow = new ElectronWindow({}, 'aceFix.js');
+        this.mainWindow = new ElectronWindow({}, 'aceFix.js', false, false, true);
         this.windowArray = new Map();
         this.discordHandler = new DiscordHandler(this.mainWindow);
         this.themeHandler = new ThemeHandler(this.mainWindow);
@@ -30,7 +30,7 @@ class App extends EventEmitter {
         this.addWindow(this.mainWindow);
         if (!settings.has('enable-ace')) settings.set('enable-ace', false);
         app.applicationMenu = appMenuSetup(this, this.themeHandler, this.popoutHandler, this.tunnelHandler);
-
+        this.tunnelHandler.openWindow();
         // Handle The Login
         this.mainWindow.webContents.on('new-window', (event, url) => {
             let oauth = url.includes('/auth/google/get?close=1') || url.includes('/auth/github/get?close=1');
