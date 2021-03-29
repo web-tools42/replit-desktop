@@ -28,6 +28,9 @@ class App extends EventEmitter {
         this.tunnelHandler = new TunnelHandler();
 
         this.addWindow(this.mainWindow);
+        /*         this.mainWindow.once('close', () => {
+            app.quit();
+        }); */
         if (!settings.has('enable-ace')) settings.set('enable-ace', false);
         app.applicationMenu = appMenuSetup(this, this.themeHandler, this.popoutHandler, this.tunnelHandler);
         this.tunnelHandler.openWindow();
