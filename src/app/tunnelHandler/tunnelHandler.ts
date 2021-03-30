@@ -26,8 +26,8 @@ class TunnelHandler {
         if (!this.tunWindow) this.tunWindow = new ElectronWindow({}, '', true, true);
         this.tunWindow.loadFile(`${__dirname}/tunnel.html`);
         this.tunWindow.once('close', () => {
-            this.tunWindow.destroy();
-            this.conn.destroy();
+            delete this.tunWindow;
+            delete this.conn;
         });
     }
     connCb(err: any) {

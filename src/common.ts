@@ -44,6 +44,7 @@ class ElectronWindow extends BrowserWindow {
 
         let restoreSize = true;
         let restorePosition = true;
+        let webSession = null;
 
         // If window size exist in options, keep it
         if (options.width && options.height) {
@@ -87,6 +88,12 @@ class ElectronWindow extends BrowserWindow {
         }
         console.log(`preload: ${__dirname}/preload/${preload}`);
 
+        if (options.webPreferences && options.webPreferences.session) {
+            webSession = options.webPreferences.session;
+        } else {
+            webSession = session.fromPartition('persist:default', { cache: false });
+        } // Use sesion from option if exist
+
         super({
             ...options,
             show: false,
@@ -97,7 +104,7 @@ class ElectronWindow extends BrowserWindow {
             width: windowSize.width,
             height: windowSize.height,
             webPreferences: {
-                session: session.fromPartition('persist:default', { cache: false }),
+                session: webSession,
                 devTools: true,
                 spellcheck: true,
                 contextIsolation: false, // Enforce false since we are using preload scripts,

@@ -10,6 +10,7 @@ import path = require('path');
 app.setName('Replit Desktop');
 app.disableHardwareAcceleration();
 console.log(`Version: ${app.getVersion()}`);
+console.log(`UserData: ${app.getPath('userData')}`);
 
 process.on('unhandledRejection', (rejection: any) => {
     console.error(`[Unhandled Promise Rejction] ${rejection.stack}`);
