@@ -1,71 +1,81 @@
 <html>
-	<head>
-		<title>Connect to a repl</title>
-		<style>
-			body {
-				background-color: #393c42;
-			}
-			#content {
-				display: flex;
-				flex-direction: column;
-				justify-content: center;
-				align-items: center;
-			}
-			#url-input {
-				border-radius: 5px;
-				width: 50%;
-				height: 30px;
-				background-color: #cccccc;
-				border: none;
-			}
-			#connect-btn {
-				margin: 10px;
-				background-color: #cccccc;
-				border: none;
-				border-radius: 8px;
-				height: 30px;
-				width: 10%;
-				box-shadow: 5px 5px #b3b3b3;
-			}
-			#connect-btn:active {
-				box-shadow: none;
-			}
-			.text {
-				color: #ffffff;
-				font-family: 'Courier New', Courier, monospace;
-			}
-			.red {
-				color: red;
-			}
-		</style>
-	</head>
-	<body>
-		<div id="content">
-			<h3 class="text">WS-Tunnel</h3>
-			<input type="text" id="url-input" placeholder="Input repl.co URL" />
-			<h4 class="text red" id="status">Not Connected</h4>
-			<button id="connect-btn" onclick="connect()">Connect</button>
-		</div>
-		<script>
-			const { ipcRenderer } = require('electron');
-			const statusText = document.getElementById('status');
-			ipcRenderer.on('tun-status-update', updateStatus);
-			function updateStatus(e, status) {
-				console.log(status);
-				statusText.innerText = status;
-				if (status === 'Connected') {
-					statusText.style.color = 'green';
-				} else if (status.includes('error') || status.includes('not')) {
-					statusText.style.color = 'red';
-				} else {
-					statusText.style.color = 'white';
-				}
-			}
-			function connect() {
-				const url = document.getElementById('url-input').value;
-				ipcRenderer.invoke('tun-connect', url);
-				console.log('invoked');
-			}
-		</script>
-	</body>
+    <head>
+        <title>Connect to a repl</title>
+        <style>
+            body {
+                background-color: #393c42;
+            }
+            div {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                width: 100%;
+            }
+            input {
+                border-radius: 5px;
+                width: 50%;
+                height: 30px;
+                background-color: #cccccc;
+                border: none;
+                margin: 5px;
+            }
+            button {
+                margin: 10px;
+                background-color: #cccccc;
+                border: none;
+                border-radius: 8px;
+                height: 30px;
+                width: 10%;
+                box-shadow: 5px 5px #b3b3b3;
+            }
+            #connect-btn:active {
+                box-shadow: none;
+            }
+            .text {
+                color: #ffffff;
+                font-family: 'Courier New', Courier, monospace;
+            }
+            .red {
+                color: red;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="content">
+            <h3 class="text">WS-Tunnel</h3>
+            <input type="text" id="url-input" placeholder="Input repl.co URL" />
+            <input type="text" id="remote-port" placeholder="Input remote port" />
+            <input type="text" id="local-port" placeholder="Input local port" />
+            <h4 class="text red" id="status">Not Connected</h4>
+            <div style="flex-direction: row">
+                <button id="connect-btn" onclick="connect()">Connect</button>
+                <button id="disconnect-btn" onclick="disconnect()">Disconnect</button>
+            </div>
+        </div>
+        <script>
+            const { ipcRenderer } = require('electron');
+            const statusText = document.getElementById('status');
+            ipcRenderer.on('tun-status-update', updateStatus);
+            function updateStatus(e, status) {
+                console.log(status);
+                statusText.innerText = status;
+                if (status === 'Connected') {
+                    statusText.style.color = 'green';
+                } else if (status.lower().includes('error') || status.lower().includes('not')) {
+                    statusText.style.color = 'red';
+                } else {
+                    statusText.style.color = 'white';
+                }
+            }
+            function connect() {
+                const url = document.getElementById('url-input').value;
+                const localPort = document.getElementById('local-port').value;
+                const remotePort = document.getElementById('remote-port').value;
+                if (url === '' || !url.startsWith('https://')) return;
+                if (localPort === '' || remotePort === '') return;
+                ipcRenderer.invoke('tun-connect', url, remotePort, localPort);
+            }
+        </script>
+    </body>
 </html>
