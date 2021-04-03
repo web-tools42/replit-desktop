@@ -14,6 +14,8 @@
 + Fully-featured Discord Rich Presence (using DiscordRPC)
 + Change and create site themes (using [Reflux](https://github.com/frissyn/Reflux))
 
+![screenshot](https://cdn.discordapp.com/attachments/557534625702871071/818541454938210364/unknown.png)
+
 ## Normal Installation & Usage
 [Download the Desired Release from the Page & Install](https://github.com/replit-discord/replit-desktop/releases)
 + [3.0.0-Alpha](https://github.com/replit-discord/replit-desktop/releases/tag/3.0.0-alpha1)
