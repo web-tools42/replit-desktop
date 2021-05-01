@@ -11,5 +11,6 @@ sips -z 512 512   Icon1024.png --out icon.iconset/icon_256x256@2x.png
 sips -z 512 512   Icon1024.png --out icon.iconset/icon_512x512.png
 cp Icon1024.png icon.iconset/icon_512x512@2x.png
 iconutil -c icns --output icon.icns icon.iconset
+mv icon.icns replit-logo/icns/icon.icns
 rm -R icon.iconset
 rm Icon1024.png

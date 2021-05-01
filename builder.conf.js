@@ -15,7 +15,7 @@ module.exports = {
             { target: 'zip', arch: ['universal'] }
         ],
         darkModeSupport: true,
-        icon: 'logos/replit-logo/icns/512x512.icns'
+        icon: 'logos/replit-logo/icns/icon.icns'
     },
     dmg: { writeUpdateInfo: false },
     win: {

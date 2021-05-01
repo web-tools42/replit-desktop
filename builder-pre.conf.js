@@ -13,7 +13,7 @@ module.exports = {
     mac: {
         target: { target: 'zip', arch: ['universal'] },
         darkModeSupport: true,
-        icon: 'logos/replit-logo/icns/512x512.icns'
+        icon: 'logos/replit-logo/icns/icon.icns'
     },
     win: {
         target: [{ target: 'zip' }, { target: 'portable' }],
