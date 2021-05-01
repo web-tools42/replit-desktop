@@ -85,7 +85,8 @@ class DiscordHandler {
                             smallImageText: 'Replit',
                             largeImageKey: res.largeImageKey,
                             largeImageText: res.largeImageText,
-                            instance: false
+                            instance: false,
+                            buttons: [{ label: 'View Repl', url: `https://replit.com/${url}` }]
                         })
                         .catch((reason) => {
                             console.error(`error@editing ${reason}`);
