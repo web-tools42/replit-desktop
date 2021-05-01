@@ -1,7 +1,7 @@
 {
   "name": "replit-desktop",
   "productName": "Replit Desktop",
-  "version": "3.0.0-beta3",
+  "version": "3.0.0-beta4",
   "description": "Desktop version of replit",
   "keywords": [
     "electron",
