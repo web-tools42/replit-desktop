@@ -163,7 +163,8 @@ const languages: { [key: string]: RegExp } = {
     // 'livescript': /\.ls$/i,
     // 'log': /\.log$/i,
     'Lua': /\.(lua|pd_lua|rbxs|wlua)$/i,
-    'polygott': /(makefile|mk\.config|\.(mk|mak|make)|^BSDmakefile|^GNUmakefile|^makefile\.sco|^Kbuild|^mkfile|^\.?qmake)$/i,
+    'polygott':
+        /(makefile|mk\.config|\.(mk|mak|make)|^BSDmakefile|^GNUmakefile|^makefile\.sco|^Kbuild|^mkfile|^\.?qmake)$/i,
     // 'manifest': /(\.(h|geo|topo|cson|json5'|ndjson|fea|json\.eex|proto|pytb|pydeps|pot?|ejson|edn|eam\.fs|qml|qbs|ston|ttl|rviz|syntax|webmanifest)|^pkginfo|^mime\.types|^METADATA\.pb|)$/i,
     // 'markdown': /\.(md|mdown|markdown|mkd|mkdown|mdwn|mkdn|rmd|ron|pmd)$/i,
     // 'markdownx': /\.mdx$/i,
@@ -186,7 +187,8 @@ const languages: { [key: string]: RegExp } = {
     // 'processing': /\.pde$/i,
     // 'pug': /\.(jade|pug)$/i,
     // 'purescript': /\.purs/i,
-    'Python': /(\.(py|ipy|isolate|pep|gyp|gypi|pyde|pyp|pyt|py3|pyi|pyw|tac|wsgi|xpy|rpy|pypirc|pythonrc|python-venv)|SConstruct|SConscript|Snakefile|WATCHLISTS|wscript)$/i,
+    'Python':
+        /(\.(py|ipy|isolate|pep|gyp|gypi|pyde|pyp|pyt|py3|pyi|pyw|tac|wsgi|xpy|rpy|pypirc|pythonrc|python-venv)|SConstruct|SConscript|Snakefile|WATCHLISTS|wscript)$/i,
     // 'r': /\.(r|Rprofile|rsx|rd)$/i,
     // 'reasonml': /\.re$/,
     // 'Ruby': /\.(rb|ru|ruby|erb|gemspec|god|mspec|pluginspec|podspec|rabl|rake|opal|irbrc|gemrc|pryrc|ruby-(gemset|version))$/i,
