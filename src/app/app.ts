@@ -99,13 +99,12 @@ class App extends EventEmitter {
 
     async clearCookies(oauthOnly: boolean, replitOnly: boolean, prompt: boolean = false) {
         if (!oauthOnly && prompt && !promptYesNoSync('Are you sure you want to clear all cookies?', 'Confirm')) return;
-        const session = this.mainWindow.webContents.session;
-        const allCookies: Array<Cookie> = await session.cookies.get({});
-        for (let x = 0; x < allCookies.length; x++) {
-            const cookie: Cookie = allCookies[x];
+        const winSession = this.mainWindow.webContents.session;
+        const allCookies: Array<Cookie> = await winSession.cookies.get({});
+        for (const cookie of allCookies) {
             if (replitOnly) {
                 if (cookie.domain.includes('replit.com') || cookie.domain.includes('repl.it'))
-                    await session.cookies.remove(
+                    await winSession.cookies.remove(
                         `https://${cookie.domain.charAt(0) === '.' ? 'www' : ''}${cookie.domain}${cookie.path}`,
                         cookie.name
                     );
@@ -115,17 +114,17 @@ class App extends EventEmitter {
                     cookie.domain.includes('google') ||
                     cookie.domain.includes('facebook')
                 )
-                    await session.cookies.remove(
+                    await winSession.cookies.remove(
                         `https://${cookie.domain.charAt(0) === '.' ? 'www' : ''}${cookie.domain}${cookie.path}`,
                         cookie.name
                     );
             } else {
-                await session.cookies.remove(
+                await winSession.cookies.remove(
                     `https://${cookie.domain.charAt(0) === '.' ? 'www' : ''}${cookie.domain}${cookie.path}`,
                     cookie.name
                 );
             }
-            session.flushStorageData();
+            winSession.flushStorageData();
         }
         if (prompt) {
             [...this.windowArray.values()].forEach((win) => {
