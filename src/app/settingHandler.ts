@@ -10,6 +10,7 @@ class SettingHandler {
 
     constructor() {
         this.settingsFilePath = path.join(app.getPath('userData'), 'settings.json');
+        console.debug(`Setting file path: ${this.settingsFilePath}`);
         // Load the settings
         this.settings = new Map();
         this.ensureFileSync();

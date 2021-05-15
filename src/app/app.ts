@@ -25,9 +25,6 @@ class App extends EventEmitter {
         this.popoutHandler = new PopoutHandler();
 
         this.addWindow(this.mainWindow);
-        /*         this.mainWindow.once('close', () => {
-            app.quit();
-        }); */
         if (!settings.has('enable-ace')) settings.set('enable-ace', false);
         app.applicationMenu = appMenuSetup(this, this.themeHandler, this.popoutHandler);
 
@@ -71,7 +68,7 @@ class App extends EventEmitter {
         let userAgent: string =
             'Mozilla/5.0 (iPad; CPU OS 11_3 like Mac OS X)AppleWebKit/605.1.15 (KHTML, like Gecko) Version/11.0 Tablet/15E148 Safari/604.1';
         if (menu) {
-            if (menu.checked == true) {
+            if (menu.checked) {
                 settings.set('enable-ace', true);
             } else {
                 settings.set('enable-ace', false);
@@ -88,6 +85,16 @@ class App extends EventEmitter {
                 window.reload();
             }
         });
+    }
+
+    toggleRestoreSession(menu: MenuItem, win: ElectronWindow) {
+        if (menu) {
+            if (menu.checked) {
+                settings.set('restore-url', win.webContents.getURL());
+            } else {
+                settings.unset('restore-url');
+            }
+        }
     }
 
     async clearCookies(oauthOnly: boolean, replitOnly: boolean, prompt: boolean = false) {
@@ -189,17 +196,21 @@ This action is NOT reversible!`
         this.windowArray.set(window.id, window);
         this.toggleAce();
 
-        window.webContents.on('will-navigate', (e, url) => {
+        window.webContents.on('did-start-navigation', (e, url) => {
             // Deal with the logout
             if (url == 'https://replit.com/logout') this.clearCookies(false, true, false);
             if (handleExt) handleExternalLink(e, window, url);
             if (settings.get('enable-ace')) this.toggleAce();
+            if (settings.has('restore-url')) {
+                settings.set('restore-url', url);
+            }
         });
 
         window.addTheme();
 
-        window.webContents.on('did-finish-load', () => window.addTheme());
-
+        window.webContents.on('did-finish-load', () => {
+            window.addTheme();
+        });
         window.on('close', () => {
             if (this.windowArray.has(window.id)) this.windowArray.delete(window.id);
         });

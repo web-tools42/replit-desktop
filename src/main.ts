@@ -4,8 +4,7 @@ import { App } from './app/app';
 import { promptYesNoSync } from './common';
 import { Launcher } from './launcher/launcher';
 import { Updater } from './launcher/updater';
-
-import path = require('path');
+import { settings } from './app/settingHandler';
 
 app.setName('Replit Desktop');
 app.disableHardwareAcceleration();
@@ -30,7 +29,11 @@ function initLauncher() {
 
 async function initApp() {
     mainApp = new App();
-    mainApp.mainWindow.loadURL('https://replit.com/~').catch(console.debug);
+    let url = 'https://replit.com/~';
+    if (settings.has('restore-url')) {
+        url = settings.get('restore-url');
+    }
+    mainApp.mainWindow.loadURL(url).catch(console.debug);
     mainApp.mainWindow.webContents.once('did-finish-load', () => {
         launcher.window.close();
     });

@@ -84,6 +84,14 @@ function appMenuSetup(mainApp: App, themeHandler: ThemeHandler, popoutHandler: P
                 },
                 { type: 'separator' },
                 {
+                    label: 'Restore Session',
+                    type: 'checkbox',
+                    checked: <boolean>settings.has('restore-url'),
+                    click(item: MenuItem, win: BrowserWindow) {
+                        mainApp.toggleRestoreSession(item, <ElectronWindow>win);
+                    }
+                },
+                {
                     label: 'Clear Cookies',
                     click() {
                         mainApp.clearCookies(false, false, true);
