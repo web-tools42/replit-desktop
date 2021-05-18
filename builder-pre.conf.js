@@ -11,7 +11,7 @@ module.exports = {
         buildResources: __dirname
     },
     mac: {
-        target: { target: 'zip', arch: ['universal'] },
+        target: { target: 'zip', arch: ['arm64', 'x64'] },
         darkModeSupport: true,
         icon: 'logos/replit-logo/icns/icon.icns'
     },

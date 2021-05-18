@@ -11,8 +11,8 @@ module.exports = {
     },
     mac: {
         target: [
-            { target: 'dmg', arch: ['universal'] },
-            { target: 'zip', arch: ['universal'] }
+            { target: 'dmg', arch: ['arm64', 'x64'] },
+            { target: 'zip', arch: ['arm64', 'x64'] }
         ],
         darkModeSupport: true,
         icon: 'logos/replit-logo/icns/icon.icns'
