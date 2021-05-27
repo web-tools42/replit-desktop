@@ -38,15 +38,9 @@ function appMenuSetup(mainApp: App, themeHandler: ThemeHandler, popoutHandler: P
                             }
                         },
                         {
-                            label: 'Replit Bugs',
-                            click(i: MenuItem, win: BrowserWindow) {
-                                win.loadURL('https://replit.com/bugs').catch();
-                            }
-                        },
-                        {
                             label: 'Replit Feedback',
                             click(i: MenuItem, win: BrowserWindow) {
-                                win.loadURL('https://replit.com/feedback').catch();
+                                win.loadURL('https://replit.canny.io').catch();
                             }
                         },
                         {
