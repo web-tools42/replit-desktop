@@ -36,7 +36,7 @@ If you would like to contribute, please refer to our [Contribution Guide](https:
 Before contributing, please take a look at our [project boards](https://github.com/replit-discord/replit-desktop/projects).
 
 **DEVELOPER NOTES:** 
-+ The application requires Node 14 LTS or later. Node 15 also works but isn't recommended as Electron does not fully support it.
++ The application requires Node 14 LTS or later. Node 15 and 16 are not tested and might not work. 
 + If you have trouble starting the app for an unknown developer on MacOS, use [`this`](https://support.apple.com/guide/mac-help/open-a-mac-app-from-an-unidentified-developer-mh40616/mac#:~:text=Open%20a%20Mac%20app%20from,as%20you%20can%20...) link.
 
 ## Final Note
