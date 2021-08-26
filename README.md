@@ -1,5 +1,6 @@
 # replit-desktop [![Discord](https://img.shields.io/discord/437048931827056642.svg?logo=discord)](https://discord.gg/5gcPC6B) [![Codacy Badge](https://app.codacy.com/project/badge/Grade/3bce49c376cf4c2bb1d2813d6b12dd6a)](https://www.codacy.com/manual/leon332157/replit-desktop?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=repl-it-discord/replit-desktop&amp;utm_campaign=Badge_Grade) [![Run on Replit](https://replit.com/badge/github/leon332157/replit-desktop)](https://replit.com/github/replit-discord/replit-desktop)
 
+# This app is deprecated in favor of the official PWA
 ## Summary
 
 [Replit](https://replit.com) is an online coding platform that provides a browser-based IDE. `Replit-Desktop` is an unofficial desktop application that interfaces with Replit. It's purpose is to improve the developer experience and boost efficiency.
