@@ -29,9 +29,9 @@ class App extends EventEmitter {
         app.applicationMenu = appMenuSetup(this, this.themeHandler, this.popoutHandler);
 
         // Handle The Login
-        this.mainWindow.webContents.on('new-window', (event, url) => {
+        this.mainWindow.webContents.setWindowOpenHandler((details) => {
+            const url = details.url;
             let oauth = url.includes('/auth/google/get?close=1') || url.includes('/auth/github/get?close=1');
-            event.preventDefault();
             if (oauth) {
                 this.clearCookies(true, true);
                 ipcMain.once('authDone', () => this.mainWindow.loadURL('https://replit.com/~'));
@@ -49,8 +49,8 @@ class App extends EventEmitter {
             loginWin.webContents.setUserAgent(
                 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:87.0) Gecko/20100101 Firefox/87.0'
             );
-            event.newGuest = loginWin;
             this.addWindow(loginWin, false);
+            return { action: 'deny' };
         });
         app.on('second-instance', (event, commandLine, workingDirectory) => {
             // Someone tried to run a second instance, we should focus our window.
